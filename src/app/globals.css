@@ -1,26 +1,353 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   InternQuest — Design Tokens (solid, no gradients)
+   ============================================================ */
+:root{
+  --pink:#FF8DB3;  --pink-text:#FF5B92;  --pink-15:rgba(255,141,179,.15);  --pink-50:rgba(255,141,179,.50);
+  --yellow:#FEE362; --yellow-text:#B58900; --yellow-15:rgba(254,227,98,.20);  --yellow-50:rgba(254,227,98,.50);
+  --green:#69DC5E;  --green-text:#2FA23C; --green-15:rgba(105,220,94,.15);   --green-40:rgba(105,220,94,.40);
+  --blue:#48A7E4;   --blue-text:#2B8FD1;  --blue-15:rgba(72,167,228,.12);    --blue-40:rgba(72,167,228,.35);
+  --red:#FF6B6B;    --red-text:#D64545;   --red-15:rgba(255,107,107,.14);    --red-40:rgba(255,107,107,.30);
+  --ink:#1A1A1A;    --ink-2:#5B5B66;      --ink-3:#8B8B96;
+  --canvas:#FFFFFF; --surface:#FFFFFF;    --surface-2:#F5F6F8;
+  --border:#ECEDF1; --border-2:#DDE0E6;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px; --sp-8:32px; --sp-12:48px; --sp-16:64px;
+  --r-sm:12px; --r-md:16px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
+  --sh-1:0 1px 2px rgba(20,20,40,.04), 0 4px 14px rgba(20,20,40,.05);
+  --sh-2:0 10px 30px rgba(20,20,40,.10);
+  --sidebar-w:230px; --topbar-h:80px; --content-max:1200px;
+  --font:'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);color:var(--ink);background:var(--canvas);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--font);font-weight:800;line-height:1.15;color:#111}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:14px;color:var(--ink)}
+small{font-size:12px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:999px;border:2px solid var(--canvas)}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Icons */
+.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic--fill{fill:currentColor;stroke:none}
+.ic-18{width:18px;height:18px}.ic-16{width:16px;height:16px}.ic-22{width:22px;height:22px}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Mascot placeholder slot (art belum dibuat) */
+.iq-mascot{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:2px dashed var(--pink);border-radius:var(--r-lg);background:var(--pink-15);color:var(--pink-text);font-size:11px;font-weight:700;text-align:center;line-height:1.2;flex:none}
+.iq-mascot small{color:var(--ink-3);font-weight:600;font-size:9px}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* Buttons */
+.iq-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:47px;padding:0 22px;border-radius:24px;font-weight:700;font-size:15px;transition:transform .1s, filter .1s}
+.iq-btn:active{transform:translateY(1px)}
+.iq-btn--primary{background:var(--pink);color:#fff}
+.iq-btn--primary:hover{filter:brightness(.96)}
+.iq-btn--blue{background:var(--blue);color:#fff}
+.iq-btn--green{background:var(--green);color:#0f5b17}
+.iq-btn--yellow{background:var(--yellow);color:#6b5200}
+.iq-btn--ghost{background:var(--surface);color:var(--ink);border:2px solid var(--border-2)}
+.iq-btn--ghost:hover{background:var(--surface-2)}
+.iq-btn--sm{height:38px;padding:0 16px;font-size:13px;border-radius:20px}
+.iq-btn--block{width:100%}
+
+/* Card */
+.iq-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-1)}
+.iq-card__pad{padding:var(--sp-6)}
+
+/* Status pill (filter) — Figma: 174x62, radius 30, tinted bg + accent text 800 */
+.iq-pill{height:52px;padding:0 22px;border-radius:26px;font-weight:800;font-size:17px;display:inline-flex;align-items:center;gap:8px;border:none;color:var(--ink-2);background:var(--surface-2)}
+.iq-pill .cnt{opacity:.85}
+.iq-pill--todo{background:var(--pink-50);color:var(--pink-text)}
+.iq-pill--applied{background:var(--yellow-50);color:var(--yellow-text)}
+.iq-pill--interview{background:var(--blue-40);color:var(--blue-text)}
+.iq-pill--offer{background:var(--green-40);color:var(--green-text)}
+.iq-pill--rejected{background:var(--red-40);color:var(--red-text)}
+
+/* Small chip */
+.iq-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:var(--r-pill);font-size:12px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.iq-chip--pink{background:var(--pink-50);color:var(--pink-text)}
+.iq-chip--yellow{background:var(--yellow-50);color:var(--yellow-text)}
+.iq-chip--blue{background:var(--blue-40);color:var(--blue-text)}
+.iq-chip--green{background:var(--green-40);color:var(--green-text)}
+.iq-chip--red{background:var(--red-40);color:var(--red-text)}
+.iq-tag-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+
+/* Section title */
+.iq-sec-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:var(--sp-4)}
+.iq-sec-title h3{font-size:18px}
+.iq-sec-title a{font-size:13px;color:var(--blue-text);font-weight:700;text-decoration:none;cursor:pointer}
+
+/* Progress bar — solid */
+.iq-progress{height:10px;border-radius:var(--r-pill);background:var(--surface-2);overflow:hidden}
+.iq-progress__fill{height:100%;border-radius:var(--r-pill);background:var(--pink)}
+
+/* Monogram / company logo box */
+.iq-mono{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex:none}
+
+/* Internship card (Figma style: 2px accent border + tint bg) */
+.iq-intern{border-radius:var(--r-lg);border:2px solid var(--c);background:var(--c-bg);padding:var(--sp-6);display:flex;flex-direction:column;gap:14px}
+.iq-intern--pink{--c:#FF8DB3;--c-bg:var(--pink-15);--c-text:var(--pink-text)}
+.iq-intern--yellow{--c:#FEE362;--c-bg:var(--yellow-15);--c-text:var(--yellow-text)}
+.iq-intern--blue{--c:#48A7E4;--c-bg:var(--blue-15);--c-text:var(--blue-text)}
+.iq-intern--green{--c:#69DC5E;--c-bg:var(--green-15);--c-text:var(--green-text)}
+.iq-intern__days{font-size:13px;font-weight:700;color:var(--c-text)}
+.iq-intern__title{font-size:20px;font-weight:700;color:#000}
+.iq-intern__sub{font-size:16px;font-weight:400;color:#000}
+.iq-intern__row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2)}
+.iq-intern .iq-progress__fill{background:var(--c)}
+.iq-apply{height:44px;border-radius:22px;background:var(--c);color:#fff;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px}
+.iq-intern--yellow .iq-apply{color:#6b5200}
+.iq-intern--add{border:2px dashed var(--border-2);background:var(--surface);align-items:center;justify-content:center;text-align:center;color:var(--ink-3);min-height:170px;cursor:pointer}
+.iq-intern--add:hover{border-color:var(--pink);color:var(--pink-text)}
+
+/* Callout — solid tint */
+.iq-callout{display:flex;gap:14px;align-items:flex-start;padding:var(--sp-6);border-radius:var(--r-lg);background:var(--blue-15);border:2px solid var(--blue-40)}
+.iq-callout__ic{flex:none}
+
+/* Checklist */
+.iq-check{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:2px solid var(--border);background:var(--surface);cursor:pointer}
+.iq-check:hover{background:var(--surface-2)}
+.iq-check__box{width:22px;height:22px;border-radius:7px;border:2px solid var(--border-2);display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.iq-check__box .ic{width:14px;height:14px;stroke-width:3;opacity:0}
+.iq-check.is-done .iq-check__box{background:var(--green);border-color:var(--green)}
+.iq-check.is-done .iq-check__box .ic{opacity:1}
+.iq-check.is-done .iq-check__label{text-decoration:line-through;color:var(--ink-3)}
+.iq-check__label{font-size:14px;font-weight:600}
+
+/* Timeline stepper */
+.iq-stepper{display:flex;align-items:flex-start;overflow-x:auto;padding:4px 0}
+.iq-step{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:96px;position:relative}
+.iq-step__dot{width:34px;height:34px;border-radius:50%;background:var(--surface-2);border:2px solid var(--border-2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ink-3);z-index:2}
+.iq-step__label{font-size:12px;color:var(--ink-3);font-weight:700;text-align:center}
+.iq-step:not(:last-child)::after{content:'';position:absolute;top:17px;left:50%;width:100%;height:3px;background:var(--border-2);z-index:1}
+.iq-step.is-done .iq-step__dot{background:var(--green);border-color:var(--green);color:#fff}
+.iq-step.is-done:not(:last-child)::after{background:var(--green)}
+.iq-step.is-current .iq-step__dot{background:var(--pink);border-color:var(--pink);color:#fff}
+.iq-step.is-current .iq-step__label{color:var(--ink)}
+
+/* Field list */
+.iq-field{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.iq-field:last-child{border-bottom:none}
+.iq-field__k{font-size:13px;color:var(--ink-3);font-weight:600}
+.iq-field__v{font-size:14px;font-weight:700;text-align:right}
+
+/* Form */
+.iq-form-row{margin-bottom:var(--sp-4)}
+.iq-form-row label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-2)}
+.iq-input,.iq-select,.iq-textarea{width:100%;height:46px;padding:0 14px;border-radius:12px;border:2px solid var(--border-2);background:var(--surface);outline:none}
+.iq-textarea{height:auto;padding:12px 14px;min-height:120px;resize:vertical;line-height:1.55}
+.iq-input:focus,.iq-select:focus,.iq-textarea:focus{border-color:var(--blue)}
+
+/* Badge grid */
+.iq-badge{display:flex;flex-direction:column;align-items:center;gap:8px;padding:var(--sp-6) var(--sp-3);border-radius:var(--r-md);border:2px solid var(--border);text-align:center;background:var(--surface)}
+.iq-badge__ic{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--yellow-15);color:var(--yellow-text)}
+.iq-badge.is-locked{opacity:.45;filter:grayscale(.6)}
+.iq-badge b{font-size:13px} .iq-badge span{font-size:11px;color:var(--ink-3)}
+
+/* Calendar */
+.iq-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.iq-cal__h{text-align:center;font-size:12px;font-weight:800;color:var(--ink-3);padding:6px 0}
+.iq-cal__d{aspect-ratio:1;border-radius:12px;border:2px solid var(--border);padding:8px;font-size:13px;font-weight:700;position:relative;display:flex;flex-direction:column}
+.iq-cal__d.is-muted{color:var(--ink-3);background:var(--surface-2)}
+.iq-cal__d.is-today{border-color:var(--pink);background:var(--pink-15)}
+.iq-cal__ev{margin-top:auto;font-size:10px;font-weight:800;border-radius:6px;padding:2px 5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ============================================================
+   App shell
+   ============================================================ */
+.iq-app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+body[data-screen="auth"] .iq-app{display:none}
+.iq-sidebar{background:var(--surface);border-right:2px solid var(--border);padding:var(--sp-6) var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-2);position:sticky;top:0;height:100vh}
+.iq-logo{padding:0 8px var(--sp-8) 8px}
+.iq-logo svg{height:44px;width:auto}
+.iq-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.iq-nav__label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding:12px 12px 4px}
+.iq-nav__item{display:flex;align-items:center;gap:12px;height:46px;padding:0 12px;border-radius:14px;color:var(--ink-2);font-weight:600;font-size:14px;cursor:pointer}
+.iq-nav__item:hover{background:var(--surface-2)}
+.iq-nav__item.is-active{background:var(--pink-15);color:var(--pink-text);font-weight:700}
+.iq-nav__badge{margin-left:auto;background:var(--pink);color:#fff;font-size:11px;font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.iq-usermini{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:var(--surface-2)}
+.iq-usermini__av{width:36px;height:36px;border-radius:50%;background:var(--border-2);flex:none}
+.iq-usermini__meta b{font-size:13px;display:block} .iq-usermini__meta span{font-size:11px;color:var(--ink-3)}
+
+.iq-main{min-width:0;display:flex;flex-direction:column}
+.iq-topbar{height:var(--topbar-h);border-bottom:2px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:14px;padding:0 var(--sp-8);position:sticky;top:0;z-index:20}
+.iq-topbar__title{font-weight:800;font-size:20px;margin-right:auto}
+.iq-stat-pill{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:22px;font-weight:800;font-size:15px;background:var(--surface);border:2px solid var(--border-2)}
+.iq-topbar__av{width:44px;height:44px;border-radius:50%;background:var(--border-2);flex:none}
+.iq-content{padding:var(--sp-8);max-width:calc(var(--content-max) + var(--sp-8)*2);width:100%;margin:0 auto}
+
+.iq-screen{display:none;animation:fade .22s ease}
+.iq-screen.is-active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.iq-grid{display:grid;gap:var(--sp-6)}
+.iq-grid--dash{grid-template-columns:1.6fr 1fr}
+.iq-grid--2{grid-template-columns:1fr 1fr}
+.iq-grid--3{grid-template-columns:repeat(3,1fr)}
+.iq-grid--4{grid-template-columns:repeat(4,1fr)}
+.iq-grid--cards{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1080px){.iq-grid--dash,.iq-grid--2{grid-template-columns:1fr}.iq-grid--3,.iq-grid--4,.iq-grid--cards{grid-template-columns:1fr 1fr}}
+
+/* Auth (solid, no gradient) */
+.iq-auth{min-height:100vh;display:none;grid-template-columns:1fr 1fr}
+body[data-screen="auth"] .iq-auth{display:grid}
+.iq-auth__hero{background:var(--pink-15);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:var(--sp-16);gap:var(--sp-6)}
+.iq-auth__hero svg{height:96px;width:auto}
+.iq-auth__tag{font-size:18px;color:var(--ink-2);max-width:400px;font-weight:500}
+.iq-auth__panel{display:flex;align-items:center;justify-content:center;padding:var(--sp-12)}
+.iq-auth__card{width:100%;max-width:400px}
+.iq-auth__step{display:none}
+.iq-auth__step.is-active{display:block}
+.iq-divider-or{display:flex;align-items:center;gap:12px;color:var(--ink-3);font-size:12px;margin:18px 0;font-weight:600}
+.iq-divider-or::before,.iq-divider-or::after{content:'';flex:1;height:2px;background:var(--border)}
+.iq-upload{border:2px dashed var(--border-2);border-radius:16px;padding:24px;text-align:center;color:var(--ink-3);cursor:pointer;font-size:13px}
+.iq-upload:hover{border-color:var(--blue);background:var(--blue-15)}
+
+/* Modal */
+.iq-modal-scrim{position:fixed;inset:0;background:rgba(20,20,40,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:24px}
+.iq-modal-scrim.is-open{display:flex}
+.iq-modal{background:var(--surface);border-radius:var(--r-xl);width:100%;max-width:640px;box-shadow:var(--sh-2);max-height:90vh;overflow:auto}
+.iq-modal__head{display:flex;align-items:center;justify-content:space-between;padding:var(--sp-6);border-bottom:2px solid var(--border)}
+.iq-modal__head h3{font-size:19px}
+.iq-modal__x{width:36px;height:36px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center}
+.iq-modal__body{padding:var(--sp-6)}
+.iq-method{display:flex;flex-direction:column;gap:8px;padding:var(--sp-6);border-radius:var(--r-md);border:2px solid var(--border);cursor:pointer;text-align:left;background:var(--surface)}
+.iq-method:hover{border-color:var(--pink);background:var(--pink-15)}
+.iq-method__ic{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.iq-method b{font-size:14px}
+.iq-loader-ring{width:80px;height:80px;border-radius:50%;border:8px solid var(--surface-2);border-top-color:var(--pink);animation:spin 1s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.iq-extract-row{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;color:var(--ink-2)}
+
+/* Utility */
+.muted{color:var(--ink-3)} .center{text-align:center}
+.stack-2{display:flex;flex-direction:column;gap:8px}.stack-3{display:flex;flex-direction:column;gap:12px}.stack-4{display:flex;flex-direction:column;gap:16px}.stack-6{display:flex;flex-direction:column;gap:24px}
+.row{display:flex;align-items:center;gap:12px}.row-between{display:flex;align-items:center;justify-content:space-between;gap:12px}.wrap{flex-wrap:wrap}
+.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}
+.big-num{font-weight:800;font-size:32px;line-height:1}
+.grow{flex:1}
+
+/* Dev guide table */
+.iq-table{width:100%;border-collapse:collapse;font-size:13px}
+.iq-table th,.iq-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.iq-table th{font-weight:800;color:var(--ink-2);background:var(--surface-2)}
+.iq-table code{font-family:Menlo,Consolas,monospace;font-size:12px;background:var(--surface-2);padding:2px 6px;border-radius:6px;color:var(--pink-text)}
+
+/* Company logo box — real logo auto-fetch with monogram fallback */
+.iq-logo-box{width:44px;height:44px;border-radius:12px;flex:none;position:relative;background:#fff;border:2px solid var(--border);overflow:hidden}
+.iq-logo-box img{width:100%;height:100%;object-fit:contain;padding:5px;display:none}
+.iq-logo-box .iq-mono{position:absolute;inset:0;width:100%;height:100%;border-radius:0;display:flex}
+.iq-logo-box--lg{width:52px;height:52px}
+
+/* Mascot illustration placeholder (temporary) */
+.iq-mascot{border:2px dashed var(--pink-50);background:var(--pink-15);overflow:hidden;position:relative;padding:0}
+.iq-mascot small{display:none}
+.iq-questy{position:absolute;top:8%;left:8%;width:84%;height:84%;display:block}
+/* Penanda: ini SLOT untuk maskot. Ganti <svg class="iq-questy"> dengan ilustrasi final, lalu hapus rule ::after ini untuk menghilangkan label. */
+.iq-mascot::after{content:'MASKOT';position:absolute;top:4px;right:4px;background:var(--pink-text);color:#fff;font-size:7px;font-weight:800;letter-spacing:.05em;padding:2px 4px;border-radius:6px;line-height:1;pointer-events:none;z-index:3}
+.iq-mascot--clean::after{display:none}
+
+/* Compact colored filter tabs */
+.iq-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:var(--sp-6)}
+.iq-tab{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 15px;border-radius:var(--r-pill);font-size:14px;font-weight:800;color:var(--ink-2);background:var(--surface-2);border:none;cursor:pointer}
+.iq-tab__cnt{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:rgba(255,255,255,.6);font-size:12px;font-weight:800;color:inherit}
+.iq-tab--todo{background:var(--pink-50);color:var(--pink-text)}
+.iq-tab--applied{background:var(--yellow-50);color:var(--yellow-text)}
+.iq-tab--interview{background:var(--blue-40);color:var(--blue-text)}
+.iq-tab--offer{background:var(--green-40);color:var(--green-text)}
+.iq-tab--rejected{background:var(--red-40);color:var(--red-text)}
+.iq-tab.is-active{box-shadow:inset 0 0 0 2px currentColor}
+
+/* Internship cards — previous layout, pastel */
+.iq-icard{border-radius:var(--r-lg);border:2px solid var(--c-bg2);background:var(--c-bg);padding:var(--sp-6);display:flex;flex-direction:column;gap:13px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.iq-icard:hover{transform:translateY(-2px);box-shadow:var(--sh-2)}
+.iq-icard--pink{--c:#FF8DB3;--c-bg:var(--pink-15);--c-bg2:var(--pink-50);--c-text:var(--pink-text)}
+.iq-icard--yellow{--c:#FEE362;--c-bg:var(--yellow-15);--c-bg2:var(--yellow-50);--c-text:var(--yellow-text)}
+.iq-icard--blue{--c:#48A7E4;--c-bg:var(--blue-15);--c-bg2:var(--blue-40);--c-text:var(--blue-text)}
+.iq-icard--green{--c:#69DC5E;--c-bg:var(--green-15);--c-bg2:var(--green-40);--c-text:var(--green-text)}
+.iq-icard__top{display:flex;gap:12px;align-items:center}
+.iq-icard__title{font-size:14px;font-weight:800;color:#000;line-height:1.2}
+.iq-icard__sub{font-size:11.5px;color:var(--ink-2)}
+.iq-icard__meta{font-size:12px;color:var(--ink-3);font-weight:600}
+.iq-icard__foot{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;color:var(--ink-2)}
+.iq-icard .iq-progress__fill{background:var(--c)}
+.iq-icard--add{border:2px dashed var(--border-2);background:var(--surface);align-items:center;justify-content:center;text-align:center;color:var(--ink-3);min-height:184px}
+.iq-icard--add:hover{border-color:var(--pink);color:var(--pink-text);transform:none;box-shadow:none}
+.iq-timechip{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;height:26px;padding:0 12px;border-radius:var(--r-pill);font-size:12px;font-weight:800;background:#fff;color:var(--c-text)}
+
+/* Calendar + info sidebar */
+.iq-calwrap{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+.iq-monthnav{display:inline-flex;align-items:center;gap:12px;font-size:15px;font-weight:800}
+.iq-monthnav button{width:34px;height:34px;border-radius:10px;border:2px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:var(--ink-2);background:var(--surface)}
+.iq-rem{display:flex;gap:12px;padding:14px;border-radius:var(--r-md);align-items:flex-start}
+.iq-rem--warn{background:rgba(255,107,107,.12);border:2px solid var(--red-40)}
+.iq-rem--info{background:var(--blue-15);border:2px solid var(--blue-40)}
+.iq-rem__ic{flex:none;margin-top:1px}
+.iq-rem__t{font-weight:800;font-size:14px;color:var(--ink)}
+.iq-rem__s{font-size:12px;color:var(--ink-2)}
+.iq-sched__item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
+.iq-sched__item:last-child{border-bottom:none}
+.iq-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none}
+@media(max-width:1100px){.iq-calwrap{grid-template-columns:1fr}}
+
+/* Auth peek login card (maskot mengintip di atas kartu) */
+.iq-peek{display:flex;justify-content:center;margin-bottom:-34px;position:relative;z-index:2}
+.iq-peekcard{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh-2);padding:48px 30px 30px}
+.iq-authbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:50px;border-radius:16px;border:2px solid var(--border-2);background:var(--surface);font-weight:700;font-size:15px;margin-bottom:12px;cursor:pointer}
+.iq-authbtn:hover{background:var(--surface-2)}
+.iq-authbtn .ic{width:18px;height:18px;color:var(--ink-2)}
+.iq-dots{display:flex;gap:7px;margin-top:22px}
+.iq-dots i{width:8px;height:8px;border-radius:50%;background:var(--pink-50);display:inline-block}
+.iq-dots i.on{width:22px;border-radius:5px;background:var(--pink)}
+
+/* Level card dengan maskot mengintip */
+.iq-levelcard{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh-1);padding:14px 24px 24px;text-align:center;margin-top:52px;overflow:visible}
+.iq-levelcard .iq-mascot{margin:-62px auto 10px}
+.iq-levelstats{display:flex;justify-content:space-around;margin-top:16px}
+.iq-levelstats .big-num{font-size:24px}
+
+/* Smart Deadline Priority (kartu horizontal) */
+.iq-prio{display:flex;flex-direction:column;gap:12px;padding:18px 20px;border-radius:var(--r-lg);border:2px solid var(--c-bg2,var(--border));background:var(--c-bg,var(--surface));box-shadow:var(--sh-1)}
+.iq-prio--pink{--c:#FF8DB3;--c-bg:var(--pink-15);--c-bg2:var(--pink-50);--c-text:var(--pink-text)}
+.iq-prio--yellow{--c:#FEE362;--c-bg:var(--yellow-15);--c-bg2:var(--yellow-50);--c-text:var(--yellow-text)}
+.iq-prio--blue{--c:#48A7E4;--c-bg:var(--blue-15);--c-bg2:var(--blue-40);--c-text:var(--blue-text)}
+.iq-prio .iq-progress__fill{background:var(--c,var(--pink))}
+.iq-prio__btn{border:none;background:var(--c,var(--pink));color:#fff;font-weight:800;font-size:13px;padding:9px 20px;border-radius:var(--r-pill);cursor:pointer;transition:filter .12s}
+.iq-prio__btn:hover{filter:brightness(.95)}
+.iq-prio--yellow .iq-prio__btn{color:var(--ink)}
+.iq-prio__top{display:flex;align-items:center;gap:12px}
+.iq-prio__title{font-size:16px;font-weight:800;line-height:1.15}
+.iq-prio__sub{font-size:12px;color:var(--ink-3);font-weight:600}
+.iq-prio__foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+/* Progress rainbow (gaya Duolingo) */
+.iq-progress--rainbow .iq-progress__fill{background:linear-gradient(90deg,#FF8DB3 0%,#FEE362 52%,#69DC5E 100%)}
+
+/* Maskot di samping card */
+.iq-sidebyside{display:flex;align-items:center}
+.iq-sidebyside>.iq-mascot{flex:none;margin-right:-16px;position:relative;z-index:2}
+.iq-sidebyside>.iq-card,.iq-sidebyside>.iq-callout{flex:1;padding-left:28px}
+
+/* Upcoming deadline row */
+.iq-dl{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.iq-dl:last-child{border-bottom:none}
+.iq-dl__t{font-weight:800;font-size:14px}
+.iq-dl__s{font-size:12px;color:var(--ink-3)}
+
+/* Timechip berwarna sesuai status (untuk kartu selain icard) */
+.iq-timechip--pink{background:var(--pink-15);color:var(--pink-text)}
+.iq-timechip--yellow{background:var(--yellow-15);color:var(--yellow-text)}
+.iq-timechip--blue{background:var(--blue-15);color:var(--blue-text)}
+.iq-timechip--green{background:var(--green-15);color:var(--green-text)}
+/* ============================================================
+   Next.js routing overrides (routing replaces data-screen toggling)
+   ============================================================ */
+.iq-auth{display:grid}
+.iq-app{display:grid}
+.iq-screen{display:block}
+.iq-nav__item{text-decoration:none}
+.iq-link{cursor:pointer;text-decoration:none;color:inherit;display:block}
+a.iq-nav__item{color:var(--ink-2)}
+a.iq-nav__item.is-active{color:var(--pink-text)}
