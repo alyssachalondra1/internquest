@@ -57,7 +57,8 @@ const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden=
 </svg>`
 
 export function IconSprite() {
-  return <span suppressHydrationWarning dangerouslySetInnerHTML= __html: SPRITE  />
+const html = { __html: SPRITE }
+return <span suppressHydrationWarning dangerouslySetInnerHTML={html} />
 }
 
 export function Icon({
