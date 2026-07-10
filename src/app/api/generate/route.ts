@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       (context ? "Applicant background: " + context + "\n" : "") +
       "Write in the same language as the role/company context (Indonesian or English). Output only the text, ready to copy."
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
+    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" })
     const result = await model.generateContent(prompt)
     return NextResponse.json({ ok: true, content: result.response.text() })
   } catch (err: any) {
