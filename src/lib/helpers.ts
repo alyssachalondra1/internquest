@@ -12,6 +12,8 @@ export type Internship = {
   duration_months: number | null
   status: string
   notes: string | null
+  match_score: number | null
+  match_reasons: string | null
 }
 
 export const ACCENTS = ["pink", "yellow", "blue", "green"] as const

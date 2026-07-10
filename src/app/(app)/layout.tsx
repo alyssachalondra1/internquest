@@ -11,7 +11,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, level, xp, gems, streak_count")
+    .select("full_name, level, xp, gems, streak_count, avatar_url")
     .eq("id", user.id)
     .single()
 
@@ -26,6 +26,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     xp: profile?.xp ?? 0,
     gems: profile?.gems ?? 0,
     streak_count: profile?.streak_count ?? 0,
+    avatar_url: profile?.avatar_url ?? null,
   }
 
   return (

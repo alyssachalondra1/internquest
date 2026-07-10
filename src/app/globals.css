@@ -351,3 +351,32 @@ body[data-screen="auth"] .iq-auth{display:grid}
 .iq-link{cursor:pointer;text-decoration:none;color:inherit;display:block}
 a.iq-nav__item{color:var(--ink-2)}
 a.iq-nav__item.is-active{color:var(--pink-text)}
+
+/* ====== Revisi UI: link, tombol daftar, avatar, kecocokan, CV ====== */
+:root{--red-text:#E5484D}
+
+/* Hilangkan garis bawah & warna link bawaan di seluruh app */
+a{color:inherit;text-decoration:none}
+
+/* Tombol "Daftar" cepat di kartu internship */
+.iq-apply-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px;border-radius:var(--r-pill);font-size:12px;font-weight:800;background:#fff;color:var(--c-text,var(--blue-text));border:2px solid var(--c-bg2,var(--border));cursor:pointer;transition:filter .12s;text-decoration:none}
+.iq-apply-btn:hover{filter:brightness(.97)}
+.iq-apply-btn .ic{width:14px;height:14px}
+
+/* Avatar bulat di topbar (klik -> profil) */
+a.iq-topbar__av{display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--pink-15);cursor:pointer;padding:0;text-decoration:none;border:2px solid var(--pink-50)}
+a.iq-topbar__av img{width:100%;height:100%;object-fit:cover}
+a.iq-topbar__av svg{width:30px;height:30px}
+
+/* Kartu kecocokan CV */
+.iq-match__score{font-weight:800;font-size:40px;line-height:1;color:var(--green-text)}
+.iq-match__bar{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:10px 0}
+.iq-match__bar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#FF8DB3,#FEE362,#69DC5E)}
+
+/* Kotak upload CV */
+.iq-cvbox{border:2px dashed var(--border);border-radius:14px;padding:16px;text-align:center;cursor:pointer;font-size:13px;color:var(--ink-3);transition:.12s}
+.iq-cvbox:hover{border-color:var(--blue);background:var(--blue-15)}
+.iq-cvbox.is-set{border-style:solid;border-color:var(--green);background:var(--green-15);color:var(--green-text);font-weight:700}
+
+/* Foto profil besar di level card */
+.iq-avatar-lg{width:110px;height:110px;border-radius:50%;object-fit:cover;margin:-62px auto 10px;display:block;border:4px solid var(--surface);background:var(--pink-15)}

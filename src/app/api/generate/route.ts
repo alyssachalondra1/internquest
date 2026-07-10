@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { generateWithRetry } from "@/lib/ai"
+import { createClient } from "@/lib/supabase/server"
 
 export const runtime = "nodejs"
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 const LABELS: Record<string, string> = {
   motivation_letter: "a motivation letter",
@@ -36,18 +35,42 @@ export async function POST(req: Request) {
       context = "",
     } = body as Record<string, string>
 
+    // Ambil CV + minat user (bila ada) untuk personalisasi hasil.
+    let cvText = ""
+    let interests = ""
+    try {
+      const supabase = await createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        const { data: prof } = await supabase
+          .from("profiles")
+          .select("cv_text, interests")
+          .eq("id", user.id)
+          .single()
+        if (prof?.cv_text) cvText = String(prof.cv_text).slice(0, 6000)
+        if (prof?.interests) interests = String(prof.interests)
+      }
+    } catch {
+      // abaikan — tetap bisa generate tanpa CV
+    }
+
     const label = LABELS[answer_type] || "a professional writing"
     const prompt =
       "Write " + label + " for an internship application.\n" +
       "Company: " + (company || "(unspecified)") + "\n" +
       "Role: " + (role || "(unspecified)") + "\n" +
       "Tone: " + tone + ". Length: " + length + ".\n" +
-      (context ? "Applicant background: " + context + "\n" : "") +
+      (cvText
+        ? "Base the content on the applicant's REAL CV below. Only use facts from it; do NOT invent experience.\nCV:\n" + cvText + "\n"
+        : "") +
+      (interests ? "Applicant interests/goals: " + interests + "\n" : "") +
+      (context ? "Additional info from applicant: " + context + "\n" : "") +
       "Write in the same language as the role/company context (Indonesian or English). Output only the text, ready to copy."
 
-    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" })
-    const result = await model.generateContent(prompt)
-    return NextResponse.json({ ok: true, content: result.response.text() })
+    const content = await generateWithRetry(prompt)
+    return NextResponse.json({ ok: true, content })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || "generate failed" }, { status: 500 })
   }

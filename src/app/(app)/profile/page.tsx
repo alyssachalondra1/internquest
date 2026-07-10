@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Questy } from "@/components/Questy"
+import { ProfileExtras } from "@/components/ProfileExtras"
 import { csx } from "@/lib/csx"
 
 export const dynamic = "force-dynamic"
@@ -10,7 +11,10 @@ export default async function ProfilePage() {
     data: { user },
   } = await supabase.auth.getUser()
   const { data: profile } = await supabase
-    .from("profiles").select("full_name, email, level, xp, gems, streak_count").eq("id", user!.id).single()
+    .from("profiles")
+    .select("full_name, email, level, xp, gems, streak_count, cv_url, cv_text, interests, avatar_url")
+    .eq("id", user!.id)
+    .single()
   const { count: applied } = await supabase
     .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
 
@@ -19,10 +23,24 @@ export default async function ProfilePage() {
   const target = level * 200
   const levelPct = Math.min(100, Math.round(((xp - (level - 1) * 200) / 200) * 100))
 
+  const hasCv = !!profile?.cv_text
+  const cvName = profile?.cv_url
+    ? decodeURIComponent(profile.cv_url.split("/").pop() || "").replace(/^cv-\d+-/, "")
+    : null
+
   return (
     <section className="iq-screen is-active">
       <div className="iq-levelcard mb-6" style={csx("max-width:540px;margin-left:auto;margin-right:auto")}>
-        <Questy size={110} />
+        {profile?.avatar_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.avatar_url}
+            alt="Foto profil"
+            className="iq-avatar-lg"
+          />
+        ) : (
+          <Questy size={110} />
+        )}
         <h2 style={csx("font-size:22px")}>Level {level} · Intern Hunter</h2>
         <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
         <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP</div>
@@ -40,10 +58,7 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
-          <div className="iq-card iq-card__pad">
-            <h3 className="mb-4">Skills</h3>
-            <div className="row wrap" style={csx("gap:8px")}><span className="iq-chip">Excel</span><span className="iq-chip">SQL</span><span className="iq-chip">Python</span><span className="iq-chip">Power BI</span></div>
-          </div>
+          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={profile?.interests ?? null} />
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">

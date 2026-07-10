@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { generateWithRetry, LITE_MODEL, PRIMARY_MODEL } from "@/lib/ai"
 
 export const runtime = "nodejs"
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 function stripFences(s: string) {
   return s.replace(/```json/gi, "").replace(/```/g, "").trim()
@@ -33,11 +31,6 @@ export async function POST(req: Request) {
       source_url?: string
     }
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-3.5-flash",
-      generationConfig: { responseMimeType: "application/json" },
-    })
-
     const parts: any[] = [{ text: PROMPT }]
     if (text) parts.push({ text: "JOB TEXT:\n" + text })
     if (source_url) parts.push({ text: "SOURCE URL: " + source_url })
@@ -49,8 +42,13 @@ export async function POST(req: Request) {
       parts.push({ text: "Extract the details from the poster image above." })
     }
 
-    const result = await model.generateContent(parts)
-    const raw = stripFences(result.response.text())
+    // flash-lite dulu (lebih cepat & kuota lega), fallback ke flash bila perlu.
+    const raw = stripFences(
+      await generateWithRetry(parts, {
+        models: [LITE_MODEL, PRIMARY_MODEL],
+        generationConfig: { responseMimeType: "application/json" },
+      }),
+    )
     const parsed = JSON.parse(raw)
     return NextResponse.json({ ok: true, data: parsed })
   } catch (err: any) {

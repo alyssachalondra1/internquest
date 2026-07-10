@@ -6,6 +6,7 @@ import { Questy } from "@/components/Questy"
 import { Icon } from "@/components/Icons"
 import { ChecklistCard } from "@/components/ChecklistCard"
 import { StatusActions } from "@/components/StatusActions"
+import { MatchCard } from "@/components/MatchCard"
 import { csx } from "@/lib/csx"
 import { guessDomain, statusMeta, fmtShort, type Internship } from "@/lib/helpers"
 
@@ -36,6 +37,13 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
     .single()
   if (!it) notFound()
   const item = it as Internship
+
+  const { data: prof } = await supabase
+    .from("profiles")
+    .select("cv_text")
+    .eq("id", user!.id)
+    .single()
+  const hasCv = !!prof?.cv_text
 
   const { data: checklist } = await supabase
     .from("checklist_items")
@@ -80,7 +88,9 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
             <div className="iq-field"><span className="iq-field__k">Lokasi</span><span className="iq-field__v">{item.location || "—"}</span></div>
             <div className="iq-field"><span className="iq-field__k">Employment</span><span className="iq-field__v">{(item.work_type || "—")}{item.is_paid ? " · Paid" : ""}</span></div>
             {item.source_url && (
-              <div className="iq-field"><span className="iq-field__k">Application Link</span><a className="iq-field__v" style={csx("color:var(--blue-text)")} href={item.source_url} target="_blank">Buka link</a></div>
+              <a className="iq-btn iq-btn--blue iq-btn--block" style={csx("margin-top:14px")} href={item.source_url} target="_blank" rel="noopener">
+                <Icon name="ic-link" className="ic ic-18" /> Buka Halaman Pendaftaran
+              </a>
             )}
             {item.notes && (
               <div style={csx("margin-top:12px")}><span className="muted" style={csx("font-size:12px")}>Catatan</span><p className="mt-2">{item.notes}</p></div>
@@ -97,6 +107,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
               <Link className="iq-btn iq-btn--ghost iq-btn--block iq-btn--sm" href={"/ai?internship=" + item.id + "&type=email_to_hr"}>Email HR</Link>
             </div>
           </div>
+          <MatchCard internshipId={item.id} initialScore={item.match_score} initialReasons={item.match_reasons} hasCv={hasCv} />
           <div className="iq-card iq-card__pad">
             <h3 className="mb-4">Progress</h3>
             <div className="center big-num" style={csx("color:var(--pink-text)")}>{pct}%</div>

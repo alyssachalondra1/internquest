@@ -24,6 +24,28 @@ const EMPTY: NewInternship = {
   source_url: null,
 }
 
+// Kompres + resize gambar poster sebelum upload agar upload & pembacaan AI jauh lebih cepat.
+async function compressImage(file: File, max = 1400, quality = 0.82): Promise<Blob> {
+  try {
+    if (!file.type.startsWith("image/")) return file
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height))
+    const w = Math.round(bitmap.width * scale)
+    const h = Math.round(bitmap.height * scale)
+    const canvas = document.createElement("canvas")
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return file
+    ctx.drawImage(bitmap, 0, 0, w, h)
+    return await new Promise<Blob>((resolve) =>
+      canvas.toBlob((b) => resolve(b || file), "image/jpeg", quality),
+    )
+  } catch {
+    return file
+  }
+}
+
 export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -91,8 +113,11 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) throw new Error("Sesi habis, silakan login lagi")
-      const path = user.id + "/" + Date.now() + "-" + file.name
-      const up = await supabase.storage.from("posters").upload(path, file)
+      const blob = await compressImage(file)
+      const path = user.id + "/" + Date.now() + ".jpg"
+      const up = await supabase.storage
+        .from("posters")
+        .upload(path, blob, { contentType: "image/jpeg", upsert: true })
       if (up.error) throw new Error(up.error.message)
       const { data: pub } = supabase.storage.from("posters").getPublicUrl(path)
       await runExtract({ poster_url: pub.publicUrl })
@@ -200,9 +225,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
                 />
                 <button
                   className="iq-btn iq-btn--blue iq-btn--sm mt-2"
-                  onClick={() =>
-                    runExtract(mode === "link" ? { source_url: text } : { text })
-                  }
+                  onClick={() => runExtract(mode === "link" ? { source_url: text } : { text })}
                 >
                   <Icon name="ic-ai" className="ic ic-16" /> Baca dengan AI
                 </button>
@@ -216,6 +239,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
               <div className="iq-form-row"><label>Mulai magang</label><input className="iq-input" type="date" value={form.start_date || ""} onChange={(e) => upd("start_date", e.target.value)} /></div>
               <div className="iq-form-row"><label>Durasi (bulan)</label><input className="iq-input" type="number" value={form.duration_months ?? ""} onChange={(e) => upd("duration_months", e.target.value)} /></div>
             </div>
+            <div className="iq-form-row"><label>Link Pendaftaran (opsional)</label><input className="iq-input" value={form.source_url || ""} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://… tautan daftar/lamar" /></div>
             <div className="iq-form-row"><label>Catatan / Requirements</label><textarea className="iq-textarea" value={form.notes || ""} onChange={(e) => upd("notes", e.target.value)} /></div>
             <div className="row" style={csx("justify-content:flex-end;gap:10px")}>
               <button className="iq-btn iq-btn--ghost" onClick={close}>Batal</button>

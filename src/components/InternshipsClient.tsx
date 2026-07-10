@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { CompanyLogo } from "@/components/CompanyLogo"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
@@ -18,6 +18,7 @@ import {
 type Prog = Record<string, { done: number; total: number; pct: number }>
 
 export function InternshipsClient({ items, progress }: { items: Internship[]; progress: Prog }) {
+  const router = useRouter()
   const [tab, setTab] = useState<string>("all")
   const counts: Record<string, number> = { all: items.length }
   for (const s of STATUSES) counts[s.key] = items.filter((i) => i.status === s.key).length
@@ -50,7 +51,11 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
             const chip = deadlineChip(it.deadline)
             const sm = statusMeta(it.status)
             return (
-              <Link key={it.id} href={"/internships/" + it.id} className={"iq-icard iq-icard--" + a}>
+              <div
+                key={it.id}
+                className={"iq-icard iq-icard--" + a}
+                onClick={() => router.push("/internships/" + it.id)}
+              >
                 {chip && (
                   <span className="iq-timechip">
                     <Icon name="ic-clock" className="ic ic-16" /> {chip.label}
@@ -72,7 +77,18 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                   <span>Checklist {p.done}/{p.total}</span>
                   <span className={"iq-chip " + sm.chip}>{sm.label}</span>
                 </div>
-              </Link>
+                {it.source_url && (
+                  <button
+                    className="iq-apply-btn"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      window.open(it.source_url as string, "_blank", "noopener")
+                    }}
+                  >
+                    <Icon name="ic-link" className="ic ic-16" /> Daftar
+                  </button>
+                )}
+              </div>
             )
           })}
         </div>

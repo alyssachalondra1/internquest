@@ -100,7 +100,12 @@ export default async function DashboardPage() {
                   <div className="iq-progress"><div className="iq-progress__fill" style={csx("width:" + p.pct + "%")} /></div>
                   <div className="iq-prio__foot">
                     <span className="muted">Checklist {p.done}/{p.total}</span>
-                    <Link className="iq-prio__btn" href={"/internships/" + it.id}>Lanjutkan</Link>
+                    <div className="row" style={csx("gap:8px")}>
+                      {it.source_url && (
+                        <a className="iq-apply-btn" href={it.source_url} target="_blank" rel="noopener">Daftar</a>
+                      )}
+                      <Link className="iq-prio__btn" href={"/internships/" + it.id}>Lanjutkan</Link>
+                    </div>
                   </div>
                 </div>
               )

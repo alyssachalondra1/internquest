@@ -35,6 +35,7 @@ function AiInner() {
   const [length, setLength] = useState("Medium")
   const [company, setCompany] = useState("")
   const [role, setRole] = useState("")
+  const [context, setContext] = useState("")
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -59,7 +60,7 @@ function AiInner() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answer_type: type, tone, length, company, role }),
+        body: JSON.stringify({ answer_type: type, tone, length, company, role, context }),
       })
       const json = await res.json()
       setOutput(json.ok ? json.content : "Gagal generate: " + (json.error || ""))
@@ -89,6 +90,15 @@ function AiInner() {
             <div className="iq-form-row"><label>Tone</label><select className="iq-select" value={tone} onChange={(e) => setTone(e.target.value)}><option>Professional</option><option>Friendly</option><option>Confident</option></select></div>
             <div className="iq-form-row"><label>Length</label><select className="iq-select" value={length} onChange={(e) => setLength(e.target.value)}><option>Medium</option><option>Short</option><option>Long</option></select></div>
           </div>
+          <div className="iq-form-row mb-4">
+            <label>Info tambahan (opsional)</label>
+            <textarea
+              className="iq-textarea"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              placeholder="Contoh: tekankan pengalaman organisasi & proyek data; tulis dalam Bahasa Indonesia; sebutkan minat pada sustainability…"
+            />
+          </div>
           <button className="iq-btn iq-btn--primary iq-btn--block mb-6" onClick={generate} disabled={loading}>
             <Icon name="ic-ai" className="ic ic-18" /> {loading ? "Generating…" : "Generate"}
           </button>
@@ -109,13 +119,8 @@ function AiInner() {
         </div>
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <div className="row mb-4"><div className="iq-mono" style={csx("background:var(--pink);width:36px;height:36px;border-radius:10px")}><Icon name="ic-brain" className="ic ic-18" style={csx("color:#fff")} /></div><h3>AI Memory</h3></div>
-            <p className="muted mb-4">Preferensi yang diingat AI:</p>
-            <div className="row wrap" style={csx("gap:8px")}>
-              <span className="iq-chip iq-chip--pink">{tone} tone</span>
-              <span className="iq-chip iq-chip--blue">{length} length</span>
-              {role && <span className="iq-chip iq-chip--green">{role}</span>}
-            </div>
+            <div className="row mb-4"><Icon name="ic-doc" className="ic ic-22" style={csx("color:var(--pink-text)")} /><h3>Personalisasi</h3></div>
+            <p className="muted">Hasil AI otomatis disesuaikan dengan <b>CV</b> yang kamu upload di halaman <b>Profile</b>. Tambahkan “Info tambahan” di sebelah kiri untuk hasil yang lebih spesifik sesuai keinginanmu.</p>
           </div>
           <div className="iq-card iq-card__pad">
             <div className="row mb-4"><Icon name="ic-target" className="ic ic-22" style={csx("color:var(--green-text)")} /><h3>Tips</h3></div>

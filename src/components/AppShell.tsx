@@ -14,6 +14,7 @@ export type ProfileStats = {
   xp: number
   gems: number
   streak_count: number
+  avatar_url: string | null
 }
 
 const NAV = [
@@ -97,16 +98,28 @@ export function AppShell({
           {navItem(NAV_ACCOUNT[1])}
           {navItem(NAV_ACCOUNT[2])}
         </nav>
-        <div className="iq-usermini">
-          <div className="iq-usermini__av" />
+        <Link href="/profile" className="iq-usermini">
+          <div
+            className="iq-usermini__av"
+            style={
+              profile.avatar_url
+                ? { backgroundImage: `url(${profile.avatar_url})`, backgroundSize: "cover", backgroundPosition: "center" }
+                : undefined
+            }
+          />
           <div className="iq-usermini__meta">
             <b>{name}</b>
             <span>Lv.{profile.level} · Intern Hunter</span>
           </div>
-          <button className="grow" style={csx("text-align:right;color:var(--ink-3)")} onClick={signOut} title="Keluar">
-            <Icon name="ic-logout" className="ic ic-18" />
-          </button>
-        </div>
+        </Link>
+        <button
+          className="iq-nav__item"
+          style={csx("color:var(--ink-3)")}
+          onClick={signOut}
+          title="Keluar"
+        >
+          <Icon name="ic-logout" /> <span style={csx("flex:1")}>Keluar</span>
+        </button>
       </aside>
 
       <main className="iq-main">
@@ -127,7 +140,14 @@ export function AppShell({
           <button className="iq-btn iq-btn--primary" onClick={() => setAddOpen(true)}>
             <Icon name="ic-plus" className="ic ic-18" /> Add Internship
           </button>
-          <div className="iq-topbar__av" />
+          <Link href="/profile" className="iq-topbar__av" aria-label="Profil">
+            {profile.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar_url} alt="Foto profil" />
+            ) : (
+              <svg aria-hidden="true"><use href="#questy" /></svg>
+            )}
+          </Link>
         </header>
         <div className="iq-content">{children}</div>
       </main>
