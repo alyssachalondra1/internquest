@@ -55,6 +55,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                 key={it.id}
                 className={"iq-icard iq-icard--" + a}
                 onClick={() => router.push("/internships/" + it.id)}
+                onMouseEnter={() => router.prefetch("/internships/" + it.id)}
               >
                 {chip && (
                   <span className="iq-timechip">
