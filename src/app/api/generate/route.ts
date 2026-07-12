@@ -35,9 +35,10 @@ export async function POST(req: Request) {
       context = "",
     } = body as Record<string, string>
 
-    // Ambil CV + minat user (bila ada) untuk personalisasi hasil.
+    // Ambil CV, minat, dan portfolio user (bila ada) untuk personalisasi hasil.
     let cvText = ""
     let interests = ""
+    let portfolioText = ""
     try {
       const supabase = await createClient()
       const {
@@ -51,9 +52,16 @@ export async function POST(req: Request) {
           .single()
         if (prof?.cv_text) cvText = String(prof.cv_text).slice(0, 6000)
         if (prof?.interests) interests = String(prof.interests)
+        // Portfolio diambil terpisah agar aman bila kolomnya belum ada.
+        const { data: p2 } = await supabase
+          .from("profiles")
+          .select("portfolio_text")
+          .eq("id", user.id)
+          .single()
+        if (p2?.portfolio_text) portfolioText = String(p2.portfolio_text).slice(0, 4000)
       }
     } catch {
-      // abaikan — tetap bisa generate tanpa CV
+      // abaikan, tetap bisa generate tanpa CV
     }
 
     const label = LABELS[answer_type] || "a professional writing"
@@ -65,9 +73,14 @@ export async function POST(req: Request) {
       (cvText
         ? "Base the content on the applicant's REAL CV below. Only use facts from it; do NOT invent experience.\nCV:\n" + cvText + "\n"
         : "") +
+      (portfolioText
+        ? "The applicant also has this portfolio. Use relevant projects from it when helpful.\nPORTFOLIO:\n" + portfolioText + "\n"
+        : "") +
       (interests ? "Applicant interests/goals: " + interests + "\n" : "") +
       (context ? "Additional info from applicant: " + context + "\n" : "") +
-      "Write in the same language as the role/company context (Indonesian or English). Output only the text, ready to copy."
+      "STYLE RULES: Write in natural Indonesian unless the company/role context is clearly English. " +
+      "Do NOT use the em dash or en dash character; use commas or full stops instead. Avoid overusing colons. " +
+      "Do not use the fire emoji or excessive emojis. Output only the final text, ready to copy."
 
     const content = await generateWithRetry(prompt)
     return NextResponse.json({ ok: true, content })

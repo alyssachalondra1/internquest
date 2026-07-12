@@ -26,10 +26,20 @@ export async function POST(req: Request) {
       .single()
     if (!prof?.cv_text) {
       return NextResponse.json(
-        { ok: false, error: "CV belum diunggah. Upload CV di halaman Profile dulu ya." },
+        { ok: false, error: "CV belum diunggah. Upload CV di halaman Profil dulu ya." },
         { status: 400 },
       )
     }
+
+    let portfolioText = ""
+    try {
+      const { data: p2 } = await supabase
+        .from("profiles")
+        .select("portfolio_text")
+        .eq("id", user.id)
+        .single()
+      if (p2?.portfolio_text) portfolioText = String(p2.portfolio_text).slice(0, 3000)
+    } catch {}
 
     const { data: it } = await supabase
       .from("internships")
@@ -40,11 +50,13 @@ export async function POST(req: Request) {
     if (!it) return NextResponse.json({ ok: false, error: "Lowongan tidak ditemukan" }, { status: 404 })
 
     const prompt =
-      "You are a career advisor. Compare the applicant's CV and interests against an internship, then estimate a match percentage.\n" +
-      'Return ONLY valid JSON: { "score": number (0-100), "reasons": string (2-3 kalimat, bahasa Indonesia), "tips": string (1-2 saran singkat, bahasa Indonesia) }.\n\n' +
+      "You are a career advisor. Compare the applicant CV, portfolio, and interests against an internship, then estimate a match percentage.\n" +
+      'Return ONLY valid JSON: { "score": number (0-100), "reasons": string (2 to 3 kalimat, bahasa Indonesia), "tips": string (1 to 2 saran singkat, bahasa Indonesia) }.\n' +
+      "STYLE: Do not use the em dash character. Do not use colons inside reasons or tips. Do not use the fire emoji.\n\n" +
       "INTERNSHIP:\nCompany: " + (it.company_name || "") + "\nRole: " + (it.role || "") +
       "\nLocation: " + (it.location || "") + "\nRequirements/Notes: " + (it.notes || "") + "\n\n" +
       "APPLICANT INTERESTS: " + (prof.interests || "(tidak diisi)") + "\n\n" +
+      (portfolioText ? "APPLICANT PORTFOLIO:\n" + portfolioText + "\n\n" : "") +
       "APPLICANT CV:\n" + String(prof.cv_text).slice(0, 6000)
 
     const raw = stripFences(

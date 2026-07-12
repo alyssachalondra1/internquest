@@ -93,8 +93,9 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         duration_months: d.duration_months || null,
         notes: d.notes || "",
         poster_url: payload.poster_url || null,
-        source_url: payload.source_url || null,
+        source_url: d.source_url || payload.source_url || null,
       })
+      if (json.warning) setError(json.warning)
       setStep("review")
     } catch (e: any) {
       setError(e?.message || "Terjadi kesalahan")
@@ -229,12 +230,17 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
                 >
                   <Icon name="ic-ai" className="ic ic-16" /> Baca dengan AI
                 </button>
+                {mode === "link" && (
+                  <p className="muted mt-2" style={csx("font-size:12px")}>
+                    Catatan: LinkedIn sering memblokir pembacaan otomatis. Kalau hasilnya kurang lengkap, pakai opsi Tempel JD lalu salin-tempel teks lowongannya.
+                  </p>
+                )}
               </div>
             )}
             <div className="iq-grid iq-grid--2">
-              <div className="iq-form-row"><label>Company</label><input className="iq-input" value={form.company_name} onChange={(e) => upd("company_name", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Position</label><input className="iq-input" value={form.role || ""} onChange={(e) => upd("role", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Location</label><input className="iq-input" value={form.location || ""} onChange={(e) => upd("location", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Perusahaan</label><input className="iq-input" value={form.company_name} onChange={(e) => upd("company_name", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Posisi</label><input className="iq-input" value={form.role || ""} onChange={(e) => upd("role", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Lokasi</label><input className="iq-input" value={form.location || ""} onChange={(e) => upd("location", e.target.value)} /></div>
               <div className="iq-form-row"><label>Deadline</label><input className="iq-input" type="date" value={form.deadline || ""} onChange={(e) => upd("deadline", e.target.value)} /></div>
               <div className="iq-form-row"><label>Mulai magang</label><input className="iq-input" type="date" value={form.start_date || ""} onChange={(e) => upd("start_date", e.target.value)} /></div>
               <div className="iq-form-row"><label>Durasi (bulan)</label><input className="iq-input" type="number" value={form.duration_months ?? ""} onChange={(e) => upd("duration_months", e.target.value)} /></div>

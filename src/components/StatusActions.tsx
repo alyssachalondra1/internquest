@@ -1,19 +1,32 @@
 "use client"
 
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { updateInternshipStatus } from "@/app/actions/internships"
 import { STATUSES } from "@/lib/helpers"
+import { Questy } from "@/components/Questy"
+import { playApply, playLevelUp, playSad } from "@/lib/sound"
+import { csx } from "@/lib/csx"
 
 const NEXT: Record<string, { to: string; label: string }> = {
-  todo: { to: "applied", label: "Tandai sudah Apply" },
-  applied: { to: "interview", label: "Masuk tahap Interview" },
-  interview: { to: "offer", label: "Dapat Offer! 🎉" },
+  todo: { to: "applied", label: "Tandai sudah melamar" },
+  applied: { to: "interview", label: "Masuk tahap interview" },
+  interview: { to: "offer", label: "Dapat offer!" },
+}
+
+type Pop = { title: string; body: string; badge: string; cls: string; mood: "happy" | "sad" }
+
+const POP: Record<string, Pop> = {
+  applied: { title: "Lamaran terkirim!", body: "Satu langkah lebih dekat menuju magang impianmu.", badge: "+25 XP", cls: "iq-chip--yellow", mood: "happy" },
+  interview: { title: "Kamu masuk interview!", body: "Kerja bagus. Siapkan dirimu, kamu pasti bisa.", badge: "+50 XP", cls: "iq-chip--blue", mood: "happy" },
+  offer: { title: "Selamat, kamu dapat offer!", body: "Luar biasa! Semua usahamu terbayar.", badge: "+150 XP", cls: "iq-chip--green", mood: "happy" },
+  rejected: { title: "Jangan menyerah ya", body: "Ini bagian dari proses. Masih banyak peluang lain yang menantimu.", badge: "Tetap semangat", cls: "iq-chip--rejected", mood: "sad" },
 }
 
 export function StatusActions({ id, status }: { id: string; status: string }) {
   const router = useRouter()
   const [pending, start] = useTransition()
+  const [pop, setPop] = useState<string | null>(null)
   const next = NEXT[status]
 
   function set(to: string) {
@@ -21,7 +34,15 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
       await updateInternshipStatus(id, to)
       router.refresh()
     })
+    if (POP[to]) {
+      setPop(to)
+      if (to === "rejected") playSad()
+      else if (to === "offer" || to === "interview") playLevelUp()
+      else playApply()
+    }
   }
+
+  const p = pop ? POP[pop] : null
 
   return (
     <div className="stack-2 mt-6">
@@ -35,6 +56,27 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
           <option key={s.key} value={s.key}>{s.label}</option>
         ))}
       </select>
+
+      {p && (
+        <div className="iq-pop-scrim" onClick={() => setPop(null)}>
+          <div className="iq-pop" onClick={(e) => e.stopPropagation()}>
+            <button className="iq-pop__x" onClick={() => setPop(null)}>✕</button>
+            {p.mood === "happy" && (
+              <>
+                <span className="iq-spark" style={csx("top:18px;left:26px")}>✨</span>
+                <span className="iq-spark" style={csx("top:30px;right:34px")}>✨</span>
+              </>
+            )}
+            <Questy size={96} />
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+            <div>
+              <span className={"iq-pop__badge " + p.cls}>{p.badge}</span>
+            </div>
+            <button className="iq-btn iq-btn--primary iq-btn--block mt-6" onClick={() => setPop(null)}>Lanjut</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -21,12 +21,11 @@ export type Accent = (typeof ACCENTS)[number]
 export const accentAt = (i: number): Accent => ACCENTS[i % ACCENTS.length]
 
 export const STATUSES = [
-  { key: "todo", label: "To Do", chip: "iq-chip--pink", tab: "iq-tab--todo" },
-  { key: "applied", label: "Applied", chip: "iq-chip--yellow", tab: "iq-tab--applied" },
+  { key: "todo", label: "Belum dilamar", chip: "iq-chip--pink", tab: "iq-tab--todo" },
+  { key: "applied", label: "Dilamar", chip: "iq-chip--yellow", tab: "iq-tab--applied" },
   { key: "interview", label: "Interview", chip: "iq-chip--blue", tab: "iq-tab--interview" },
   { key: "offer", label: "Offer", chip: "iq-chip--green", tab: "iq-tab--offer" },
-  { key: "rejected", label: "Rejected", chip: "iq-chip--rejected", tab: "iq-tab--rejected" },
-  { key: "archived", label: "Archived", chip: "", tab: "" },
+  { key: "rejected", label: "Ditolak", chip: "iq-chip--rejected", tab: "iq-tab--rejected" },
 ]
 
 export function statusMeta(key: string) {
@@ -41,9 +40,9 @@ export function guessDomain(company: string | null): string {
 const MONTHS_ID = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
 
 export function fmtShort(iso?: string | null): string {
-  if (!iso) return "—"
+  if (!iso) return "-"
   const d = new Date(iso)
-  if (isNaN(d.getTime())) return "—"
+  if (isNaN(d.getTime())) return "-"
   return d.getDate() + " " + MONTHS_ID[d.getMonth()]
 }
 

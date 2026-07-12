@@ -18,6 +18,14 @@ export default async function ProfilePage() {
   const { count: applied } = await supabase
     .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
 
+  // Portfolio diambil terpisah agar aman bila kolomnya belum ada di database.
+  let portfolio: { portfolio_url: string | null; portfolio_text: string | null } | null = null
+  try {
+    const { data } = await supabase
+      .from("profiles").select("portfolio_url, portfolio_text").eq("id", user!.id).single()
+    portfolio = (data as any) ?? null
+  } catch {}
+
   const level = profile?.level ?? 1
   const xp = profile?.xp ?? 0
   const target = level * 200
@@ -26,6 +34,10 @@ export default async function ProfilePage() {
   const hasCv = !!profile?.cv_text
   const cvName = profile?.cv_url
     ? decodeURIComponent(profile.cv_url.split("/").pop() || "").replace(/^cv-\d+-/, "")
+    : null
+  const hasPortfolio = !!portfolio?.portfolio_text
+  const portfolioName = portfolio?.portfolio_url
+    ? decodeURIComponent(portfolio.portfolio_url.split("/").pop() || "").replace(/^portfolio-\d+-/, "")
     : null
 
   return (
@@ -53,18 +65,18 @@ export default async function ProfilePage() {
       <div className="iq-grid iq-grid--dash">
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <h3 className="mb-4">Personal Information</h3>
+            <h3 className="mb-4">Informasi Pribadi</h3>
             <div className="iq-field"><span className="iq-field__k">Nama</span><span className="iq-field__v">{profile?.full_name || "—"}</span></div>
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
-          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={profile?.interests ?? null} />
+          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={profile?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} />
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">
             <Questy size={72} />
             <div className="iq-callout" style={csx("background:var(--pink-15);border-color:var(--pink-50)")}>
-              <div><b>Semangat, {(profile?.full_name || "").split(" ")[0] || "Kamu"}!</b><p className="mt-2">Tinggal {Math.max(0, target - xp)} XP lagi menuju Level {level + 1}. Selesaikan 1 checklist hari ini untuk jaga streak-mu! 🔥</p></div>
+              <div><b>Semangat, {(profile?.full_name || "").split(" ")[0] || "Kamu"}!</b><p className="mt-2">Tinggal {Math.max(0, target - xp)} XP lagi menuju Level {level + 1}. Selesaikan 1 checklist hari ini untuk jaga streak-mu.</p></div>
             </div>
           </div>
         </div>

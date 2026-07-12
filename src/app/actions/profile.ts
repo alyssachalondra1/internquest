@@ -36,3 +36,16 @@ export async function saveAvatar(avatar_url: string) {
   revalidatePath("/profile")
   revalidatePath("/", "layout")
 }
+
+export async function savePortfolio(input: { portfolio_url: string; portfolio_text: string }) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase
+    .from("profiles")
+    .update({ portfolio_url: input.portfolio_url, portfolio_text: input.portfolio_text })
+    .eq("id", user.id)
+  revalidatePath("/profile")
+}

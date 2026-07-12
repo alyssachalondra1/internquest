@@ -393,3 +393,116 @@ a.iq-topbar__av svg{width:30px;height:30px}
 .iq-skel--line{width:100%;height:14px}
 .iq-skel--line.short{width:55%}
 .iq-skel--bar{width:100%;height:10px;border-radius:999px}
+
+/* ============================================================
+   REVISI v2 — Dominan biru, tombol 3D, tanpa gradient, sparkle,
+   skala font konsisten, kartu lebih natural, badge & settings gamified.
+   (Ditaruh di akhir file agar meng-override aturan di atasnya.)
+   ============================================================ */
+:root{
+  --primary:#48A7E4; --primary-text:#2B8FD1;
+  --blue-2:#EAF4FC;            /* kanvas biru sangat lembut */
+  --ink:#14213D;              /* teks navy konsisten */
+  --ink-2:#4A5568; --ink-3:#8A93A6;
+  --border:#E6ECF4; --border-2:#D5DCE8;
+}
+
+/* Kanvas app diberi semburat biru lembut agar biru mendominasi */
+body{background:var(--blue-2);color:var(--ink)}
+.iq-sidebar,.iq-topbar{background:#fff}
+
+/* ---- Skala tipografi konsisten ---- */
+h1{font-size:26px;font-weight:800;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:800;letter-spacing:-.01em}
+h3{font-size:17px;font-weight:800}
+.big-num{font-size:28px;font-weight:800}
+.iq-field__v,.iq-icard__title{color:var(--ink)}
+
+/* ---- Tombol 3D (gaya hard-shadow) ---- */
+.iq-btn{border-radius:16px;font-weight:800;box-shadow:0 4px 0 var(--btn-dark,rgba(20,33,61,.16));transition:transform .06s, box-shadow .06s, filter .12s}
+.iq-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--btn-dark,rgba(20,33,61,.16))}
+.iq-btn--primary{background:var(--blue);color:#fff;--btn-dark:#2B7CB3}
+.iq-btn--blue{background:var(--blue);color:#fff;--btn-dark:#2B7CB3}
+.iq-btn--green{background:var(--green);color:#0f5b17;--btn-dark:#3EA847}
+.iq-btn--yellow{background:var(--yellow);color:#6b5200;--btn-dark:#D8B900}
+.iq-btn--pink{background:var(--pink);color:#fff;--btn-dark:#E0699A}
+.iq-btn--ghost{background:#fff;color:var(--ink);border:2px solid var(--border-2);--btn-dark:#D5DCE8}
+.iq-btn--sm{box-shadow:0 3px 0 var(--btn-dark,rgba(20,33,61,.16))}
+.iq-btn--sm:active{box-shadow:0 1px 0 var(--btn-dark,rgba(20,33,61,.16))}
+.iq-prio__btn{box-shadow:0 3px 0 rgba(20,33,61,.18)}
+.iq-prio__btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(20,33,61,.18)}
+
+/* ---- Sidebar dominan biru ---- */
+.iq-nav__item.is-active,a.iq-nav__item.is-active{background:var(--blue-15);color:var(--blue-text)}
+.iq-nav__badge{background:var(--blue)}
+.iq-usermini{background:var(--blue-15)}
+
+/* ---- Progress & bar: biru solid (tanpa gradient) ---- */
+.iq-progress__fill{background:var(--blue)}
+.iq-progress--rainbow .iq-progress__fill{background:var(--blue)}
+.iq-match__bar>i{background:var(--blue)}
+.iq-match__score{color:var(--blue-text)}
+
+/* ---- Kartu lebih natural & lembut ---- */
+.iq-card{border:2px solid #E7ECF3;border-radius:22px;box-shadow:0 1px 2px rgba(20,33,61,.04),0 8px 22px rgba(20,33,61,.05)}
+.iq-callout{background:var(--blue-15);border-color:var(--blue-40);border-radius:20px}
+.iq-icard{border-radius:22px;transition:transform .14s,box-shadow .14s}
+.iq-icard:hover{transform:translateY(-3px)}
+.iq-modal{border-radius:26px}
+
+/* ---- Sparkle dekoratif (tanpa gradient) ---- */
+.iq-spark{position:absolute;color:var(--yellow);pointer-events:none;animation:iq-tw 2.4s ease-in-out infinite}
+@keyframes iq-tw{0%,100%{transform:scale(.7);opacity:.4}50%{transform:scale(1.05);opacity:1}}
+
+/* ---- Util teks rata kiri-kanan ---- */
+.iq-justify{text-align:justify;text-justify:inter-word}
+
+/* ---- Popup status (maskot senang/sedih) ---- */
+.iq-pop-scrim{position:fixed;inset:0;background:rgba(20,33,61,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;animation:fade .18s ease}
+.iq-pop{background:#fff;border-radius:28px;max-width:380px;width:100%;padding:30px 26px;text-align:center;box-shadow:var(--sh-2);position:relative;overflow:hidden;animation:iq-pop-in .28s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes iq-pop-in{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.iq-pop h3{font-size:22px;margin:14px 0 6px}
+.iq-pop p{color:var(--ink-2);font-size:14px}
+.iq-pop__badge{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 18px;border-radius:999px;font-weight:800;font-size:14px;margin-top:16px}
+.iq-pop__x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.iq-pop .iq-spark{font-size:16px}
+
+/* ---- Badge gamified ---- */
+.iq-badge{position:relative;border-radius:20px;transition:transform .14s,box-shadow .14s}
+.iq-badge.is-unlocked{box-shadow:0 6px 18px rgba(72,167,228,.18);border-color:var(--blue-40)}
+.iq-badge.is-unlocked:hover{transform:translateY(-3px)}
+.iq-badge__ic{width:60px;height:60px;border-radius:18px}
+.iq-badge.is-locked .iq-badge__ic{background:var(--surface-2);color:var(--ink-3)}
+.iq-badge__spark{position:absolute;top:8px;right:10px;font-size:14px;animation:iq-tw 2.4s ease-in-out infinite}
+
+/* ---- Achievements hero ---- */
+.iq-ach-hero{display:flex;gap:22px;align-items:center;background:#fff;border:2px solid #E7ECF3;border-radius:24px;padding:26px 28px;box-shadow:0 8px 22px rgba(20,33,61,.06)}
+.iq-ach-hero__mascot{flex:none}
+@media(max-width:700px){.iq-ach-hero{flex-direction:column;text-align:center}}
+
+/* ---- Settings pro + gamified ---- */
+.iq-set-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:900px){.iq-set-grid{grid-template-columns:1fr}}
+.iq-set-sec{margin-bottom:20px}
+.iq-set-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.iq-set-ic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--blue-15);color:var(--blue-text);flex:none}
+.iq-set-head h3{font-size:16px}
+.iq-set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.iq-set-row:last-child{border-bottom:none}
+.iq-set-row__t b{font-size:14px;display:block}
+.iq-set-row__t span{font-size:12px;color:var(--ink-3)}
+.iq-switch{position:relative;width:48px;height:28px;flex:none;cursor:pointer;display:inline-block}
+.iq-switch input{opacity:0;width:0;height:0;position:absolute}
+.iq-switch .track{position:absolute;inset:0;background:var(--border-2);border-radius:999px;transition:.18s}
+.iq-switch .knob{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:.18s}
+.iq-switch input:checked ~ .track{background:var(--blue)}
+.iq-switch input:checked ~ .knob{transform:translateX(20px)}
+.iq-seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.iq-seg button{height:34px;padding:0 16px;border-radius:9px;font-weight:800;font-size:13px;color:var(--ink-2)}
+.iq-seg button.on{background:#fff;color:var(--blue-text);box-shadow:0 1px 3px rgba(20,33,61,.12)}
+
+/* Tombol hapus di kartu internship (arsip diganti jadi hapus) */
+.iq-icard{position:relative}
+.iq-card-del{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:9px;background:rgba(255,255,255,.75);color:var(--ink-3);display:none;align-items:center;justify-content:center;font-size:13px;font-weight:800;z-index:4;line-height:1}
+.iq-icard:hover .iq-card-del{display:flex}
+.iq-card-del:hover{background:var(--red-15);color:var(--red-text)}

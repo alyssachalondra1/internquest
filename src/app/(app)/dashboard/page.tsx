@@ -25,11 +25,13 @@ export default async function DashboardPage() {
     .eq("id", user!.id)
     .single()
 
+  // Hanya lowongan yang masih berjalan (bukan ditolak / diarsip) yang tampil di dashboard.
   const { data: internships } = await supabase
     .from("internships")
     .select("*")
     .eq("user_id", user!.id)
     .neq("status", "archived")
+    .neq("status", "rejected")
     .order("deadline", { ascending: true })
   const items = (internships || []) as Internship[]
 
@@ -66,22 +68,22 @@ export default async function DashboardPage() {
       <div className="iq-callout mb-6">
         <Questy size={54} />
         <div>
-          <b>AI Insight</b>
-          <p className="mt-2">
+          <b>Insight AI</b>
+          <p className="mt-2 iq-justify">
             Kamu menyimpan <b>{items.length} lowongan</b>, sudah <b>{applied}</b> yang berproses.
             {priority[0]
-              ? " Deadline terdekat: " + priority[0].company_name + " — fokus selesaikan checklist-nya dulu ya. 🔥"
-              : " Tambahkan lowongan pertamamu untuk mulai! 🚀"}
+              ? " Deadline terdekat ada di " + priority[0].company_name + ". Fokus selesaikan checklist-nya dulu ya."
+              : " Tambahkan lowongan pertamamu untuk mulai."}
           </p>
         </div>
       </div>
 
       <div className="iq-grid iq-grid--dash">
         <div className="stack-6">
-          <div className="iq-sec-title"><h3>🔥 Smart Deadline Priority</h3><Link href="/internships">Lihat semua</Link></div>
+          <div className="iq-sec-title"><h3>Prioritas Deadline</h3><Link href="/internships">Lihat semua</Link></div>
           <div className="stack-4">
             {priority.length === 0 && (
-              <div className="iq-card iq-card__pad muted">Belum ada deadline. Tambahkan lowongan lewat tombol Add Internship.</div>
+              <div className="iq-card iq-card__pad muted">Belum ada deadline. Tambahkan lowongan lewat tombol Tambah Magang.</div>
             )}
             {priority.map((it, idx) => {
               const a = accentAt(idx)
@@ -120,19 +122,19 @@ export default async function DashboardPage() {
             <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
             <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP menuju Level {level + 1}</div>
             <div className="iq-levelstats">
-              <div><div className="big-num">{profile?.streak_count ?? 0}</div><small className="muted">Day Streak</small></div>
+              <div><div className="big-num">{profile?.streak_count ?? 0}</div><small className="muted">Hari Beruntun</small></div>
               <div><div className="big-num">{profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
-              <div><div className="big-num">{applied}</div><small className="muted">Applied</small></div>
+              <div><div className="big-num">{applied}</div><small className="muted">Dilamar</small></div>
             </div>
           </div>
           <div className="iq-card iq-card__pad">
-            <div className="iq-sec-title"><h3>📅 Upcoming Deadlines</h3><Link href="/calendar">Calendar</Link></div>
+            <div className="iq-sec-title"><h3>Deadline Mendatang</h3><Link href="/calendar">Kalender</Link></div>
             {upcoming.length === 0 && <p className="muted">Tidak ada deadline mendatang.</p>}
             {upcoming.map((it) => {
               const chip = deadlineChip(it.deadline)
               return (
                 <div key={it.id} className="iq-dl">
-                  <span className="iq-tag-dot" style={csx("background:var(--pink)")} />
+                  <span className="iq-tag-dot" style={csx("background:var(--blue)")} />
                   <div style={csx("flex:1")}>
                     <div className="iq-dl__t">{it.company_name}</div>
                     <div className="iq-dl__s">Deadline · {fmtShort(it.deadline)}</div>

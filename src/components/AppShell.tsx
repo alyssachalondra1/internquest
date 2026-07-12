@@ -18,27 +18,25 @@ export type ProfileStats = {
 }
 
 const NAV = [
-  { href: "/dashboard", icon: "ic-dashboard", label: "Dashboard" },
-  { href: "/internships", icon: "ic-list", label: "Internships" },
-  { href: "/calendar", icon: "ic-calendar", label: "Calendar" },
-  { href: "/ai", icon: "ic-ai", label: "AI Assistant" },
-  { href: "/achievements", icon: "ic-trophy", label: "Achievements" },
+  { href: "/dashboard", icon: "ic-dashboard", label: "Beranda" },
+  { href: "/internships", icon: "ic-list", label: "Magang" },
+  { href: "/calendar", icon: "ic-calendar", label: "Kalender" },
+  { href: "/ai", icon: "ic-ai", label: "Asisten AI" },
+  { href: "/achievements", icon: "ic-trophy", label: "Pencapaian" },
 ]
 const NAV_ACCOUNT = [
-  { href: "/profile", icon: "ic-user", label: "Profile" },
-  { href: "/settings", icon: "ic-settings", label: "Settings" },
-  { href: "/devguide", icon: "ic-code", label: "Dev & Naming" },
+  { href: "/profile", icon: "ic-user", label: "Profil" },
+  { href: "/settings", icon: "ic-settings", label: "Pengaturan" },
 ]
 
 const TITLES: Record<string, string> = {
-  "/dashboard": "Dashboard",
-  "/internships": "Internships",
-  "/calendar": "Calendar",
-  "/ai": "AI Assistant",
-  "/achievements": "Achievements",
-  "/profile": "Profile",
-  "/settings": "Settings",
-  "/devguide": "Dev & Naming",
+  "/dashboard": "Beranda",
+  "/internships": "Magang",
+  "/calendar": "Kalender",
+  "/ai": "Asisten AI",
+  "/achievements": "Pencapaian",
+  "/profile": "Profil",
+  "/settings": "Pengaturan",
 }
 
 export function AppShell({
@@ -57,7 +55,7 @@ export function AppShell({
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/")
   const title =
-    TITLES[pathname] || (pathname.startsWith("/internships/") ? "Internship Detail" : "InternQuest")
+    TITLES[pathname] || (pathname.startsWith("/internships/") ? "Detail Magang" : "InternQuest")
   const name = profile.full_name || "Kamu"
 
   async function signOut() {
@@ -96,7 +94,6 @@ export function AppShell({
           <div className="iq-nav__label">Akun</div>
           {navItem(NAV_ACCOUNT[0])}
           {navItem(NAV_ACCOUNT[1])}
-          {navItem(NAV_ACCOUNT[2])}
         </nav>
         <Link href="/profile" className="iq-usermini">
           <div
@@ -138,7 +135,7 @@ export function AppShell({
             <span style={csx("color:var(--ink)")}>{profile.gems}</span>
           </span>
           <button className="iq-btn iq-btn--primary" onClick={() => setAddOpen(true)}>
-            <Icon name="ic-plus" className="ic ic-18" /> Add Internship
+            <Icon name="ic-plus" className="ic ic-18" /> Tambah Magang
           </button>
           <Link href="/profile" className="iq-topbar__av" aria-label="Profil">
             {profile.avatar_url ? (

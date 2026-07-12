@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { CompanyLogo } from "@/components/CompanyLogo"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
+import { deleteInternship } from "@/app/actions/internships"
 import {
   STATUSES,
   accentAt,
@@ -17,16 +18,41 @@ import {
 
 type Prog = Record<string, { done: number; total: number; pct: number }>
 
+const ACTIVE = ["todo", "applied", "interview", "offer"]
+
 export function InternshipsClient({ items, progress }: { items: Internship[]; progress: Prog }) {
   const router = useRouter()
-  const [tab, setTab] = useState<string>("all")
-  const counts: Record<string, number> = { all: items.length }
+  const [, startTx] = useTransition()
+  const [tab, setTab] = useState<string>("active")
+
+  const counts: Record<string, number> = {
+    active: items.filter((i) => ACTIVE.includes(i.status)).length,
+    all: items.length,
+  }
   for (const s of STATUSES) counts[s.key] = items.filter((i) => i.status === s.key).length
-  const shown = tab === "all" ? items : items.filter((i) => i.status === tab)
+
+  const shown =
+    tab === "active"
+      ? items.filter((i) => ACTIVE.includes(i.status))
+      : tab === "all"
+      ? items
+      : items.filter((i) => i.status === tab)
+
+  function remove(e: React.MouseEvent, it: Internship) {
+    e.stopPropagation()
+    if (!confirm('Hapus "' + it.company_name + '" dari daftar? Tindakan ini tidak bisa dibatalkan.')) return
+    startTx(async () => {
+      await deleteInternship(it.id)
+      router.refresh()
+    })
+  }
 
   return (
     <section className="iq-screen is-active">
       <div className="iq-tabs">
+        <button className={"iq-tab" + (tab === "active" ? " is-active" : "")} onClick={() => setTab("active")}>
+          Aktif <span className="iq-tab__cnt">{counts.active}</span>
+        </button>
         <button className={"iq-tab" + (tab === "all" ? " is-active" : "")} onClick={() => setTab("all")}>
           Semua <span className="iq-tab__cnt">{counts.all}</span>
         </button>
@@ -42,7 +68,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
       </div>
 
       {shown.length === 0 ? (
-        <div className="iq-card iq-card__pad muted">Belum ada internship di kategori ini. Klik “Add Internship” di atas untuk menambah.</div>
+        <div className="iq-card iq-card__pad muted">Belum ada internship di kategori ini. Klik "Tambah Magang" di atas untuk menambah.</div>
       ) : (
         <div className="iq-grid iq-grid--3">
           {shown.map((it, idx) => {
@@ -57,6 +83,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                 onClick={() => router.push("/internships/" + it.id)}
                 onMouseEnter={() => router.prefetch("/internships/" + it.id)}
               >
+                <button className="iq-card-del" title="Hapus" onClick={(e) => remove(e, it)}>✕</button>
                 {chip && (
                   <span className="iq-timechip">
                     <Icon name="ic-clock" className="ic ic-16" /> {chip.label}
@@ -70,7 +97,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                   </div>
                 </div>
                 <div className="iq-icard__meta">
-                  {it.location || "—"} · Mulai {fmtShort(it.start_date)}
+                  {it.location || "-"} · Mulai {fmtShort(it.start_date)}
                   {it.duration_months ? " · " + it.duration_months + " bulan" : ""}
                 </div>
                 <div className="iq-progress"><div className="iq-progress__fill" style={csx("width:" + p.pct + "%")} /></div>

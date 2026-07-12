@@ -48,12 +48,12 @@ export function MatchCard({
   return (
     <div className="iq-card iq-card__pad">
       <div className="row mb-4">
-        <Icon name="ic-target" className="ic ic-22" style={csx("color:var(--green-text)")} />
+        <Icon name="ic-target" className="ic ic-22" style={csx("color:var(--blue-text)")} />
         <h3>Kecocokan CV &amp; Minat</h3>
       </div>
       {!hasCv ? (
-        <p className="muted">
-          Upload CV dulu di halaman <b>Profile</b> agar AI bisa menghitung seberapa cocok kamu dengan lowongan ini.
+        <p className="muted iq-justify">
+          Upload CV dulu di halaman <b>Profil</b> agar AI bisa menghitung seberapa cocok kamu dengan lowongan ini.
         </p>
       ) : (
         <>
@@ -61,13 +61,18 @@ export function MatchCard({
             <>
               <div className="iq-match__score">{score}%</div>
               <div className="iq-match__bar"><i style={csx("width:" + score + "%")} /></div>
-              {reasons && <p className="muted" style={csx("font-size:13px")}>{reasons}</p>}
-              {tips && <p className="mt-2" style={csx("font-size:13px;color:var(--blue-text)")}>💡 {tips}</p>}
+              {reasons && <p className="muted iq-justify" style={csx("font-size:13px")}>{reasons}</p>}
+              {tips && (
+                <div className="iq-callout mt-4" style={csx("padding:12px 14px;align-items:center")}>
+                  <Icon name="ic-target" className="ic ic-18" style={csx("color:var(--blue-text)")} />
+                  <p style={csx("font-size:13px")} className="iq-justify">{tips}</p>
+                </div>
+              )}
             </>
           )}
-          {score === null && <p className="muted mb-4">Belum dihitung. Klik tombol di bawah untuk cek kecocokan.</p>}
+          {score === null && <p className="muted mb-4 iq-justify">Belum dihitung. Klik tombol di bawah untuk cek kecocokan.</p>}
           {err && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{err}</p>}
-          <button className="iq-btn iq-btn--green iq-btn--block iq-btn--sm mt-4" onClick={run} disabled={loading}>
+          <button className="iq-btn iq-btn--blue iq-btn--block iq-btn--sm mt-4" onClick={run} disabled={loading}>
             <Icon name="ic-ai" className="ic ic-16" /> {loading ? "Menghitung…" : score === null ? "Hitung kecocokan" : "Hitung ulang"}
           </button>
         </>

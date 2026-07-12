@@ -7,6 +7,7 @@ import { Icon } from "@/components/Icons"
 import { ChecklistCard } from "@/components/ChecklistCard"
 import { StatusActions } from "@/components/StatusActions"
 import { MatchCard } from "@/components/MatchCard"
+import { DeleteInternshipButton } from "@/components/DeleteInternshipButton"
 import { csx } from "@/lib/csx"
 import { guessDomain, statusMeta, fmtShort, type Internship } from "@/lib/helpers"
 
@@ -109,10 +110,11 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
           </div>
           <MatchCard internshipId={item.id} initialScore={item.match_score} initialReasons={item.match_reasons} hasCv={hasCv} />
           <div className="iq-card iq-card__pad">
-            <h3 className="mb-4">Progress</h3>
-            <div className="center big-num" style={csx("color:var(--pink-text)")}>{pct}%</div>
+            <h3 className="mb-4">Progres</h3>
+            <div className="center big-num" style={csx("color:var(--blue-text)")}>{pct}%</div>
             <div className="iq-progress mt-4"><div className="iq-progress__fill" style={csx("width:" + pct + "%")} /></div>
             <StatusActions id={item.id} status={item.status} />
+            <div className="mt-4"><DeleteInternshipButton id={item.id} name={item.company_name} /></div>
           </div>
         </div>
       </div>
