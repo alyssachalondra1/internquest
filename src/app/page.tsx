@@ -33,7 +33,7 @@ export default function Landing() {
         </span>
         <div style={csx("display:flex;gap:10px")}>
           <Link className="iq-btn iq-btn--ghost iq-btn--sm" href="/login">Log in</Link>
-          <Link className="iq-btn iq-btn--primary iq-btn--sm" href="/login">Get started</Link>
+          <Link className="iq-btn iq-btn--primary iq-btn--sm" href="/login?mode=signup">Get started</Link>
         </div>
       </nav>
 
@@ -44,7 +44,7 @@ export default function Landing() {
             <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
             <p className="iq-lp__sub">InternQuest helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, and stay motivated with a friendly gamified workspace.</p>
             <div className="iq-lp__cta">
-              <Link className="iq-btn iq-btn--primary" href="/login">Get started free <Icon name="ic-arrow-right" className="ic ic-18" /></Link>
+              <Link className="iq-btn iq-btn--primary" href="/login?mode=signup">Get started free <Icon name="ic-arrow-right" className="ic ic-18" /></Link>
               <Link className="iq-btn iq-btn--ghost" href="/dashboard">Open dashboard</Link>
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function Landing() {
         <section className="iq-lp__cta-band">
           <h2>Ready to start your quest?</h2>
           <p>Join InternQuest and turn a stressful search into a clear, motivating plan.</p>
-          <Link className="iq-btn iq-btn--ghost" href="/login" style={csx("background:#fff;color:#3B2FA0")}>Create your free account</Link>
+          <Link className="iq-btn iq-btn--ghost" href="/login?mode=signup" style={csx("background:#fff;color:#3B2FA0")}>Create your free account</Link>
         </section>
 
         <div className="iq-lp__foot">InternQuest · Built for students, powered by AI.</div>

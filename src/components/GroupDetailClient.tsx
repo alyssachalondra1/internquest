@@ -6,7 +6,7 @@ import { Icon } from "@/components/Icons"
 import { CompanyLogo } from "@/components/CompanyLogo"
 import { GroupAddModal } from "@/components/GroupAddModal"
 import { csx } from "@/lib/csx"
-import { accentAt, deadlineChip, fmtRange, fmtShort, guessDomain } from "@/lib/helpers"
+import { accentAt, deadlineChip, externalHref, fmtRange, fmtShort, guessDomain } from "@/lib/helpers"
 import { deleteGroup, deleteGroupInternship, leaveGroup, removeMember } from "@/app/actions/groups"
 
 type Group = { id: string; name: string; join_code: string; owner_id: string; created_at?: string }
@@ -161,7 +161,7 @@ export function GroupDetailClient({
                 <div className="iq-icard__foot">
                   <span className="muted" style={csx("font-size:12px")}>Added by {nameOf(it.added_by)}</span>
                   {it.source_url && (
-                    <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => window.open(it.source_url as string, "_blank", "noopener")}>
+                    <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => window.open(externalHref(it.source_url), "_blank", "noopener")}>
                       <Icon name="ic-link" className="ic ic-16" /> Open
                     </button>
                   )}

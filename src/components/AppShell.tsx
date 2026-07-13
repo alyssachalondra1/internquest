@@ -43,7 +43,7 @@ const TITLES: Record<string, string> = {
   "/calendar": "Calendar",
   "/ai": "AI Assistant",
   "/achievements": "Achievements",
-  "/groups": "Study Groups",
+  "/groups": "Groups",
   "/profile": "Profile",
   "/settings": "Settings",
 }
@@ -68,7 +68,7 @@ export function AppShell({
     (pathname.startsWith("/internships/")
       ? "Internship Detail"
       : pathname.startsWith("/groups/")
-      ? "Study Group"
+      ? "Group"
       : "InternQuest")
   const name = profile.full_name || "You"
 

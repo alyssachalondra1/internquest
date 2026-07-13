@@ -9,7 +9,7 @@ import { StatusActions } from "@/components/StatusActions"
 import { MatchCard } from "@/components/MatchCard"
 import { DeleteInternshipButton } from "@/components/DeleteInternshipButton"
 import { csx } from "@/lib/csx"
-import { guessDomain, statusMeta, fmtShort, fmtRange, type Internship } from "@/lib/helpers"
+import { guessDomain, statusMeta, fmtShort, fmtRange, externalHref, type Internship } from "@/lib/helpers"
 
 export const dynamic = "force-dynamic"
 
@@ -68,7 +68,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
       <div className="iq-grid iq-grid--dash">
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <div className="row-between mb-6">
+            <div className="row-between mb-6" style={csx("align-items:flex-start;gap:12px")}>
               <div className="row">
                 <CompanyLogo domain={guessDomain(item.company_name)} name={item.company_name} large />
                 <div>
@@ -76,11 +76,11 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
                   <div className="muted">{item.company_name} · {item.location || "—"}</div>
                 </div>
               </div>
-              <span className={"iq-chip " + sm.chip}>{sm.label}</span>
+              <span className={"iq-chip " + sm.chip} style={csx("flex-shrink:0;white-space:nowrap;align-self:flex-start")}>{sm.label}</span>
             </div>
             <div className="iq-stepper mb-6">
               {STEPS.map((label, i) => (
-                <div key={label} className={"iq-step" + (i < current ? " is-done" : i === current ? " is-current" : "")}>
+                <div key={label} className={"iq-step iq-step--" + i + (i < current ? " is-done" : i === current ? " is-current" : "")}>
                   <span className="iq-step__dot">{i < current ? <Icon name="ic-check" className="ic ic-16" /> : i + 1}</span>
                   <span className="iq-step__label">{label}</span>
                 </div>
@@ -96,7 +96,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
             <div className="iq-field"><span className="iq-field__k">Location</span><span className="iq-field__v">{item.location || "—"}</span></div>
             <div className="iq-field"><span className="iq-field__k">Employment</span><span className="iq-field__v">{(item.work_type || "—")}{item.is_paid ? " · Paid" : ""}</span></div>
             {item.source_url && (
-              <a className="iq-btn iq-btn--blue iq-btn--block" style={csx("margin-top:14px")} href={item.source_url} target="_blank" rel="noopener">
+              <a className="iq-btn iq-btn--blue iq-btn--block" style={csx("margin-top:14px")} href={externalHref(item.source_url)} target="_blank" rel="noopener">
                 <Icon name="ic-link" className="ic ic-18" /> Open application page
               </a>
             )}

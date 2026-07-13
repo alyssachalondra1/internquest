@@ -14,6 +14,7 @@ import {
   fmtRange,
   guessDomain,
   statusMeta,
+  externalHref,
   type Internship,
 } from "@/lib/helpers"
 
@@ -113,7 +114,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                     className="iq-apply-btn"
                     onClick={(e) => {
                       e.stopPropagation()
-                      window.open(it.source_url as string, "_blank", "noopener")
+                      window.open(externalHref(it.source_url), "_blank", "noopener")
                     }}
                   >
                     <Icon name="ic-link" className="ic ic-16" /> Apply

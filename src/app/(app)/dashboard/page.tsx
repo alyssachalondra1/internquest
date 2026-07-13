@@ -9,6 +9,7 @@ import {
   fmtShort,
   fmtRange,
   guessDomain,
+  externalHref,
   type Internship,
 } from "@/lib/helpers"
 
@@ -108,7 +109,7 @@ export default async function DashboardPage() {
                     <span className="muted">Checklist {p.done}/{p.total}</span>
                     <div className="row" style={csx("gap:8px")}>
                       {it.source_url && (
-                        <a className="iq-apply-btn" href={it.source_url} target="_blank" rel="noopener">Apply</a>
+                        <a className="iq-apply-btn" href={externalHref(it.source_url)} target="_blank" rel="noopener">Apply</a>
                       )}
                       <Link className="iq-prio__btn" href={"/internships/" + it.id}>Continue</Link>
                     </div>

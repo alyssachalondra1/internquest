@@ -61,9 +61,9 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
         <div className="row">
           <span className="iq-rec__ic"><Icon name="ic-users" className="ic ic-20" /></span>
           <div>
-            <h3 style={csx("margin:0")}>Study Groups</h3>
+            <h3 style={csx("margin:0")}>Internship Groups</h3>
             <p className="muted iq-justify" style={csx("margin:2px 0 0;font-size:13px")}>
-              Share a collection of internships with classmates using a join code. Only the shared
+              Share a collection of internships with friends who share the same interest using a join code. Only the shared
               internship list is visible to members. Your CV, portfolio, and AI results always stay private.
             </p>
           </div>
@@ -88,7 +88,7 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
               className="iq-input"
               autoFocus
               value={name}
-              placeholder="Group name, e.g. Informatics 2023 Cohort"
+              placeholder="Group name, e.g. Finance Interns 2026"
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && doCreate()}
             />
@@ -113,7 +113,7 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
 
       {groups.length === 0 ? (
         <div className="iq-card iq-card__pad muted">
-          You are not in any group yet. Create one and share the code with your classmates, or join with a code you received.
+          You are not in any group yet. Create one and share the code with friends who share your interest, or join with a code you received.
         </div>
       ) : (
         <div className="iq-grid iq-grid--3">
@@ -133,7 +133,7 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
               </div>
               <div className="iq-icard__meta">Code {g.join_code} · {g.member_count} members · {g.internship_count} internships</div>
               <div className="iq-icard__foot">
-                <span className="iq-chip iq-chip--blue">Open group</span>
+                <span className="iq-open-btn">Open group</span>
                 <Icon name="ic-arrow-right" className="ic ic-18" />
               </div>
             </div>
