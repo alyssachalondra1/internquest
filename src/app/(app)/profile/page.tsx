@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Questy } from "@/components/Questy"
-import { QuestyFace, isMascot, moodOf } from "@/components/MascotAvatar"
+import { QuestyFace } from "@/components/MascotAvatar"
+import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { csx } from "@/lib/csx"
 
