@@ -6,6 +6,20 @@ import { csx } from "@/lib/csx"
 
 export const dynamic = "force-dynamic"
 
+// Nama file bisa mengandung karakter yang membuat decodeURIComponent melempar
+// URIError (mis. '%' yang bukan escape valid). Bungkus supaya tidak crash.
+function safeName(url: string | null | undefined, prefix: RegExp): string | null {
+  if (!url) return null
+  const raw = url.split("/").pop() || ""
+  let name = raw
+  try {
+    name = decodeURIComponent(raw)
+  } catch {
+    name = raw
+  }
+  return name.replace(prefix, "")
+}
+
 export default async function ProfilePage() {
   const supabase = await createClient()
   const {
@@ -13,11 +27,19 @@ export default async function ProfilePage() {
   } = await supabase.auth.getUser()
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, email, level, xp, gems, streak_count, cv_url, cv_text, interests, avatar_url")
+    .select("full_name, email, level, xp, gems, streak_count, avatar_url")
     .eq("id", user!.id)
     .single()
   const { count: applied } = await supabase
     .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
+
+  // CV & interests fetched separately so the page still works if a column is missing.
+  let extra: { cv_url: string | null; cv_text: string | null; interests: string | null } | null = null
+  try {
+    const { data } = await supabase
+      .from("profiles").select("cv_url, cv_text, interests").eq("id", user!.id).single()
+    extra = (data as any) ?? null
+  } catch {}
 
   // Portfolio is fetched separately so it is safe if the column does not exist yet.
   let portfolio: { portfolio_url: string | null; portfolio_text: string | null } | null = null
@@ -32,14 +54,10 @@ export default async function ProfilePage() {
   const target = level * 200
   const levelPct = Math.min(100, Math.round(((xp - (level - 1) * 200) / 200) * 100))
 
-  const hasCv = !!profile?.cv_text
-  const cvName = profile?.cv_url
-    ? decodeURIComponent(profile.cv_url.split("/").pop() || "").replace(/^cv-\d+-/, "")
-    : null
+  const hasCv = !!extra?.cv_text
+  const cvName = safeName(extra?.cv_url, /^cv-\d+-/)
   const hasPortfolio = !!portfolio?.portfolio_text
-  const portfolioName = portfolio?.portfolio_url
-    ? decodeURIComponent(portfolio.portfolio_url.split("/").pop() || "").replace(/^portfolio-\d+-/, "")
-    : null
+  const portfolioName = safeName(portfolio?.portfolio_url, /^portfolio-\d+-/)
 
   return (
     <section className="iq-screen is-active">
@@ -69,7 +87,7 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
-          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={profile?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
+          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">
