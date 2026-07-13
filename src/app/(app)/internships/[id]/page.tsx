@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyLogo } from "@/components/CompanyLogo"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { Icon } from "@/components/Icons"
 import { ChecklistCard } from "@/components/ChecklistCard"
 import { StatusActions } from "@/components/StatusActions"
@@ -108,7 +108,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
         </div>
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <div className="row mb-4"><Questy size={52} /><h3>AI Helper</h3></div>
+            <div className="row mb-4"><Momo size={52} /><h3>AI Helper</h3></div>
             <div className="stack-2">
               <Link className="iq-btn iq-btn--primary iq-btn--block iq-btn--sm" href={"/ai?internship=" + item.id + "&type=motivation_letter"}>Generate Motivation Letter</Link>
               <Link className="iq-btn iq-btn--ghost iq-btn--block iq-btn--sm" href={"/ai?internship=" + item.id + "&type=cover_letter"}>Cover Letter</Link>

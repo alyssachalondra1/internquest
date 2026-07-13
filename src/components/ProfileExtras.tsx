@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveCv, saveInterests, saveAvatar, savePortfolio } from "@/app/actions/profile"
-import { QuestyFace } from "@/components/MascotAvatar"
+import { MomoFace } from "@/components/MascotAvatar"
 import { MASCOT_PRESETS, isMascot } from "@/lib/mascot"
 import { csx } from "@/lib/csx"
 
@@ -173,7 +173,7 @@ export function ProfileExtras({
 
       <div className="iq-form-row" style={csx("margin-bottom:0")}>
         <label>Profile photo</label>
-        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Questy expression, or upload your own photo.</p>
+        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Momo expression, or upload your own photo.</p>
         <div className="iq-avatar-picker">
           {MASCOT_PRESETS.map((p) => (
             <button
@@ -183,7 +183,7 @@ export function ProfileExtras({
               onClick={() => pickPreset(p.key)}
               title={p.label}
             >
-              <QuestyFace mood={p.mood} size={46} />
+              <MomoFace mood={p.mood} size={46} />
             </button>
           ))}
           <input ref={avaRef} type="file" accept="image/*" hidden onChange={onPickAvatar} />

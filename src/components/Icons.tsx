@@ -3,7 +3,7 @@
 /*
  * IconSprite renders the hidden SVG symbol sheet once (in the root layout).
  * Icon renders a single icon by name, e.g. <Icon name="ic-plus" />.
- * Mascot symbol "#questy" also lives here — see components/Questy.tsx.
+ * Mascot symbol "#momo" also lives here — see components/Momo.tsx.
  */
 
 const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -37,7 +37,7 @@ const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden=
   <symbol id="ic-logout" viewBox="0 0 24 24"><path d="M15 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h9M14 12H9m10 0-3-3m3 3-3 3"/></symbol>
   <symbol id="ic-brain" viewBox="0 0 24 24"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5 3 3 0 0 0 2 4 3 3 0 0 0 5 0V4.5A2.5 2.5 0 0 0 9 4zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5 3 3 0 0 1-2 4 3 3 0 0 1-5 0"/></symbol>
   <symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6"/></symbol>
-  <symbol id="questy" viewBox="0 0 100 100">
+  <symbol id="momo" viewBox="0 0 100 100">
     <ellipse cx="30" cy="35" rx="8" ry="8" fill="#8FB9E8"/>
     <ellipse cx="70" cy="35" rx="8" ry="8" fill="#8FB9E8"/>
     <ellipse cx="50" cy="58" rx="35" ry="33" fill="#8FB9E8"/>

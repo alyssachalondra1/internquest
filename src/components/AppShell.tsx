@@ -6,7 +6,7 @@ import { useState } from "react"
 import { Icon } from "@/components/Icons"
 import { AddInternshipModal } from "@/components/AddInternshipModal"
 import { createClient } from "@/lib/supabase/client"
-import { QuestyFace } from "@/components/MascotAvatar"
+import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { csx } from "@/lib/csx"
 
@@ -71,7 +71,7 @@ export function AppShell({
       ? "Internship Detail"
       : pathname.startsWith("/groups/")
       ? "Group"
-      : "InternQuest")
+      : "Sloe")
   const name = profile.full_name || "You"
 
   async function signOut() {
@@ -120,7 +120,7 @@ export function AppShell({
             }
           >
             {(!profile.avatar_url || isMascot(profile.avatar_url)) && (
-              <QuestyFace mood={moodOf(profile.avatar_url)} size={36} />
+              <MomoFace mood={moodOf(profile.avatar_url)} size={36} />
             )}
           </div>
           <div className="iq-usermini__meta">
@@ -156,7 +156,7 @@ export function AppShell({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={profile.avatar_url} alt="Profile photo" />
             ) : (
-              <QuestyFace mood={moodOf(profile.avatar_url)} size={34} />
+              <MomoFace mood={moodOf(profile.avatar_url)} size={34} />
             )}
           </Link>
         </header>

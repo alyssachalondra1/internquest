@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
-   InternQuest — Design Tokens (solid, no gradients)
+   Sloe — Design Tokens (solid, no gradients)
    ============================================================ */
 :root{
   --pink:#FF8DB3;  --pink-text:#FF5B92;  --pink-15:rgba(255,141,179,.15);  --pink-50:rgba(255,141,179,.50);
@@ -244,8 +244,8 @@ body[data-screen="auth"] .iq-auth{display:grid}
 /* Mascot illustration placeholder (temporary) */
 .iq-mascot{border:2px dashed var(--pink-50);background:var(--pink-15);overflow:hidden;position:relative;padding:0}
 .iq-mascot small{display:none}
-.iq-questy{position:absolute;top:8%;left:8%;width:84%;height:84%;display:block}
-/* Penanda: ini SLOT untuk maskot. Ganti <svg class="iq-questy"> dengan ilustrasi final, lalu hapus rule ::after ini untuk menghilangkan label. */
+.iq-momo{position:absolute;top:8%;left:8%;width:84%;height:84%;display:block}
+/* Penanda: ini SLOT untuk maskot. Ganti <svg class="iq-momo"> dengan ilustrasi final, lalu hapus rule ::after ini untuk menghilangkan label. */
 .iq-mascot::after{content:'MASKOT';position:absolute;top:4px;right:4px;background:var(--pink-text);color:#fff;font-size:7px;font-weight:800;letter-spacing:.05em;padding:2px 4px;border-radius:6px;line-height:1;pointer-events:none;z-index:3}
 .iq-mascot--clean::after{display:none}
 
@@ -708,7 +708,7 @@ body{background:var(--canvas)}
 @media (max-width: 520px) { .iq-grid--3 { grid-template-columns: 1fr; } }
 
 /* (6) Dashboard hero sparkle moved to the top-left, behind the greeting
-   text, so it no longer overlaps Questy on the right. */
+   text, so it no longer overlaps Momo on the right. */
 .iq-hero__spark { right: auto; left: -12px; top: -26px; font-size: 150px; opacity: .13; }
 
 /* ============================================================

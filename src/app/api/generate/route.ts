@@ -56,7 +56,7 @@ export async function POST(req: Request) {
               error:
                 "Not enough gems. You need " +
                 GEN_COST +
-                " gems to generate. Earn gems by opening InternQuest daily, adding internships, completing checklist items, and reaching Interview or Offer.",
+                " gems to generate. Earn gems by opening Sloe daily, adding internships, completing checklist items, and reaching Interview or Offer.",
             },
             { status: 402 },
           )

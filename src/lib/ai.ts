@@ -5,8 +5,8 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 // ============================================================
 // Model aktif — ganti HANYA di sini bila Google mengubah nama model.
 // ============================================================
-export const PRIMARY_MODEL = "gemini-3.5-flash"
-export const LITE_MODEL = "gemini-3.1-flash-lite"
+export const PRIMARY_MODEL = "gemini-2.0-flash"
+export const LITE_MODEL = "gemini-2.0-flash-lite"
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 

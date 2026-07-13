@@ -7,7 +7,7 @@ import type { Mood } from "@/lib/mascot"
    MASCOT AVATAR PRESETS (sloth expressions)
    ------------------------------------------------------------
    Built-in default avatars a user can pick if they don't want to
-   upload their own photo. Each preset renders Questy with a
+   upload their own photo. Each preset renders Momo with a
    different expression.
 
    >>> SWAP POINT FOR YOUR FINAL ART <<<
@@ -79,13 +79,13 @@ function Mouth({ mood }: { mood: Mood }) {
   return <path d="M45 66 Q50 70 55 66" stroke="#6E5230" strokeWidth="1.8" fill="none" strokeLinecap="round" />
 }
 
-export function QuestyFace({ mood = "happy", size = 96 }: { mood?: Mood; size?: number }) {
+export function MomoFace({ mood = "happy", size = 96 }: { mood?: Mood; size?: number }) {
   if (USE_CUSTOM_ART) {
     // eslint-disable-next-line @next/next/no-img-element
     return (
       <img
         src={CUSTOM_ART[mood]}
-        alt="Questy"
+        alt="Momo"
         style={csx("width:" + size + "px;height:" + size + "px;border-radius:50%;object-fit:cover")}
       />
     )

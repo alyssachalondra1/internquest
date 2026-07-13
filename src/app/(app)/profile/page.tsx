@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
-import { Questy } from "@/components/Questy"
-import { QuestyFace } from "@/components/MascotAvatar"
+import { Momo } from "@/components/Momo"
+import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { csx } from "@/lib/csx"
@@ -68,7 +68,7 @@ export default async function ProfilePage() {
           <img src={profile.avatar_url} alt="Profile photo" className="iq-avatar-lg" />
         ) : (
           <div className="iq-avatar-lg iq-avatar-lg--mascot">
-            <QuestyFace mood={moodOf(profile?.avatar_url)} size={104} />
+            <MomoFace mood={moodOf(profile?.avatar_url)} size={104} />
           </div>
         )}
         <h2 style={csx("font-size:22px")}>Level {level} · Intern Hunter</h2>
@@ -92,9 +92,9 @@ export default async function ProfilePage() {
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">
-            <Questy size={72} />
+            <Momo size={72} />
             <div className="iq-callout" style={csx("background:var(--pink-15);border-color:var(--pink-50)")}>
-              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Open InternQuest every day to keep your streak alive.</p></div>
+              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Open Sloe every day to keep your streak alive.</p></div>
             </div>
           </div>
         </div>

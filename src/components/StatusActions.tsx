@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { updateInternshipStatus } from "@/app/actions/internships"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { playApply, playLevelUp, playSad } from "@/lib/sound"
 import { csx } from "@/lib/csx"
 
@@ -91,12 +91,12 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
         </>
       ) : status === "offer" ? (
         <div className="iq-callout" style={csx("align-items:center")}>
-          <Questy size={46} />
+          <Momo size={46} />
           <div><b>Offer secured</b><p className="mt-2" style={csx("font-size:13px")}>This journey is complete. Congratulations on landing the offer!</p></div>
         </div>
       ) : status === "rejected" ? (
         <div className="iq-callout" style={csx("align-items:center;background:var(--red-15);border-color:var(--red-40)")}>
-          <Questy size={46} />
+          <Momo size={46} />
           <div><b>Marked as not selected</b><p className="mt-2" style={csx("font-size:13px")}>Keep going. The next opportunity could be the one.</p></div>
         </div>
       ) : null}
@@ -105,7 +105,7 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
         <div className="iq-pop-scrim" onClick={() => setConfirmTo(null)}>
           <div className="iq-pop" onClick={(e) => e.stopPropagation()}>
             <button className="iq-pop__x" onClick={() => setConfirmTo(null)}>✕</button>
-            <Questy size={72} />
+            <Momo size={72} />
             <h3>{isReject ? "Mark as not selected?" : "Are you sure?"}</h3>
             <p>{isReject ? "This internship will move to Rejected. You cannot change it back afterwards." : "You cannot undo this step later, so only confirm when it is official."}</p>
             <div className="row mt-6" style={csx("gap:10px")}>
@@ -126,7 +126,7 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
                 <span className="iq-spark" style={csx("top:30px;right:34px")}>✨</span>
               </>
             )}
-            <Questy size={96} />
+            <Momo size={96} />
             <h3>{p.title}</h3>
             <p>{p.body}</p>
             <div>

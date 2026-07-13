@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { AppShell, type ProfileStats } from "@/components/AppShell"
-import { touchStreak, syncAchievementGems } from "@/app/actions/gamification"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -9,9 +8,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect("/login")
-
-  await touchStreak()
-  await syncAchievementGems()
 
   const { data: profile } = await supabase
     .from("profiles")

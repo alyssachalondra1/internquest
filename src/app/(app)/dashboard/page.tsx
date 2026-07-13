@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { CompanyLogo } from "@/components/CompanyLogo"
 import { csx } from "@/lib/csx"
 import {
@@ -12,6 +12,7 @@ import {
   externalHref,
   type Internship,
 } from "@/lib/helpers"
+import { touchStreak, syncAchievementGems } from "@/app/actions/gamification"
 
 export const dynamic = "force-dynamic"
 
@@ -20,6 +21,11 @@ export default async function DashboardPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  // Daily login streak + achievement gems (moved here from the app layout so
+  // they run once when the dashboard loads instead of on every navigation).
+  await touchStreak()
+  await syncAchievementGems()
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -65,11 +71,11 @@ export default async function DashboardPage() {
           <p style={csx("opacity:.92;margin-top:4px")}>Here is your internship quest for today.</p>
         </div>
         <span className="iq-hero__spark">✨</span>
-        <Questy size={92} />
+        <Momo size={92} />
       </div>
 
       <div className="iq-callout mb-6">
-        <Questy size={54} />
+        <Momo size={54} />
         <div>
           <b>AI Insight</b>
           <p className="mt-2 iq-justify">
@@ -122,7 +128,7 @@ export default async function DashboardPage() {
 
         <div className="stack-6">
           <div className="iq-levelcard">
-            <Questy size={104} />
+            <Momo size={104} />
             <h3 style={csx("font-size:19px")}>Level {level} · Intern Hunter</h3>
             <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
             <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>

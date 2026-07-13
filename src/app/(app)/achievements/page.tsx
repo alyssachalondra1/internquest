@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
 import type { Internship } from "@/lib/helpers"
@@ -40,7 +40,7 @@ export default async function AchievementsPage() {
   return (
     <section className="iq-screen is-active">
       <div className="iq-ach-hero mb-6">
-        <div className="iq-ach-hero__mascot"><Questy size={96} /></div>
+        <div className="iq-ach-hero__mascot"><Momo size={96} /></div>
         <div style={csx("flex:1")}>
           <div className="row-between wrap" style={csx("gap:10px")}>
             <div>

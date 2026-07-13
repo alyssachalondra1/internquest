@@ -1,10 +1,10 @@
 import Link from "next/link"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
 
 export const metadata = {
-  title: "InternQuest - Your AI internship companion",
+  title: "Sloe - Your AI internship companion",
   description: "Find, track, and win internships with an AI companion that keeps you organized and motivated.",
 }
 
@@ -44,7 +44,7 @@ export default function Landing() {
           <div>
             <span className="iq-lp__badge">✨ Your AI internship companion</span>
             <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
-            <p className="iq-lp__sub">InternQuest helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with study groups, and stay motivated with a friendly gamified workspace.</p>
+            <p className="iq-lp__sub">Sloe helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with study groups, and stay motivated with a friendly gamified workspace.</p>
             <div className="iq-lp__cta">
               <Link className="iq-btn iq-btn--primary" href="/login?mode=signup">Get started free <Icon name="ic-arrow-right" className="ic ic-18" /></Link>
               <Link className="iq-btn iq-btn--ghost" href="/dashboard">Open dashboard</Link>
@@ -52,7 +52,7 @@ export default function Landing() {
           </div>
           <div className="iq-lp__art">
             <div className="row" style={csx("gap:12px;margin-bottom:16px")}>
-              <Questy size={64} />
+              <Momo size={64} />
               <div><b style={csx("font-size:16px")}>Today's Quest</b><div style={csx("opacity:.9;font-size:13px")}>3 tasks to level up</div></div>
             </div>
             <div className="iq-lp__arti"><Icon name="ic-check" className="ic ic-18" /> Finish your CV checklist</div>
@@ -91,11 +91,11 @@ export default function Landing() {
 
         <section className="iq-lp__cta-band">
           <h2>Ready to start your quest?</h2>
-          <p>Join InternQuest and turn a stressful search into a clear, motivating plan.</p>
+          <p>Join Sloe and turn a stressful search into a clear, motivating plan.</p>
           <Link className="iq-btn iq-btn--ghost" href="/login?mode=signup" style={csx("background:#fff;color:#3B2FA0")}>Create your free account</Link>
         </section>
 
-        <div className="iq-lp__foot">InternQuest · Built for students, powered by AI.</div>
+        <div className="iq-lp__foot">Sloe · Built for students, powered by AI. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></div>
       </div>
     </main>
   )

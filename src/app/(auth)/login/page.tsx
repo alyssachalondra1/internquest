@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { csx } from "@/lib/csx"
@@ -111,7 +111,7 @@ export default function LoginPage() {
           Intern<span style={csx("color:var(--pink-text)")}>Quest</span>
         </span>
         <div className="iq-auth__tag" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
-        <Questy size={200} />
+        <Momo size={200} />
         <div className="iq-dots">
           {TAGLINES.map((_, i) => (
             <i key={i} className={i === slide ? "on" : ""} />
@@ -122,7 +122,7 @@ export default function LoginPage() {
         <div className="iq-auth__card">
           {step === "welcome" && (
             <div className="iq-auth__step is-active">
-              <div className="iq-peek"><Questy size={120} /></div>
+              <div className="iq-peek"><Momo size={120} /></div>
               <div className="iq-peekcard">
                 <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome! 👋</h1>
                 <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for internships.</p>

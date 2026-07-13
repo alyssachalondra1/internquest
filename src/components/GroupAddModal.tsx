@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Icon } from "@/components/Icons"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { createClient } from "@/lib/supabase/client"
 import { addGroupInternship, listMyInternships, type NewGroupInternship, type PickInternship } from "@/app/actions/groups"
 import { csx } from "@/lib/csx"
@@ -249,7 +249,7 @@ export function GroupAddModal({
         <div className="iq-modal" style={csx("max-width:440px")}>
           <div className="iq-modal__body center">
             <div className="iq-loader-ring mb-6" />
-            <Questy size={70} className="mb-4" />
+            <Momo size={70} className="mb-4" />
             <h3 className="mb-2">Reading the details…</h3>
             <p className="muted">One moment, AI is putting the posting details together.</p>
           </div>

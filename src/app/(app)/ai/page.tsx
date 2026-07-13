@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Questy } from "@/components/Questy"
+import { Momo } from "@/components/Momo"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveGeneration } from "@/app/actions/ai"
@@ -86,7 +86,7 @@ function AiInner() {
     <section className="iq-screen is-active">
       <div className="iq-grid iq-grid--dash">
         <div className="iq-card iq-card__pad">
-          <div className="row mb-6"><Questy size={56} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
+          <div className="row mb-6"><Momo size={56} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
           <div className="iq-grid iq-grid--2 mb-4">
             <div className="iq-form-row"><label>Company</label><input className="iq-input" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company name" /></div>
             <div className="iq-form-row"><label>Role</label><input className="iq-input" value={role} onChange={(e) => setRole(e.target.value)} placeholder="Role" /></div>
