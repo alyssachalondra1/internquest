@@ -173,13 +173,6 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
                 <b>Upload Poster</b>
                 <span className="muted">Photo / image of the posting</span>
               </button>
-              <button className="iq-method" onClick={() => { setMode("ig"); setForm(EMPTY); setError(null); setStep("review") }}>
-                <span className="iq-method__ic" style={csx("background:var(--purple-15,var(--pink-15));color:var(--pink-text)")}>
-                  <Icon name="ic-doc" />
-                </span>
-                <b>Instagram Post</b>
-                <span className="muted">Read the poster from an IG post</span>
-              </button>
               <button className="iq-method" onClick={() => { setMode("link"); setStep("review"); setForm(EMPTY) }}>
                 <span className="iq-method__ic" style={csx("background:var(--blue-15);color:var(--blue-text)")}>
                   <Icon name="ic-link" />
@@ -225,22 +218,6 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
           </div>
           <div className="iq-modal__body">
             {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
-            {mode === "ig" && (
-              <div className="iq-form-row">
-                <div className="iq-callout mb-4" style={csx("align-items:center")}>
-                  <Questy size={46} />
-                  <div>
-                    <b>Reading an Instagram poster</b>
-                    <p style={csx("font-size:13px")} className="iq-justify mt-2">Instagram does not allow reading posts automatically. Save or screenshot the poster image from the post, then upload it here so AI can read it directly.</p>
-                  </div>
-                </div>
-                <button className="iq-btn iq-btn--blue iq-btn--sm" onClick={() => { setMode("poster"); fileRef.current?.click() }}>
-                  <Icon name="ic-upload" className="ic ic-16" /> Upload the poster from the post
-                </button>
-                <label className="mt-4">Instagram post link (optional)</label>
-                <input className="iq-input" value={form.source_url || ""} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://instagram.com/p/…" />
-              </div>
-            )}
             {(mode === "link" || mode === "jd") && (
               <div className="iq-form-row">
                 <label>{mode === "link" ? "Paste the posting link" : "Paste the job description text"}</label>

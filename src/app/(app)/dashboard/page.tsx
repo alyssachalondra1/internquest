@@ -53,7 +53,7 @@ export default async function DashboardPage() {
 
   const priority = items.filter((i) => i.deadline).slice(0, 3)
   const upcoming = items.filter((i) => i.deadline && (deadlineChip(i.deadline)?.label ?? "") !== "Passed").slice(0, 4)
-  const applied = items.filter((i) => ["applied", "interview", "offer"].includes(i.status)).length
+  const applied = items.filter((i) => ["applied", "screening", "test", "interview", "offer"].includes(i.status)).length
 
   return (
     <section className="iq-screen is-active">

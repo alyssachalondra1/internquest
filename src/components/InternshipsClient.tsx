@@ -19,7 +19,7 @@ import {
 
 type Prog = Record<string, { done: number; total: number; pct: number }>
 
-const ACTIVE = ["todo", "applied", "interview", "offer"]
+const ACTIVE = ["todo", "applied", "screening", "test", "interview", "offer"]
 
 export function InternshipsClient({ items, progress }: { items: Internship[]; progress: Prog }) {
   const router = useRouter()

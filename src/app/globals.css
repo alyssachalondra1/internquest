@@ -666,5 +666,47 @@ body{background:var(--canvas)}
 .iq-member__name { font-weight: 600; }
 .iq-member__x { border: none; background: transparent; cursor: pointer; color: var(--red-text); font-size: 12px; padding: 0 2px; line-height: 1; }
 .iq-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.iq-field { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: var(--blue-text); }
+.iq-gfield { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: var(--blue-text); }
 @media (max-width: 640px) { .iq-form-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   REVISI v4 - uniform vibrant cards, calendar sizing,
+   solid full-width mobile cards, sparkle fix, rejected chip
+   (appended last so it overrides earlier layers)
+   ============================================================ */
+
+/* (1) Colorful, uniform, clearly rounded internship / group cards.
+   Stronger accent borders + slightly stronger tints, matching the
+   Duolingo-style reference while staying readable. */
+.iq-icard { border-radius: 24px; }
+.iq-icard--pink   { --c-bg: rgba(255,111,165,.16); --c-bg2: rgba(255,111,165,.55); }
+.iq-icard--yellow { --c-bg: rgba(255,197,61,.22);  --c-bg2: rgba(255,197,61,.60); }
+.iq-icard--blue   { --c-bg: rgba(47,107,255,.12);  --c-bg2: rgba(47,107,255,.45); }
+.iq-icard--green  { --c-bg: rgba(47,203,126,.16);  --c-bg2: rgba(47,203,126,.50); }
+
+/* Rejected chip + tab (was falling back to default styling) */
+.iq-chip--rejected { background: var(--red-40); color: var(--red-text); }
+.iq-tab--rejected.is-active { color: var(--red-text); }
+
+/* (2) Calendar: every day cell is exactly the same size on every row,
+   on desktop and mobile. Fixed height + clip keeps them uniform. */
+.iq-cal__d { height: 84px; min-height: 84px; overflow: hidden; }
+@media (max-width: 860px) { .iq-cal__d { height: 74px; min-height: 74px; } }
+@media (max-width: 520px) { .iq-cal__d { height: 62px; min-height: 62px; padding: 4px; } }
+
+/* (3) Mobile internship/group cards: one per row so they run wide
+   (landscape) instead of tall & narrow, with SOLID opaque colors
+   (no more see-through / murky look). */
+@media (max-width: 860px) {
+  .iq-grid--3 { grid-template-columns: 1fr; }
+  .iq-icard { background: #ffffff; }
+  .iq-icard--pink   { background: #FFEAF2; }
+  .iq-icard--yellow { background: #FFF6DF; }
+  .iq-icard--blue   { background: #EAF1FF; }
+  .iq-icard--green  { background: #E6FAF0; }
+}
+@media (max-width: 520px) { .iq-grid--3 { grid-template-columns: 1fr; } }
+
+/* (6) Dashboard hero sparkle moved to the top-left, behind the greeting
+   text, so it no longer overlaps Questy on the right. */
+.iq-hero__spark { right: auto; left: -12px; top: -26px; font-size: 150px; opacity: .13; }

@@ -30,12 +30,11 @@ const NAV_ACCOUNT = [
   { href: "/settings", icon: "ic-settings", label: "Settings" },
 ]
 const MOBILE_NAV = [
-  { href: "/dashboard", icon: "ic-dashboard", label: "Home" },
   { href: "/internships", icon: "ic-list", label: "Internships" },
   { href: "/groups", icon: "ic-users", label: "Groups" },
+  { href: "/dashboard", icon: "ic-dashboard", label: "Home" },
   { href: "/calendar", icon: "ic-calendar", label: "Calendar" },
   { href: "/ai", icon: "ic-ai", label: "AI" },
-  { href: "/profile", icon: "ic-user", label: "Profile" },
 ]
 
 const TITLES: Record<string, string> = {
@@ -131,15 +130,15 @@ export function AppShell({
       <main className="iq-main">
         <header className="iq-topbar">
           <div className="iq-topbar__title">{title}</div>
-          <span className="iq-stat-pill iq-stat-pill--keep" style={csx("color:#FF7A3D")}>
+          <span className="iq-stat-pill iq-stat-pill--keep" style={csx("color:#FF7A3D;background:rgba(255,122,61,.14);border-color:transparent")}>
             <Icon name="ic-flame" className="ic ic-18 ic--fill" />
             <span style={csx("color:var(--ink)")}>{profile.streak_count}</span>
           </span>
-          <span className="iq-stat-pill" style={csx("color:#F0B400")}>
+          <span className="iq-stat-pill" style={csx("color:#F0B400;background:var(--yellow-15);border-color:transparent")}>
             <Icon name="ic-star" className="ic ic-18 ic--fill" />
             <span style={csx("color:var(--ink)")}>{profile.xp} XP</span>
           </span>
-          <span className="iq-stat-pill" style={csx("color:var(--blue)")}>
+          <span className="iq-stat-pill" style={csx("color:var(--blue);background:var(--blue-15);border-color:transparent")}>
             <Icon name="ic-gem" className="ic ic-18 ic--fill" />
             <span style={csx("color:var(--ink)")}>{profile.gems}</span>
           </span>

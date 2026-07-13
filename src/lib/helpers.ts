@@ -24,6 +24,8 @@ export const accentAt = (i: number): Accent => ACCENTS[i % ACCENTS.length]
 export const STATUSES = [
   { key: "todo", label: "To Do", chip: "iq-chip--pink", tab: "iq-tab--todo" },
   { key: "applied", label: "Applied", chip: "iq-chip--yellow", tab: "iq-tab--applied" },
+  { key: "screening", label: "Screening", chip: "iq-chip--blue", tab: "iq-tab--interview" },
+  { key: "test", label: "Online Test", chip: "iq-chip--blue", tab: "iq-tab--interview" },
   { key: "interview", label: "Interview", chip: "iq-chip--blue", tab: "iq-tab--interview" },
   { key: "offer", label: "Offer", chip: "iq-chip--green", tab: "iq-tab--offer" },
   { key: "rejected", label: "Rejected", chip: "iq-chip--rejected", tab: "iq-tab--rejected" },

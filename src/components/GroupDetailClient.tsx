@@ -4,15 +4,10 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { CompanyLogo } from "@/components/CompanyLogo"
+import { GroupAddModal } from "@/components/GroupAddModal"
 import { csx } from "@/lib/csx"
 import { accentAt, deadlineChip, fmtRange, fmtShort, guessDomain } from "@/lib/helpers"
-import {
-  addGroupInternship,
-  deleteGroup,
-  deleteGroupInternship,
-  leaveGroup,
-  removeMember,
-} from "@/app/actions/groups"
+import { deleteGroup, deleteGroupInternship, leaveGroup, removeMember } from "@/app/actions/groups"
 
 type Group = { id: string; name: string; join_code: string; owner_id: string; created_at?: string }
 type Member = { user_id: string; full_name: string | null; avatar_url: string | null; joined_at: string; is_owner: boolean }
@@ -30,18 +25,6 @@ type GI = {
   added_by: string | null
 }
 
-const EMPTY = {
-  company_name: "",
-  role: "",
-  location: "",
-  source_url: "",
-  open_date: "",
-  deadline: "",
-  start_date: "",
-  duration_months: "",
-  notes: "",
-}
-
 export function GroupDetailClient({
   group,
   members,
@@ -56,9 +39,7 @@ export function GroupDetailClient({
   const router = useRouter()
   const [pending, start] = useTransition()
   const [copied, setCopied] = useState(false)
-  const [adding, setAdding] = useState(false)
-  const [form, setForm] = useState({ ...EMPTY })
-  const [err, setErr] = useState<string | null>(null)
+  const [addOpen, setAddOpen] = useState(false)
   const isOwner = group.owner_id === currentUserId
   const nameOf = (uid: string | null) => members.find((m) => m.user_id === uid)?.full_name || "a member"
 
@@ -66,39 +47,6 @@ export function GroupDetailClient({
     navigator.clipboard?.writeText(group.join_code)
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
-  }
-
-  function set(k: string, v: string) {
-    setForm((f) => ({ ...f, [k]: v }))
-  }
-
-  function submit() {
-    setErr(null)
-    const company = form.company_name.trim()
-    if (!company) {
-      setErr("Company name is required")
-      return
-    }
-    start(async () => {
-      try {
-        await addGroupInternship(group.id, {
-          company_name: company,
-          role: form.role.trim() || null,
-          location: form.location.trim() || null,
-          source_url: form.source_url.trim() || null,
-          open_date: form.open_date || null,
-          deadline: form.deadline || null,
-          start_date: form.start_date || null,
-          duration_months: form.duration_months ? Number(form.duration_months) : null,
-          notes: form.notes.trim() || null,
-        })
-        setForm({ ...EMPTY })
-        setAdding(false)
-        router.refresh()
-      } catch (e: any) {
-        setErr(e?.message || "Could not add internship")
-      }
-    })
   }
 
   function removeInternship(gi: GI) {
@@ -177,31 +125,10 @@ export function GroupDetailClient({
 
       <div className="iq-sec-title">
         <h3>Shared internships</h3>
-        <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={() => setAdding((v) => !v)}>
+        <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={() => setAddOpen(true)}>
           <Icon name="ic-plus" className="ic ic-16" /> Add internship
         </button>
       </div>
-
-      {adding && (
-        <div className="iq-card iq-card__pad mb-4">
-          <div className="iq-form-grid">
-            <input className="iq-input" placeholder="Company name *" value={form.company_name} onChange={(e) => set("company_name", e.target.value)} />
-            <input className="iq-input" placeholder="Role" value={form.role} onChange={(e) => set("role", e.target.value)} />
-            <input className="iq-input" placeholder="Location" value={form.location} onChange={(e) => set("location", e.target.value)} />
-            <input className="iq-input" placeholder="Application link" value={form.source_url} onChange={(e) => set("source_url", e.target.value)} />
-            <label className="iq-field"><span>Registration opens</span><input className="iq-input" type="date" value={form.open_date} onChange={(e) => set("open_date", e.target.value)} /></label>
-            <label className="iq-field"><span>Deadline</span><input className="iq-input" type="date" value={form.deadline} onChange={(e) => set("deadline", e.target.value)} /></label>
-            <label className="iq-field"><span>Start date</span><input className="iq-input" type="date" value={form.start_date} onChange={(e) => set("start_date", e.target.value)} /></label>
-            <input className="iq-input" type="number" placeholder="Duration (months)" value={form.duration_months} onChange={(e) => set("duration_months", e.target.value)} />
-          </div>
-          <textarea className="iq-input mt-2" rows={2} placeholder="Notes (optional)" value={form.notes} onChange={(e) => set("notes", e.target.value)} />
-          {err && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{err}</p>}
-          <div className="row mt-2" style={csx("gap:8px")}>
-            <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={submit} disabled={pending}>{pending ? "Saving…" : "Add to group"}</button>
-            <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => { setAdding(false); setErr(null) }}>Cancel</button>
-          </div>
-        </div>
-      )}
 
       {internships.length === 0 ? (
         <div className="iq-card iq-card__pad muted">No shared internships yet. Add the first one so your group can see it.</div>
@@ -244,6 +171,8 @@ export function GroupDetailClient({
           })}
         </div>
       )}
+
+      <GroupAddModal groupId={group.id} open={addOpen} onClose={() => setAddOpen(false)} onAdded={() => router.refresh()} />
     </section>
   )
 }

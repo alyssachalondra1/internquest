@@ -79,3 +79,39 @@ export async function deleteGroupInternship(groupId: string, id: string) {
   await supabase.from("group_internships").delete().eq("id", id)
   revalidatePath("/groups/" + groupId)
 }
+
+export type PickInternship = {
+  id: string
+  company_name: string
+  role: string | null
+  location: string | null
+  source_url: string | null
+  open_date: string | null
+  deadline: string | null
+  start_date: string | null
+  duration_months: number | null
+  notes: string | null
+}
+
+// Returns the caller's own private internships so they can copy one into a group.
+// Only the internship details are exposed; CV, portfolio, AI output and checklists are never included.
+export async function listMyInternships(): Promise<PickInternship[]> {
+  const { supabase, user } = await requireUser()
+  const { data } = await supabase
+    .from("internships")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+  return (data || []).map((r: any) => ({
+    id: r.id,
+    company_name: r.company_name,
+    role: r.role ?? null,
+    location: r.location ?? null,
+    source_url: r.source_url ?? null,
+    open_date: r.open_date ?? null,
+    deadline: r.deadline ?? null,
+    start_date: r.start_date ?? null,
+    duration_months: r.duration_months ?? null,
+    notes: r.notes ?? null,
+  }))
+}

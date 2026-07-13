@@ -13,14 +13,16 @@ import { guessDomain, statusMeta, fmtShort, fmtRange, type Internship } from "@/
 
 export const dynamic = "force-dynamic"
 
-const STEPS = ["Saved", "Preparing", "Applied", "Assessment", "Interview", "Offer"]
+const STEPS = ["To Do", "Applied", "Screening", "Online Test", "Interview", "Offer"]
 const STEP_BY_STATUS: Record<string, number> = {
-  todo: 1,
-  applied: 2,
+  todo: 0,
+  applied: 1,
+  screening: 2,
+  test: 3,
   interview: 4,
   offer: 5,
-  rejected: 2,
-  archived: 1,
+  rejected: 1,
+  archived: 0,
 }
 
 export default async function DetailPage({ params }: { params: Promise<{ id: string }> }) {
