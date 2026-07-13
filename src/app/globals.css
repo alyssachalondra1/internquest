@@ -710,3 +710,114 @@ body{background:var(--canvas)}
 /* (6) Dashboard hero sparkle moved to the top-left, behind the greeting
    text, so it no longer overlaps Questy on the right. */
 .iq-hero__spark { right: auto; left: -12px; top: -26px; font-size: 150px; opacity: .13; }
+
+/* ============================================================
+   REVISI v5 - sidebar biru langit gradient (clean),
+   tab filter warna-warni seragam (tanpa abu),
+   kartu internship solid & vibrant ala referensi + CTA tegas,
+   penyegaran halaman login. (Appended last -> overrides all.)
+   ============================================================ */
+
+/* ---------- Sidebar: clean sky-blue gradient, dark text ---------- */
+.iq-sidebar{
+  background:linear-gradient(185deg,#EAF4FF 0%,#CFE4FF 55%,#BCD8FF 100%);
+  border-right:1px solid #C4DBF7;
+  color:var(--ink);
+  box-shadow:2px 0 22px rgba(47,107,255,.08);
+}
+.iq-brand{color:var(--blue-text)}
+.iq-brand i{color:var(--pink-text)}
+.iq-nav__item,a.iq-nav__item{color:#41506E}
+.iq-nav__item:hover{background:rgba(47,107,255,.10);color:var(--blue-text)}
+.iq-nav__item.is-active,a.iq-nav__item.is-active{background:linear-gradient(135deg,#5AA6FF,#2F6BFF);color:#fff;font-weight:800;box-shadow:0 8px 18px rgba(47,107,255,.30)}
+.iq-nav__label{color:#7482A0}
+.iq-nav__badge{background:var(--blue);color:#fff}
+.iq-usermini{background:rgba(255,255,255,.62);border:1px solid rgba(47,107,255,.16)}
+.iq-usermini__meta b{color:var(--ink)}
+.iq-usermini__meta span{color:var(--ink-3)}
+.iq-usermini__av{background:#fff}
+.iq-signout{color:#54638A}
+.iq-signout:hover{background:rgba(47,107,255,.10);color:var(--blue-text)}
+
+/* Mobile bottom nav matches the sky-blue sidebar */
+.iq-botnav{background:linear-gradient(180deg,#EAF4FF,#CFE4FF);box-shadow:0 -6px 20px rgba(47,107,255,.12)}
+.iq-botnav a{color:#54638A}
+.iq-botnav a.is-active{color:#fff;background:linear-gradient(135deg,#5AA6FF,#2F6BFF)}
+
+/* ---------- Filter tabs: colorful & uniform, no dead gray ---------- */
+.iq-tabs{gap:9px}
+.iq-tab{background:#E7F0FF;color:#365591;border:none}
+.iq-tab__cnt{background:rgba(255,255,255,.80);color:inherit}
+.iq-tab--todo{background:#FFD9E8;color:#D63384}
+.iq-tab--applied{background:#FFE7A6;color:#8A5B00}
+.iq-tab--interview{background:#CFE0FF;color:#2456D6}
+.iq-tab--offer{background:#BFF0D6;color:#1E9E60}
+.iq-tab--rejected{background:#FFD2D2;color:#DB3B3B}
+.iq-tab.is-active{box-shadow:inset 0 0 0 2px currentColor;filter:saturate(1.08)}
+
+/* ---------- Internship cards: solid, vibrant, rounded (Duolingo vibe) ---------- */
+.iq-icard{border-radius:24px;border-width:2px;gap:12px}
+.iq-icard--pink{background:#FFE9F2;border-color:#FFC0D8;--c:#FF5D9E;--c-text:#D63384}
+.iq-icard--yellow{background:#FFF3D2;border-color:#FFDC82;--c:#F2AC12;--c-text:#8A5B00}
+.iq-icard--blue{background:#E7F0FF;border-color:#BBD4FF;--c:#2F6BFF;--c-text:#2456D6}
+.iq-icard--green{background:#DDF6E8;border-color:#A2E7C2;--c:#22B978;--c-text:#1E9E60}
+.iq-icard__title{color:var(--ink);font-size:15px}
+.iq-icard__sub{color:var(--ink-2)}
+.iq-icard .iq-progress{height:10px;background:rgba(255,255,255,.75)}
+.iq-icard .iq-progress__fill{background:var(--c)}
+.iq-timechip{background:#fff;color:var(--c-text);box-shadow:0 2px 6px rgba(20,27,46,.08)}
+.iq-card-del{background:rgba(255,255,255,.85)}
+
+/* Prominent CTA button like the reference "Continue" button */
+.iq-apply-btn{width:100%;height:46px;border-radius:16px;background:var(--c);color:#fff;border:none;font-size:14px;font-weight:800;box-shadow:0 4px 0 rgba(20,27,46,.16);margin-top:2px}
+.iq-apply-btn:hover{filter:brightness(.96)}
+.iq-apply-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(20,27,46,.16)}
+.iq-icard--yellow .iq-apply-btn{color:#5b3d00}
+
+/* ---------- Login refresh: clean sky-blue gradient ---------- */
+.iq-auth__panel{background:#fff}
+.iq-authbtn{border-radius:16px;border:2px solid #DCE6F5;background:#fff}
+.iq-authbtn:hover{background:#F2F7FF;border-color:#BBD4FF}
+.iq-dots i{background:rgba(47,107,255,.30)}
+.iq-dots i.on{background:var(--blue)}
+
+/* ============================================================
+   REVISI v6 - kartu internship: gradient warna PEKAT + teks putih
+   + tombol krem, mengikuti referensi kartu hijau "In Progress".
+   Tiap kartu tetap beda warna. (Appended last -> overrides all.)
+   ============================================================ */
+.iq-icard{border-radius:24px;border:none;color:#fff;box-shadow:0 12px 26px rgba(20,27,46,.16)}
+.iq-icard--pink{background:linear-gradient(150deg,#FB5C93 0%,#E23A7E 100%)}
+.iq-icard--yellow{background:linear-gradient(150deg,#F5A31C 0%,#E07A00 100%)}
+.iq-icard--blue{background:linear-gradient(150deg,#3E93F2 0%,#2F6BFF 100%)}
+.iq-icard--green{background:linear-gradient(150deg,#41B85E 0%,#2C9C49 100%)}
+.iq-icard:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(20,27,46,.22)}
+
+.iq-icard__title{color:#fff;font-size:15px}
+.iq-icard__sub{color:rgba(255,255,255,.92)}
+.iq-icard__meta{color:rgba(255,255,255,.88);font-weight:600}
+.iq-icard__foot{color:#fff}
+.iq-icard__foot span:first-child{color:#fff}
+
+/* progress: translucent track, bright white fill (like the reference) */
+.iq-icard .iq-progress{background:rgba(255,255,255,.30)}
+.iq-icard .iq-progress__fill{background:rgba(255,255,255,.95)}
+
+/* badge pills on the colored card = solid white with colored text */
+.iq-timechip{background:#fff}
+.iq-icard__foot .iq-chip{background:rgba(255,255,255,.95)}
+
+/* delete button on colored card */
+.iq-card-del{background:rgba(255,255,255,.30);color:#fff}
+.iq-card-del:hover{background:#fff;color:var(--red-text)}
+
+/* cream CTA button, like "Continue Learning" */
+.iq-apply-btn{width:100%;height:46px;border-radius:16px;background:#FFF7E9;color:#243043;border:none;font-weight:800;font-size:14px;box-shadow:0 4px 0 rgba(20,27,46,.22);margin-top:2px}
+.iq-apply-btn:hover{background:#fff;filter:none}
+.iq-apply-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(20,27,46,.22)}
+.iq-icard--yellow .iq-apply-btn{color:#243043}
+
+/* REVISI v6b - login hero gradient hidup: teks & dots putih */
+.iq-auth__hero .iq-auth__tag{color:#fff}
+.iq-auth__hero .iq-dots i{background:rgba(255,255,255,.5)}
+.iq-auth__hero .iq-dots i.on{background:#fff}

@@ -98,11 +98,11 @@ export default function LoginPage() {
 
   return (
     <section className="iq-auth">
-      <div className="iq-auth__hero" style={csx("background:var(--blue-15)")}>
-        <span style={csx("font-weight:800;font-size:28px;color:var(--blue-text)")}>
+      <div className="iq-auth__hero" style={csx("background:linear-gradient(160deg,#5CB4FF 0%,#3B82F6 52%,#7C5CFF 100%)")}>
+        <span style={csx("font-weight:800;font-size:26px;color:var(--blue-text);background:#fff;padding:9px 18px;border-radius:14px;display:inline-block;box-shadow:0 8px 18px rgba(20,27,46,.16)")}>
           Intern<span style={csx("color:var(--pink-text)")}>Quest</span>
         </span>
-        <div className="iq-auth__tag" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
+        <div className="iq-auth__tag" style={csx("min-height:28px;color:#fff;font-weight:600")}>{TAGLINES[slide]} 🦥</div>
         <Questy size={200} />
         <div className="iq-dots">
           {TAGLINES.map((_, i) => (
