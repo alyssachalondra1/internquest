@@ -9,18 +9,18 @@ import { playApply, playLevelUp, playSad } from "@/lib/sound"
 import { csx } from "@/lib/csx"
 
 const NEXT: Record<string, { to: string; label: string }> = {
-  todo: { to: "applied", label: "Tandai sudah melamar" },
-  applied: { to: "interview", label: "Masuk tahap interview" },
-  interview: { to: "offer", label: "Dapat offer!" },
+  todo: { to: "applied", label: "Mark as applied" },
+  applied: { to: "interview", label: "Move to interview" },
+  interview: { to: "offer", label: "Got an offer!" },
 }
 
 type Pop = { title: string; body: string; badge: string; cls: string; mood: "happy" | "sad" }
 
 const POP: Record<string, Pop> = {
-  applied: { title: "Lamaran terkirim!", body: "Satu langkah lebih dekat menuju magang impianmu.", badge: "+25 XP", cls: "iq-chip--yellow", mood: "happy" },
-  interview: { title: "Kamu masuk interview!", body: "Kerja bagus. Siapkan dirimu, kamu pasti bisa.", badge: "+50 XP", cls: "iq-chip--blue", mood: "happy" },
-  offer: { title: "Selamat, kamu dapat offer!", body: "Luar biasa! Semua usahamu terbayar.", badge: "+150 XP", cls: "iq-chip--green", mood: "happy" },
-  rejected: { title: "Jangan menyerah ya", body: "Ini bagian dari proses. Masih banyak peluang lain yang menantimu.", badge: "Tetap semangat", cls: "iq-chip--rejected", mood: "sad" },
+  applied: { title: "Application sent!", body: "One step closer to your dream internship.", badge: "+25 XP", cls: "iq-chip--yellow", mood: "happy" },
+  interview: { title: "You got an interview!", body: "Great work. Get ready, you have got this.", badge: "+50 XP", cls: "iq-chip--blue", mood: "happy" },
+  offer: { title: "Congrats, you got an offer!", body: "Amazing! All your effort paid off.", badge: "+150 XP", cls: "iq-chip--green", mood: "happy" },
+  rejected: { title: "Do not give up", body: "This is part of the process. Many more opportunities are waiting for you.", badge: "Keep going", cls: "iq-chip--rejected", mood: "sad" },
 }
 
 export function StatusActions({ id, status }: { id: string; status: string }) {
@@ -73,7 +73,7 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
             <div>
               <span className={"iq-pop__badge " + p.cls}>{p.badge}</span>
             </div>
-            <button className="iq-btn iq-btn--primary iq-btn--block mt-6" onClick={() => setPop(null)}>Lanjut</button>
+            <button className="iq-btn iq-btn--primary iq-btn--block mt-6" onClick={() => setPop(null)}>Continue</button>
           </div>
         </div>
       )}

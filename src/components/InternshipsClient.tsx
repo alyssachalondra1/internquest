@@ -11,6 +11,7 @@ import {
   accentAt,
   deadlineChip,
   fmtShort,
+  fmtRange,
   guessDomain,
   statusMeta,
   type Internship,
@@ -40,7 +41,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
 
   function remove(e: React.MouseEvent, it: Internship) {
     e.stopPropagation()
-    if (!confirm('Hapus "' + it.company_name + '" dari daftar? Tindakan ini tidak bisa dibatalkan.')) return
+    if (!confirm('Remove "' + it.company_name + '" from your list? This action cannot be undone.')) return
     startTx(async () => {
       await deleteInternship(it.id)
       router.refresh()
@@ -51,10 +52,10 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
     <section className="iq-screen is-active">
       <div className="iq-tabs">
         <button className={"iq-tab" + (tab === "active" ? " is-active" : "")} onClick={() => setTab("active")}>
-          Aktif <span className="iq-tab__cnt">{counts.active}</span>
+          Active <span className="iq-tab__cnt">{counts.active}</span>
         </button>
         <button className={"iq-tab" + (tab === "all" ? " is-active" : "")} onClick={() => setTab("all")}>
-          Semua <span className="iq-tab__cnt">{counts.all}</span>
+          All <span className="iq-tab__cnt">{counts.all}</span>
         </button>
         {STATUSES.map((s) => (
           <button
@@ -68,7 +69,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
       </div>
 
       {shown.length === 0 ? (
-        <div className="iq-card iq-card__pad muted">Belum ada internship di kategori ini. Klik "Tambah Magang" di atas untuk menambah.</div>
+        <div className="iq-card iq-card__pad muted">No internships in this category yet. Click "Add Internship" above to add one.</div>
       ) : (
         <div className="iq-grid iq-grid--3">
           {shown.map((it, idx) => {
@@ -76,6 +77,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
             const p = progress[it.id] || { done: 0, total: 0, pct: 0 }
             const chip = deadlineChip(it.deadline)
             const sm = statusMeta(it.status)
+            const range = fmtRange(it.open_date, it.deadline)
             return (
               <div
                 key={it.id}
@@ -83,7 +85,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                 onClick={() => router.push("/internships/" + it.id)}
                 onMouseEnter={() => router.prefetch("/internships/" + it.id)}
               >
-                <button className="iq-card-del" title="Hapus" onClick={(e) => remove(e, it)}>✕</button>
+                <button className="iq-card-del" title="Delete" onClick={(e) => remove(e, it)}>✕</button>
                 {chip && (
                   <span className="iq-timechip">
                     <Icon name="ic-clock" className="ic ic-16" /> {chip.label}
@@ -97,8 +99,9 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                   </div>
                 </div>
                 <div className="iq-icard__meta">
-                  {it.location || "-"} · Mulai {fmtShort(it.start_date)}
-                  {it.duration_months ? " · " + it.duration_months + " bulan" : ""}
+                  {it.location || "-"}
+                  {range ? " · " + range : it.start_date ? " · Starts " + fmtShort(it.start_date) : ""}
+                  {it.duration_months ? " · " + it.duration_months + " months" : ""}
                 </div>
                 <div className="iq-progress"><div className="iq-progress__fill" style={csx("width:" + p.pct + "%")} /></div>
                 <div className="iq-icard__foot">
@@ -113,7 +116,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                       window.open(it.source_url as string, "_blank", "noopener")
                     }}
                   >
-                    <Icon name="ic-link" className="ic ic-16" /> Daftar
+                    <Icon name="ic-link" className="ic ic-16" /> Apply
                   </button>
                 )}
               </div>

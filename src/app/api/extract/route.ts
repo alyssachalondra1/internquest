@@ -15,18 +15,20 @@ Return ONLY valid JSON (no prose) with this exact shape:
   "location": string,
   "work_type": "on-site" | "remote" | "hybrid" | "",
   "is_paid": boolean,
-  "deadline": string,        // ISO date YYYY-MM-DD or ""
-  "start_date": string,      // ISO date YYYY-MM-DD or ""
+  "open_date": string,       // registration OPEN date, ISO YYYY-MM-DD or ""
+  "deadline": string,        // registration CLOSE / application deadline, ISO YYYY-MM-DD or ""
+  "start_date": string,      // internship start date, ISO YYYY-MM-DD or ""
   "duration_months": number, // 0 if unknown
-  "notes": string,           // requirements / required documents summary, in Indonesian
+  "notes": string,           // requirements / required documents summary, in English
   "source_url": string       // the application/registration link if any is visible; "" if none
 }
 Rules:
 - Use "" or 0 when a field is missing. Do not invent data.
-- If the poster or text contains a link to apply or register (a full URL, bit.ly, tinyurl, s.id, Google Form, or a "daftar di / apply here" link), put it EXACTLY as written into source_url.
-- Write notes in Indonesian. Do not use the em dash character. Do not use fire emoji.`
+- If a registration PERIOD is shown (for example "12 to 30 July" or "open until 30 July"), set open_date to the start of the period and deadline to the end of the period.
+- If the poster or text contains a link to apply or register (a full URL, bit.ly, tinyurl, s.id, Google Form, or an "apply here / register at" link), put it EXACTLY as written into source_url.
+- Write notes in English. Do not use the em dash character. Do not use the fire emoji.`
 
-// Ambil teks mentah dari sebuah URL (best-effort). Situs ber-login seperti LinkedIn sering memblokir ini.
+// Best-effort raw text from a URL. Login-gated sites such as LinkedIn and Instagram often block this.
 async function fetchUrlText(url: string): Promise<string> {
   try {
     const res = await fetch(url, {
@@ -85,15 +87,19 @@ export async function POST(req: Request) {
     const parsed = JSON.parse(raw)
     if (source_url && !parsed.source_url) parsed.source_url = source_url
 
-    const linkedinBlocked =
-      !!source_url && /linkedin\.com/i.test(source_url) && !fetched && !parsed.company_name
-    return NextResponse.json({
-      ok: true,
-      data: parsed,
-      warning: linkedinBlocked
-        ? "LinkedIn membatasi akses otomatis, jadi sebagian data mungkin kosong. Lengkapi manual, atau salin-tempel teks lowongannya lewat opsi Tempel JD."
-        : undefined,
-    })
+    const isInstagram = !!source_url && /instagram\.com/i.test(source_url)
+    const isLinkedin = !!source_url && /linkedin\.com/i.test(source_url)
+    const blocked = (isInstagram || isLinkedin) && !fetched && !parsed.company_name
+    let warning: string | undefined
+    if (isInstagram && blocked) {
+      warning =
+        "Instagram does not allow automatic reading of posts. For the best result, upload a screenshot of the poster image from the post so AI can read it directly."
+    } else if (isLinkedin && blocked) {
+      warning =
+        "LinkedIn limits automatic access, so some fields may be empty. Fill them in manually, or copy and paste the job text using the Paste JD option."
+    }
+
+    return NextResponse.json({ ok: true, data: parsed, warning })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || "extract failed" }, { status: 500 })
   }

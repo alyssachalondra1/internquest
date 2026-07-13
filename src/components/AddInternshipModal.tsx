@@ -9,6 +9,7 @@ import { createInternship, type NewInternship } from "@/app/actions/internships"
 import { csx } from "@/lib/csx"
 
 type Step = "method" | "extracting" | "review"
+type Mode = "poster" | "ig" | "link" | "jd" | "manual"
 
 const EMPTY: NewInternship = {
   company_name: "",
@@ -16,6 +17,7 @@ const EMPTY: NewInternship = {
   location: "",
   work_type: "",
   is_paid: false,
+  open_date: "",
   deadline: "",
   start_date: "",
   duration_months: null,
@@ -24,7 +26,7 @@ const EMPTY: NewInternship = {
   source_url: null,
 }
 
-// Kompres + resize gambar poster sebelum upload agar upload & pembacaan AI jauh lebih cepat.
+// Compress and resize the poster image before upload so upload and AI reading are much faster.
 async function compressImage(file: File, max = 1400, quality = 0.82): Promise<Blob> {
   try {
     if (!file.type.startsWith("image/")) return file
@@ -52,7 +54,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
   const [step, setStep] = useState<Step>("method")
   const [form, setForm] = useState<NewInternship>(EMPTY)
   const [text, setText] = useState("")
-  const [mode, setMode] = useState<"poster" | "link" | "jd" | "manual">("manual")
+  const [mode, setMode] = useState<Mode>("manual")
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -79,7 +81,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         body: JSON.stringify(payload),
       })
       const json = await res.json()
-      if (!json.ok) throw new Error(json.error || "Gagal membaca lowongan")
+      if (!json.ok) throw new Error(json.error || "Could not read the posting")
       const d = json.data || {}
       setForm({
         ...EMPTY,
@@ -88,6 +90,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         location: d.location || "",
         work_type: d.work_type || "",
         is_paid: !!d.is_paid,
+        open_date: d.open_date || "",
         deadline: d.deadline || "",
         start_date: d.start_date || "",
         duration_months: d.duration_months || null,
@@ -98,7 +101,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       if (json.warning) setError(json.warning)
       setStep("review")
     } catch (e: any) {
-      setError(e?.message || "Terjadi kesalahan")
+      setError(e?.message || "Something went wrong")
       setStep("method")
     }
   }
@@ -106,14 +109,13 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
   async function onPickPoster(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    setMode("poster")
     setStep("extracting")
     try {
       const supabase = createClient()
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) throw new Error("Sesi habis, silakan login lagi")
+      if (!user) throw new Error("Your session has expired, please log in again")
       const blob = await compressImage(file)
       const path = user.id + "/" + Date.now() + ".jpg"
       const up = await supabase.storage
@@ -123,7 +125,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       const { data: pub } = supabase.storage.from("posters").getPublicUrl(path)
       await runExtract({ poster_url: pub.publicUrl })
     } catch (e: any) {
-      setError(e?.message || "Upload gagal")
+      setError(e?.message || "Upload failed")
       setStep("method")
     }
   }
@@ -131,10 +133,11 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
   async function save() {
     setSaving(true)
     try {
-      if (!form.company_name.trim()) throw new Error("Nama perusahaan wajib diisi")
+      if (!form.company_name.trim()) throw new Error("Company name is required")
       const id = await createInternship({
         ...form,
         duration_months: form.duration_months ? Number(form.duration_months) : null,
+        open_date: form.open_date || null,
         deadline: form.deadline || null,
         start_date: form.start_date || null,
       })
@@ -142,7 +145,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       router.push("/internships/" + id)
       router.refresh()
     } catch (e: any) {
-      setError(e?.message || "Gagal menyimpan")
+      setError(e?.message || "Could not save")
     } finally {
       setSaving(false)
     }
@@ -152,6 +155,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
 
   return (
     <div className="iq-modal-scrim is-open" onClick={(e) => e.target === e.currentTarget && close()}>
+      <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickPoster} />
       {step === "method" && (
         <div className="iq-modal">
           <div className="iq-modal__head">
@@ -160,15 +164,21 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
           </div>
           <div className="iq-modal__body">
             {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
-            <p className="muted mb-6">Pilih cara menambahkan.</p>
-            <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickPoster} />
+            <p className="muted mb-6">Choose how you want to add it.</p>
             <div className="iq-grid iq-grid--2">
-              <button className="iq-method" onClick={() => fileRef.current?.click()}>
+              <button className="iq-method" onClick={() => { setMode("poster"); fileRef.current?.click() }}>
                 <span className="iq-method__ic" style={csx("background:var(--pink-15);color:var(--pink-text)")}>
                   <Icon name="ic-upload" />
                 </span>
                 <b>Upload Poster</b>
-                <span className="muted">Foto / gambar lowongan</span>
+                <span className="muted">Photo / image of the posting</span>
+              </button>
+              <button className="iq-method" onClick={() => { setMode("ig"); setForm(EMPTY); setError(null); setStep("review") }}>
+                <span className="iq-method__ic" style={csx("background:var(--purple-15,var(--pink-15));color:var(--pink-text)")}>
+                  <Icon name="ic-doc" />
+                </span>
+                <b>Instagram Post</b>
+                <span className="muted">Read the poster from an IG post</span>
               </button>
               <button className="iq-method" onClick={() => { setMode("link"); setStep("review"); setForm(EMPTY) }}>
                 <span className="iq-method__ic" style={csx("background:var(--blue-15);color:var(--blue-text)")}>
@@ -182,14 +192,14 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
                   <Icon name="ic-doc" />
                 </span>
                 <b>Paste JD</b>
-                <span className="muted">Copy-paste teks</span>
+                <span className="muted">Copy and paste the text</span>
               </button>
               <button className="iq-method" onClick={() => { setMode("manual"); setStep("review"); setForm(EMPTY) }}>
                 <span className="iq-method__ic" style={csx("background:var(--green-15);color:var(--green-text)")}>
                   <Icon name="ic-edit" />
                 </span>
-                <b>Isi Manual</b>
-                <span className="muted">Ketik sendiri</span>
+                <b>Fill Manually</b>
+                <span className="muted">Type it yourself</span>
               </button>
             </div>
           </div>
@@ -201,8 +211,8 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
           <div className="iq-modal__body center">
             <div className="iq-loader-ring mb-6" />
             <Questy size={70} className="mb-4" />
-            <h3 className="mb-2">Membaca informasi…</h3>
-            <p className="muted">Sebentar ya, AI sedang menyusun detail lowongan.</p>
+            <h3 className="mb-2">Reading the details…</h3>
+            <p className="muted">One moment, AI is putting the posting details together.</p>
           </div>
         </div>
       )}
@@ -210,47 +220,64 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       {step === "review" && (
         <div className="iq-modal">
           <div className="iq-modal__head">
-            <h3>{mode === "manual" ? "Isi Detail" : "Review & Save"}</h3>
+            <h3>{mode === "manual" ? "Fill in the details" : "Review & Save"}</h3>
             <button className="iq-modal__x" onClick={close}>✕</button>
           </div>
           <div className="iq-modal__body">
             {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
+            {mode === "ig" && (
+              <div className="iq-form-row">
+                <div className="iq-callout mb-4" style={csx("align-items:center")}>
+                  <Questy size={46} />
+                  <div>
+                    <b>Reading an Instagram poster</b>
+                    <p style={csx("font-size:13px")} className="iq-justify mt-2">Instagram does not allow reading posts automatically. Save or screenshot the poster image from the post, then upload it here so AI can read it directly.</p>
+                  </div>
+                </div>
+                <button className="iq-btn iq-btn--blue iq-btn--sm" onClick={() => { setMode("poster"); fileRef.current?.click() }}>
+                  <Icon name="ic-upload" className="ic ic-16" /> Upload the poster from the post
+                </button>
+                <label className="mt-4">Instagram post link (optional)</label>
+                <input className="iq-input" value={form.source_url || ""} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://instagram.com/p/…" />
+              </div>
+            )}
             {(mode === "link" || mode === "jd") && (
               <div className="iq-form-row">
-                <label>{mode === "link" ? "Tempel link lowongan" : "Tempel teks job description"}</label>
+                <label>{mode === "link" ? "Paste the posting link" : "Paste the job description text"}</label>
                 <textarea
                   className="iq-textarea"
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  placeholder={mode === "link" ? "https://…" : "Paste JD di sini…"}
+                  placeholder={mode === "link" ? "https://…" : "Paste the JD here…"}
                 />
                 <button
                   className="iq-btn iq-btn--blue iq-btn--sm mt-2"
                   onClick={() => runExtract(mode === "link" ? { source_url: text } : { text })}
                 >
-                  <Icon name="ic-ai" className="ic ic-16" /> Baca dengan AI
+                  <Icon name="ic-ai" className="ic ic-16" /> Read with AI
                 </button>
                 {mode === "link" && (
                   <p className="muted mt-2" style={csx("font-size:12px")}>
-                    Catatan: LinkedIn sering memblokir pembacaan otomatis. Kalau hasilnya kurang lengkap, pakai opsi Tempel JD lalu salin-tempel teks lowongannya.
+                    Note: LinkedIn often blocks automatic reading. If the result is incomplete, use the Paste JD option and copy in the posting text.
                   </p>
                 )}
               </div>
             )}
             <div className="iq-grid iq-grid--2">
-              <div className="iq-form-row"><label>Perusahaan</label><input className="iq-input" value={form.company_name} onChange={(e) => upd("company_name", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Posisi</label><input className="iq-input" value={form.role || ""} onChange={(e) => upd("role", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Lokasi</label><input className="iq-input" value={form.location || ""} onChange={(e) => upd("location", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Deadline</label><input className="iq-input" type="date" value={form.deadline || ""} onChange={(e) => upd("deadline", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Mulai magang</label><input className="iq-input" type="date" value={form.start_date || ""} onChange={(e) => upd("start_date", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Durasi (bulan)</label><input className="iq-input" type="number" value={form.duration_months ?? ""} onChange={(e) => upd("duration_months", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Company</label><input className="iq-input" value={form.company_name} onChange={(e) => upd("company_name", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Role</label><input className="iq-input" value={form.role || ""} onChange={(e) => upd("role", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Location</label><input className="iq-input" value={form.location || ""} onChange={(e) => upd("location", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Registration opens</label><input className="iq-input" type="date" value={form.open_date || ""} onChange={(e) => upd("open_date", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Registration closes / Deadline</label><input className="iq-input" type="date" value={form.deadline || ""} onChange={(e) => upd("deadline", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Internship start</label><input className="iq-input" type="date" value={form.start_date || ""} onChange={(e) => upd("start_date", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Duration (months)</label><input className="iq-input" type="number" value={form.duration_months ?? ""} onChange={(e) => upd("duration_months", e.target.value)} /></div>
             </div>
-            <div className="iq-form-row"><label>Link Pendaftaran (opsional)</label><input className="iq-input" value={form.source_url || ""} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://… tautan daftar/lamar" /></div>
-            <div className="iq-form-row"><label>Catatan / Requirements</label><textarea className="iq-textarea" value={form.notes || ""} onChange={(e) => upd("notes", e.target.value)} /></div>
+            <div className="iq-form-row"><label>Application link (optional)</label><input className="iq-input" value={form.source_url || ""} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://… apply / register link" /></div>
+            <div className="iq-form-row"><label>Notes / Requirements</label><textarea className="iq-textarea" value={form.notes || ""} onChange={(e) => upd("notes", e.target.value)} /></div>
             <div className="row" style={csx("justify-content:flex-end;gap:10px")}>
-              <button className="iq-btn iq-btn--ghost" onClick={close}>Batal</button>
+              <button className="iq-btn iq-btn--ghost" onClick={close}>Cancel</button>
               <button className="iq-btn iq-btn--primary" onClick={save} disabled={saving}>
-                {saving ? "Menyimpan…" : "Simpan"}
+                {saving ? "Saving…" : "Save"}
               </button>
             </div>
           </div>

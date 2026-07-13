@@ -11,7 +11,7 @@ export function DeleteInternshipButton({ id, name }: { id: string; name: string 
   const [pending, start] = useTransition()
 
   function remove() {
-    if (!confirm('Hapus "' + name + '"? Tindakan ini tidak bisa dibatalkan.')) return
+    if (!confirm('Delete "' + name + '"? This action cannot be undone.')) return
     start(async () => {
       await deleteInternship(id)
       router.push("/internships")
@@ -21,7 +21,7 @@ export function DeleteInternshipButton({ id, name }: { id: string; name: string 
 
   return (
     <button className="iq-btn iq-btn--ghost iq-btn--sm" style={csx("color:var(--red-text)")} onClick={remove} disabled={pending}>
-      <Icon name="ic-logout" className="ic ic-16" /> {pending ? "Menghapus…" : "Hapus internship"}
+      <Icon name="ic-logout" className="ic ic-16" /> {pending ? "Deleting…" : "Delete internship"}
     </button>
   )
 }

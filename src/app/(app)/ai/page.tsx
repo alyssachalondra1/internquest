@@ -16,12 +16,12 @@ const TYPES: Array<{ value: string; label: string }> = [
   { value: "why_this_company", label: "Why This Company" },
   { value: "your_strengths", label: "Your Strengths" },
   { value: "your_weaknesses", label: "Your Weaknesses" },
-  { value: "career_goals", label: "Career Goals (5 tahun)" },
+  { value: "career_goals", label: "Career Goals (5 years)" },
   { value: "expected_salary", label: "Expected Salary" },
-  { value: "short_bio", label: "Short Bio / Profil Singkat" },
+  { value: "short_bio", label: "Short Bio" },
   { value: "professional_summary", label: "Professional Summary" },
   { value: "reason_for_applying", label: "Reason for Applying" },
-  { value: "email_to_hr", label: "Email ke HR" },
+  { value: "email_to_hr", label: "Email to HR" },
   { value: "follow_up_email", label: "Follow-up Email" },
   { value: "thank_you_email", label: "Thank You Email" },
   { value: "reference_request", label: "Reference Request" },
@@ -63,9 +63,9 @@ function AiInner() {
         body: JSON.stringify({ answer_type: type, tone, length, company, role, context }),
       })
       const json = await res.json()
-      setOutput(json.ok ? json.content : "Gagal generate: " + (json.error || ""))
+      setOutput(json.ok ? json.content : "Failed to generate: " + (json.error || ""))
     } catch (e: any) {
-      setOutput("Gagal generate: " + (e?.message || ""))
+      setOutput("Failed to generate: " + (e?.message || ""))
     } finally {
       setLoading(false)
     }
@@ -82,8 +82,8 @@ function AiInner() {
         <div className="iq-card iq-card__pad">
           <div className="row mb-6"><Questy size={56} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
           <div className="iq-grid iq-grid--2 mb-4">
-            <div className="iq-form-row"><label>Company</label><input className="iq-input" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Nama perusahaan" /></div>
-            <div className="iq-form-row"><label>Role</label><input className="iq-input" value={role} onChange={(e) => setRole(e.target.value)} placeholder="Posisi" /></div>
+            <div className="iq-form-row"><label>Company</label><input className="iq-input" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company name" /></div>
+            <div className="iq-form-row"><label>Role</label><input className="iq-input" value={role} onChange={(e) => setRole(e.target.value)} placeholder="Role" /></div>
           </div>
           <div className="iq-grid iq-grid--3 mb-4">
             <div className="iq-form-row"><label>Type</label><select className="iq-select" value={type} onChange={(e) => setType(e.target.value)}>{TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}</select></div>
@@ -91,12 +91,12 @@ function AiInner() {
             <div className="iq-form-row"><label>Length</label><select className="iq-select" value={length} onChange={(e) => setLength(e.target.value)}><option>Medium</option><option>Short</option><option>Long</option></select></div>
           </div>
           <div className="iq-form-row mb-4">
-            <label>Info tambahan (opsional)</label>
+            <label>Additional info (optional)</label>
             <textarea
               className="iq-textarea"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              placeholder="Contoh: tekankan pengalaman organisasi & proyek data; tulis dalam Bahasa Indonesia; sebutkan minat pada sustainability…"
+              placeholder="For example: highlight my organization and data project experience; mention my interest in sustainability…"
             />
           </div>
           <button className="iq-btn iq-btn--primary iq-btn--block mb-6" onClick={generate} disabled={loading}>
@@ -104,27 +104,27 @@ function AiInner() {
           </button>
           <div className="iq-card iq-card__pad" style={csx("background:var(--surface-2);border-style:dashed")}>
             {output ? (
-              <p style={csx("line-height:1.7;white-space:pre-wrap")}>{output}</p>
+              <p style={csx("line-height:1.7;white-space:pre-wrap")} className="iq-justify">{output}</p>
             ) : (
-              <p className="muted">Hasil AI akan muncul di sini. Pilih tipe lalu klik Generate.</p>
+              <p className="muted">Your AI result will appear here. Pick a type and click Generate.</p>
             )}
             {output && (
               <div className="row wrap mt-6" style={csx("gap:8px")}>
                 <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => navigator.clipboard.writeText(output)}><Icon name="ic-copy" className="ic ic-16" /> Copy</button>
                 <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={generate}><Icon name="ic-refresh" className="ic ic-16" /> Regenerate</button>
-                <button className="iq-btn iq-btn--green iq-btn--sm" onClick={save}><Icon name="ic-save" className="ic ic-16" /> {saved ? "Tersimpan" : "Save"}</button>
+                <button className="iq-btn iq-btn--green iq-btn--sm" onClick={save}><Icon name="ic-save" className="ic ic-16" /> {saved ? "Saved" : "Save"}</button>
               </div>
             )}
           </div>
         </div>
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <div className="row mb-4"><Icon name="ic-doc" className="ic ic-22" style={csx("color:var(--pink-text)")} /><h3>Personalisasi</h3></div>
-            <p className="muted">Hasil AI otomatis disesuaikan dengan <b>CV</b> yang kamu upload di halaman <b>Profile</b>. Tambahkan “Info tambahan” di sebelah kiri untuk hasil yang lebih spesifik sesuai keinginanmu.</p>
+            <div className="row mb-4"><Icon name="ic-doc" className="ic ic-22" style={csx("color:var(--pink-text)")} /><h3>Personalization</h3></div>
+            <p className="muted iq-justify">AI results are automatically tailored to the <b>CV</b> you upload on the <b>Profile</b> page. Add "Additional info" on the left for a result that fits exactly what you want.</p>
           </div>
           <div className="iq-card iq-card__pad">
             <div className="row mb-4"><Icon name="ic-target" className="ic ic-22" style={csx("color:var(--green-text)")} /><h3>Tips</h3></div>
-            <p className="muted">Buka sebuah internship lalu klik tombol AI Helper agar Company &amp; Role terisi otomatis di sini.</p>
+            <p className="muted iq-justify">Open an internship and click the AI Helper button so Company and Role are filled in here automatically.</p>
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ function AiInner() {
 
 export default function AiPage() {
   return (
-    <Suspense fallback={<div className="iq-card iq-card__pad">Memuat…</div>}>
+    <Suspense fallback={<div className="iq-card iq-card__pad">Loading…</div>}>
       <AiInner />
     </Suspense>
   )

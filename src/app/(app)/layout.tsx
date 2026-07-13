@@ -21,7 +21,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .eq("user_id", user.id)
 
   const stats: ProfileStats = {
-    full_name: profile?.full_name ?? user.email ?? "Kamu",
+    full_name: profile?.full_name ?? user.email ?? "there",
     level: profile?.level ?? 1,
     xp: profile?.xp ?? 0,
     gems: profile?.gems ?? 0,

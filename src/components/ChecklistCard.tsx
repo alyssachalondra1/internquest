@@ -23,7 +23,7 @@ export function ChecklistCard({
   const [adding, setAdding] = useState(false)
   const [label, setLabel] = useState("")
 
-  // Sinkron ketika data server berubah (mis. setelah refresh)
+  // Sync when server data changes (for example after a refresh).
   useEffect(() => {
     setRows(items)
   }, [items])
@@ -32,7 +32,7 @@ export function ChecklistCard({
 
   function toggle(row: Row) {
     const nd = !row.is_done
-    // Update instan (optimistic) supaya tidak terasa lelet
+    // Optimistic update so it does not feel laggy.
     setRows((rs) => rs.map((r) => (r.id === row.id ? { ...r, is_done: nd } : r)))
     if (nd) playXp()
     start(async () => {
@@ -59,7 +59,7 @@ export function ChecklistCard({
 
   return (
     <div className="iq-card iq-card__pad">
-      <div className="iq-sec-title"><h3>Checklist</h3><span className="muted">{done} / {rows.length} selesai</span></div>
+      <div className="iq-sec-title"><h3>Checklist</h3><span className="muted">{done} / {rows.length} done</span></div>
       <div className="stack-2">
         {rows.map((row) => (
           <div key={row.id} className={"iq-check" + (row.is_done ? " is-done" : "")} onClick={() => toggle(row)}>
@@ -67,16 +67,16 @@ export function ChecklistCard({
             <span className="iq-check__label">{row.label}</span>
           </div>
         ))}
-        {rows.length === 0 && <p className="muted">Belum ada item. Tambahkan di bawah.</p>}
+        {rows.length === 0 && <p className="muted">No items yet. Add one below.</p>}
       </div>
       {adding ? (
         <div className="row mt-4" style={csx("gap:8px")}>
-          <input className="iq-input" autoFocus value={label} placeholder="Nama dokumen…" onChange={(e) => setLabel(e.target.value)} onKeyDown={(e) => e.key === "Enter" && add()} />
-          <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={add}>Tambah</button>
+          <input className="iq-input" autoFocus value={label} placeholder="Document name…" onChange={(e) => setLabel(e.target.value)} onKeyDown={(e) => e.key === "Enter" && add()} />
+          <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={add}>Add</button>
         </div>
       ) : (
         <button className="iq-btn iq-btn--ghost iq-btn--sm mt-4" onClick={() => setAdding(true)}>
-          <Icon name="ic-plus" className="ic ic-16" /> Tambah item
+          <Icon name="ic-plus" className="ic ic-16" /> Add item
         </button>
       )}
     </div>

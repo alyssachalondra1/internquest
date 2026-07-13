@@ -25,10 +25,10 @@ export function ProfileExtras({
   const pfRef = useRef<HTMLInputElement>(null)
   const avaRef = useRef<HTMLInputElement>(null)
   const [cvBusy, setCvBusy] = useState(false)
-  const [cvLabel, setCvLabel] = useState(hasCv ? cvName || "CV tersimpan" : "")
+  const [cvLabel, setCvLabel] = useState(hasCv ? cvName || "CV saved" : "")
   const [cvErr, setCvErr] = useState<string | null>(null)
   const [pfBusy, setPfBusy] = useState(false)
-  const [pfLabel, setPfLabel] = useState(hasPortfolio ? portfolioName || "Portfolio tersimpan" : "")
+  const [pfLabel, setPfLabel] = useState(hasPortfolio ? portfolioName || "Portfolio saved" : "")
   const [pfErr, setPfErr] = useState<string | null>(null)
   const [interests, setInterests] = useState(initialInterests || "")
   const [savedInt, setSavedInt] = useState(false)
@@ -39,7 +39,7 @@ export function ProfileExtras({
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    if (!user) throw new Error("Sesi habis, login lagi ya")
+    if (!user) throw new Error("Your session has expired, please log in again")
     const path = user.id + "/" + prefix + "-" + Date.now() + "-" + file.name
     const up = await supabase.storage.from("cvs").upload(path, file, { upsert: true })
     if (up.error) throw new Error(up.error.message)
@@ -50,7 +50,7 @@ export function ProfileExtras({
       body: JSON.stringify({ cv_url: pub.publicUrl }),
     })
     const json = await res.json()
-    if (!json.ok) throw new Error(json.error || "Gagal membaca PDF")
+    if (!json.ok) throw new Error(json.error || "Could not read the PDF")
     return { url: pub.publicUrl as string, text: json.text as string }
   }
 
@@ -65,7 +65,7 @@ export function ProfileExtras({
       setCvLabel(file.name)
       router.refresh()
     } catch (e: any) {
-      setCvErr(e?.message || "Upload gagal")
+      setCvErr(e?.message || "Upload failed")
     } finally {
       setCvBusy(false)
     }
@@ -82,7 +82,7 @@ export function ProfileExtras({
       setPfLabel(file.name)
       router.refresh()
     } catch (e: any) {
-      setPfErr(e?.message || "Upload gagal")
+      setPfErr(e?.message || "Upload failed")
     } finally {
       setPfBusy(false)
     }
@@ -97,7 +97,7 @@ export function ProfileExtras({
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) throw new Error("Sesi habis")
+      if (!user) throw new Error("Session expired")
       const path = user.id + "/avatar-" + Date.now() + "-" + file.name
       const up = await supabase.storage.from("avatars").upload(path, file, { upsert: true })
       if (up.error) throw new Error(up.error.message)
@@ -105,7 +105,7 @@ export function ProfileExtras({
       await saveAvatar(pub.publicUrl)
       router.refresh()
     } catch {
-      // diabaikan
+      // ignored
     } finally {
       setAvaBusy(false)
     }
@@ -119,28 +119,28 @@ export function ProfileExtras({
 
   return (
     <div className="iq-card iq-card__pad">
-      <h3 className="mb-4">CV, Portfolio &amp; Preferensi</h3>
+      <h3 className="mb-4">CV, Portfolio &amp; Preferences</h3>
 
       <div className="iq-form-row">
-        <label>CV (PDF), dipakai AI untuk hasil yang dipersonalisasi</label>
+        <label>CV (PDF), used by AI for personalized results</label>
         <input ref={cvRef} type="file" accept="application/pdf" hidden onChange={onPickCv} />
         <div className={"iq-cvbox" + (cvLabel ? " is-set" : "")} onClick={() => !cvBusy && cvRef.current?.click()}>
-          {cvBusy ? "Membaca CV dengan AI…" : cvLabel ? "✓ " + cvLabel + " · klik untuk ganti" : "Klik untuk upload CV (PDF)"}
+          {cvBusy ? "Reading your CV with AI…" : cvLabel ? "✓ " + cvLabel + " · click to replace" : "Click to upload your CV (PDF)"}
         </div>
         {cvErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{cvErr}</p>}
       </div>
 
       <div className="iq-form-row">
-        <label>Portfolio (PDF), ikut dibaca AI untuk hasil yang lebih relevan</label>
+        <label>Portfolio (PDF), also read by AI for more relevant results</label>
         <input ref={pfRef} type="file" accept="application/pdf" hidden onChange={onPickPortfolio} />
         <div className={"iq-cvbox" + (pfLabel ? " is-set" : "")} onClick={() => !pfBusy && pfRef.current?.click()}>
-          {pfBusy ? "Membaca portfolio dengan AI…" : pfLabel ? "✓ " + pfLabel + " · klik untuk ganti" : "Klik untuk upload Portfolio (PDF)"}
+          {pfBusy ? "Reading your portfolio with AI…" : pfLabel ? "✓ " + pfLabel + " · click to replace" : "Click to upload your Portfolio (PDF)"}
         </div>
         {pfErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{pfErr}</p>}
       </div>
 
       <div className="iq-form-row">
-        <label>Minat &amp; bidang yang dituju (opsional)</label>
+        <label>Interests &amp; target fields (optional)</label>
         <textarea
           className="iq-textarea"
           style={csx("min-height:80px")}
@@ -149,18 +149,18 @@ export function ProfileExtras({
             setInterests(e.target.value)
             setSavedInt(false)
           }}
-          placeholder="Contoh: tertarik di data analysis, supply chain, dan pemasaran digital…"
+          placeholder="Example: interested in data analysis, supply chain, and digital marketing…"
         />
         <button className="iq-btn iq-btn--ghost iq-btn--sm mt-2" onClick={saveInt}>
-          <Icon name="ic-save" className="ic ic-16" /> {savedInt ? "Tersimpan" : "Simpan minat"}
+          <Icon name="ic-save" className="ic ic-16" /> {savedInt ? "Saved" : "Save interests"}
         </button>
       </div>
 
       <div className="iq-form-row" style={csx("margin-bottom:0")}>
-        <label>Foto profil</label>
+        <label>Profile photo</label>
         <input ref={avaRef} type="file" accept="image/*" hidden onChange={onPickAvatar} />
         <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => !avaBusy && avaRef.current?.click()}>
-          <Icon name="ic-upload" className="ic ic-16" /> {avaBusy ? "Mengunggah…" : "Ganti foto profil"}
+          <Icon name="ic-upload" className="ic ic-16" /> {avaBusy ? "Uploading…" : "Change profile photo"}
         </button>
       </div>
     </div>

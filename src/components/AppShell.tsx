@@ -18,25 +18,35 @@ export type ProfileStats = {
 }
 
 const NAV = [
-  { href: "/dashboard", icon: "ic-dashboard", label: "Beranda" },
-  { href: "/internships", icon: "ic-list", label: "Magang" },
-  { href: "/calendar", icon: "ic-calendar", label: "Kalender" },
-  { href: "/ai", icon: "ic-ai", label: "Asisten AI" },
-  { href: "/achievements", icon: "ic-trophy", label: "Pencapaian" },
+  { href: "/dashboard", icon: "ic-dashboard", label: "Dashboard" },
+  { href: "/internships", icon: "ic-list", label: "Internships" },
+  { href: "/calendar", icon: "ic-calendar", label: "Calendar" },
+  { href: "/ai", icon: "ic-ai", label: "AI Assistant" },
+  { href: "/achievements", icon: "ic-trophy", label: "Achievements" },
+  { href: "/groups", icon: "ic-users", label: "Groups" },
 ]
 const NAV_ACCOUNT = [
-  { href: "/profile", icon: "ic-user", label: "Profil" },
-  { href: "/settings", icon: "ic-settings", label: "Pengaturan" },
+  { href: "/profile", icon: "ic-user", label: "Profile" },
+  { href: "/settings", icon: "ic-settings", label: "Settings" },
+]
+const MOBILE_NAV = [
+  { href: "/dashboard", icon: "ic-dashboard", label: "Home" },
+  { href: "/internships", icon: "ic-list", label: "Internships" },
+  { href: "/groups", icon: "ic-users", label: "Groups" },
+  { href: "/calendar", icon: "ic-calendar", label: "Calendar" },
+  { href: "/ai", icon: "ic-ai", label: "AI" },
+  { href: "/profile", icon: "ic-user", label: "Profile" },
 ]
 
 const TITLES: Record<string, string> = {
-  "/dashboard": "Beranda",
-  "/internships": "Magang",
-  "/calendar": "Kalender",
-  "/ai": "Asisten AI",
-  "/achievements": "Pencapaian",
-  "/profile": "Profil",
-  "/settings": "Pengaturan",
+  "/dashboard": "Dashboard",
+  "/internships": "Internships",
+  "/calendar": "Calendar",
+  "/ai": "AI Assistant",
+  "/achievements": "Achievements",
+  "/groups": "Study Groups",
+  "/profile": "Profile",
+  "/settings": "Settings",
 }
 
 export function AppShell({
@@ -55,8 +65,13 @@ export function AppShell({
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/")
   const title =
-    TITLES[pathname] || (pathname.startsWith("/internships/") ? "Detail Magang" : "InternQuest")
-  const name = profile.full_name || "Kamu"
+    TITLES[pathname] ||
+    (pathname.startsWith("/internships/")
+      ? "Internship Detail"
+      : pathname.startsWith("/groups/")
+      ? "Study Group"
+      : "InternQuest")
+  const name = profile.full_name || "You"
 
   async function signOut() {
     const supabase = createClient()
@@ -81,9 +96,7 @@ export function AppShell({
     <div className="iq-app">
       <aside className="iq-sidebar">
         <div className="iq-logo">
-          <span style={csx("font-weight:800;font-size:20px;color:var(--blue-text)")}>
-            Intern<span style={csx("color:var(--pink-text)")}>Quest</span>
-          </span>
+          <span className="iq-brand">Intern<i>Quest</i></span>
         </div>
         <nav className="iq-nav">
           {navItem(NAV[0])}
@@ -91,7 +104,8 @@ export function AppShell({
           {navItem(NAV[2])}
           {navItem(NAV[3])}
           {navItem(NAV[4])}
-          <div className="iq-nav__label">Akun</div>
+          {navItem(NAV[5])}
+          <div className="iq-nav__label">Account</div>
           {navItem(NAV_ACCOUNT[0])}
           {navItem(NAV_ACCOUNT[1])}
         </nav>
@@ -109,20 +123,15 @@ export function AppShell({
             <span>Lv.{profile.level} · Intern Hunter</span>
           </div>
         </Link>
-        <button
-          className="iq-nav__item"
-          style={csx("color:var(--ink-3)")}
-          onClick={signOut}
-          title="Keluar"
-        >
-          <Icon name="ic-logout" /> <span style={csx("flex:1")}>Keluar</span>
+        <button className="iq-nav__item iq-signout" onClick={signOut} title="Log out">
+          <Icon name="ic-logout" /> <span style={csx("flex:1")}>Log out</span>
         </button>
       </aside>
 
       <main className="iq-main">
         <header className="iq-topbar">
           <div className="iq-topbar__title">{title}</div>
-          <span className="iq-stat-pill" style={csx("color:#FF7A3D")}>
+          <span className="iq-stat-pill iq-stat-pill--keep" style={csx("color:#FF7A3D")}>
             <Icon name="ic-flame" className="ic ic-18 ic--fill" />
             <span style={csx("color:var(--ink)")}>{profile.streak_count}</span>
           </span>
@@ -135,12 +144,12 @@ export function AppShell({
             <span style={csx("color:var(--ink)")}>{profile.gems}</span>
           </span>
           <button className="iq-btn iq-btn--primary" onClick={() => setAddOpen(true)}>
-            <Icon name="ic-plus" className="ic ic-18" /> Tambah Magang
+            <Icon name="ic-plus" className="ic ic-18" /> <span className="iq-btn__text">Add Internship</span>
           </button>
-          <Link href="/profile" className="iq-topbar__av" aria-label="Profil">
+          <Link href="/profile" className="iq-topbar__av" aria-label="Profile">
             {profile.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.avatar_url} alt="Foto profil" />
+              <img src={profile.avatar_url} alt="Profile photo" />
             ) : (
               <svg aria-hidden="true"><use href="#questy" /></svg>
             )}
@@ -148,6 +157,15 @@ export function AppShell({
         </header>
         <div className="iq-content">{children}</div>
       </main>
+
+      <nav className="iq-botnav">
+        {MOBILE_NAV.map((m) => (
+          <Link key={m.href} href={m.href} className={isActive(m.href) ? "is-active" : ""}>
+            <Icon name={m.icon} />
+            <span>{m.label}</span>
+          </Link>
+        ))}
+      </nav>
 
       <AddInternshipModal open={addOpen} onClose={() => setAddOpen(false)} />
     </div>

@@ -78,7 +78,7 @@ export async function POST(req: Request) {
         : "") +
       (interests ? "Applicant interests/goals: " + interests + "\n" : "") +
       (context ? "Additional info from applicant: " + context + "\n" : "") +
-      "STYLE RULES: Write in natural Indonesian unless the company/role context is clearly English. " +
+      "STYLE RULES: Write in natural, professional English. Do not use em dashes. " +
       "Do NOT use the em dash or en dash character; use commas or full stops instead. Avoid overusing colons. " +
       "Do not use the fire emoji or excessive emojis. Output only the final text, ready to copy."
 

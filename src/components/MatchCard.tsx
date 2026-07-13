@@ -5,6 +5,15 @@ import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
 
+type Rec = { type: string; title: string; detail: string }
+
+const REC_META: Record<string, { icon: string; label: string; chip: string }> = {
+  certification: { icon: "ic-trophy", label: "Certification", chip: "iq-chip--yellow" },
+  project: { icon: "ic-code", label: "Project", chip: "iq-chip--blue" },
+  skill: { icon: "ic-brain", label: "Skill", chip: "iq-chip--pink" },
+  cv: { icon: "ic-doc", label: "Add to CV", chip: "iq-chip--green" },
+}
+
 export function MatchCard({
   internshipId,
   initialScore,
@@ -19,7 +28,7 @@ export function MatchCard({
   const router = useRouter()
   const [score, setScore] = useState<number | null>(initialScore)
   const [reasons, setReasons] = useState<string>(initialReasons || "")
-  const [tips, setTips] = useState<string>("")
+  const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState<string | null>(null)
 
@@ -33,13 +42,13 @@ export function MatchCard({
         body: JSON.stringify({ internship_id: internshipId }),
       })
       const json = await res.json()
-      if (!json.ok) throw new Error(json.error || "Gagal menghitung")
+      if (!json.ok) throw new Error(json.error || "Could not calculate")
       setScore(json.score)
       setReasons(json.reasons || "")
-      setTips(json.tips || "")
+      setRecs(Array.isArray(json.recommendations) ? json.recommendations : [])
       router.refresh()
     } catch (e: any) {
-      setErr(e?.message || "Gagal")
+      setErr(e?.message || "Failed")
     } finally {
       setLoading(false)
     }
@@ -49,11 +58,11 @@ export function MatchCard({
     <div className="iq-card iq-card__pad">
       <div className="row mb-4">
         <Icon name="ic-target" className="ic ic-22" style={csx("color:var(--blue-text)")} />
-        <h3>Kecocokan CV &amp; Minat</h3>
+        <h3>CV &amp; Portfolio Match</h3>
       </div>
       {!hasCv ? (
         <p className="muted iq-justify">
-          Upload CV dulu di halaman <b>Profil</b> agar AI bisa menghitung seberapa cocok kamu dengan lowongan ini.
+          Upload your CV on the <b>Profile</b> page first so AI can score how well you match this role and suggest how to improve.
         </p>
       ) : (
         <>
@@ -62,18 +71,37 @@ export function MatchCard({
               <div className="iq-match__score">{score}%</div>
               <div className="iq-match__bar"><i style={csx("width:" + score + "%")} /></div>
               {reasons && <p className="muted iq-justify" style={csx("font-size:13px")}>{reasons}</p>}
-              {tips && (
-                <div className="iq-callout mt-4" style={csx("padding:12px 14px;align-items:center")}>
-                  <Icon name="ic-target" className="ic ic-18" style={csx("color:var(--blue-text)")} />
-                  <p style={csx("font-size:13px")} className="iq-justify">{tips}</p>
+              {recs.length > 0 && (
+                <div className="iq-recs mt-4">
+                  <div className="row mb-2">
+                    <Icon name="ic-star" className="ic ic-18" style={csx("color:var(--yellow-text)")} />
+                    <b>How to boost your chances</b>
+                  </div>
+                  <div className="stack-2">
+                    {recs.map((r, i) => {
+                      const m = REC_META[r.type] || REC_META.skill
+                      return (
+                        <div key={i} className="iq-rec">
+                          <span className="iq-rec__ic"><Icon name={m.icon} className="ic ic-18" /></span>
+                          <div style={csx("flex:1")}>
+                            <div className="iq-rec__head">
+                              <b>{r.title}</b>
+                              <span className={"iq-chip " + m.chip}>{m.label}</span>
+                            </div>
+                            {r.detail && <div className="iq-rec__detail muted iq-justify">{r.detail}</div>}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
               )}
             </>
           )}
-          {score === null && <p className="muted mb-4 iq-justify">Belum dihitung. Klik tombol di bawah untuk cek kecocokan.</p>}
+          {score === null && <p className="muted mb-4 iq-justify">Not checked yet. Click the button below to see your match and get tips to improve your chances.</p>}
           {err && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{err}</p>}
           <button className="iq-btn iq-btn--blue iq-btn--block iq-btn--sm mt-4" onClick={run} disabled={loading}>
-            <Icon name="ic-ai" className="ic ic-16" /> {loading ? "Menghitung…" : score === null ? "Hitung kecocokan" : "Hitung ulang"}
+            <Icon name="ic-ai" className="ic ic-16" /> {loading ? "Analyzing…" : score === null ? "Check match & tips" : "Recalculate"}
           </button>
         </>
       )}

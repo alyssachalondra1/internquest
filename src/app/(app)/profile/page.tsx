@@ -18,7 +18,7 @@ export default async function ProfilePage() {
   const { count: applied } = await supabase
     .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
 
-  // Portfolio diambil terpisah agar aman bila kolomnya belum ada di database.
+  // Portfolio is fetched separately so it is safe if the column does not exist yet.
   let portfolio: { portfolio_url: string | null; portfolio_text: string | null } | null = null
   try {
     const { data } = await supabase
@@ -47,7 +47,7 @@ export default async function ProfilePage() {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={profile.avatar_url}
-            alt="Foto profil"
+            alt="Profile photo"
             className="iq-avatar-lg"
           />
         ) : (
@@ -65,8 +65,8 @@ export default async function ProfilePage() {
       <div className="iq-grid iq-grid--dash">
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <h3 className="mb-4">Informasi Pribadi</h3>
-            <div className="iq-field"><span className="iq-field__k">Nama</span><span className="iq-field__v">{profile?.full_name || "—"}</span></div>
+            <h3 className="mb-4">Personal Information</h3>
+            <div className="iq-field"><span className="iq-field__k">Name</span><span className="iq-field__v">{profile?.full_name || "—"}</span></div>
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
@@ -76,7 +76,7 @@ export default async function ProfilePage() {
           <div className="iq-sidebyside">
             <Questy size={72} />
             <div className="iq-callout" style={csx("background:var(--pink-15);border-color:var(--pink-50)")}>
-              <div><b>Semangat, {(profile?.full_name || "").split(" ")[0] || "Kamu"}!</b><p className="mt-2">Tinggal {Math.max(0, target - xp)} XP lagi menuju Level {level + 1}. Selesaikan 1 checklist hari ini untuk jaga streak-mu.</p></div>
+              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Finish one checklist today to keep your streak.</p></div>
             </div>
           </div>
         </div>

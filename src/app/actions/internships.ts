@@ -15,6 +15,7 @@ export type NewInternship = {
   is_paid?: boolean
   poster_url?: string | null
   source_url?: string | null
+  open_date?: string | null
   deadline?: string | null
   start_date?: string | null
   duration_months?: number | null
@@ -28,12 +29,16 @@ export async function createInternship(data: NewInternship) {
   } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: row, error } = await supabase
-    .from("internships")
-    .insert({ ...data, user_id: user.id, status: "todo" })
-    .select("id")
-    .single()
-  if (error) throw new Error(error.message)
+  const insertData: Record<string, any> = { ...data, user_id: user.id, status: "todo" }
+  let ins = await supabase.from("internships").insert(insertData).select("id").single()
+  // The open_date column is optional; if the database has not been migrated yet,
+  // retry the insert without it so saving still works.
+  if (ins.error && /open_date/i.test(ins.error.message)) {
+    const { open_date, ...rest } = insertData
+    ins = await supabase.from("internships").insert(rest).select("id").single()
+  }
+  if (ins.error) throw new Error(ins.error.message)
+  const row = ins.data!
 
   await supabase.from("checklist_items").insert(
     DEFAULT_CHECKLIST.map((label) => ({

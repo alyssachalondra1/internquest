@@ -11,13 +11,13 @@ function stripFences(s: string) {
 export async function POST(req: Request) {
   try {
     const { internship_id } = (await req.json()) as { internship_id?: string }
-    if (!internship_id) throw new Error("internship_id wajib")
+    if (!internship_id) throw new Error("internship_id is required")
 
     const supabase = await createClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    if (!user) return NextResponse.json({ ok: false, error: "Belum login" }, { status: 401 })
+    if (!user) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 })
 
     const { data: prof } = await supabase
       .from("profiles")
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       .single()
     if (!prof?.cv_text) {
       return NextResponse.json(
-        { ok: false, error: "CV belum diunggah. Upload CV di halaman Profil dulu ya." },
+        { ok: false, error: "No CV uploaded yet. Please upload your CV on the Profile page first." },
         { status: 400 },
       )
     }
@@ -47,15 +47,16 @@ export async function POST(req: Request) {
       .eq("id", internship_id)
       .eq("user_id", user.id)
       .single()
-    if (!it) return NextResponse.json({ ok: false, error: "Lowongan tidak ditemukan" }, { status: 404 })
+    if (!it) return NextResponse.json({ ok: false, error: "Internship not found" }, { status: 404 })
 
     const prompt =
-      "You are a career advisor. Compare the applicant CV, portfolio, and interests against an internship, then estimate a match percentage.\n" +
-      'Return ONLY valid JSON: { "score": number (0-100), "reasons": string (2 to 3 kalimat, bahasa Indonesia), "tips": string (1 to 2 saran singkat, bahasa Indonesia) }.\n' +
-      "STYLE: Do not use the em dash character. Do not use colons inside reasons or tips. Do not use the fire emoji.\n\n" +
+      "You are a career advisor. Compare the applicant CV, portfolio, and interests against an internship, then estimate a match percentage AND give concrete recommendations to improve the applicant chances for THIS specific role.\n" +
+      'Return ONLY valid JSON: { "score": number (0-100), "reasons": string (2 to 3 sentences in English explaining the score), "recommendations": array of 3 to 5 objects, each { "type": one of "certification" | "project" | "skill" | "cv", "title": short actionable step of at most 8 words, "detail": one sentence in English on how it boosts chances for this role } }.\n' +
+      "Make every recommendation specific to the gap between the applicant profile and the internship requirements. Suggest real certification names, concrete personal project ideas, specific skills or tools to learn, or exact things to add to the CV.\n" +
+      "STYLE: Write in English. Do not use the em dash character. Do not use the fire emoji.\n\n" +
       "INTERNSHIP:\nCompany: " + (it.company_name || "") + "\nRole: " + (it.role || "") +
       "\nLocation: " + (it.location || "") + "\nRequirements/Notes: " + (it.notes || "") + "\n\n" +
-      "APPLICANT INTERESTS: " + (prof.interests || "(tidak diisi)") + "\n\n" +
+      "APPLICANT INTERESTS: " + (prof.interests || "(not provided)") + "\n\n" +
       (portfolioText ? "APPLICANT PORTFOLIO:\n" + portfolioText + "\n\n" : "") +
       "APPLICANT CV:\n" + String(prof.cv_text).slice(0, 6000)
 
@@ -68,7 +69,17 @@ export async function POST(req: Request) {
     const parsed = JSON.parse(raw)
     const score = Math.max(0, Math.min(100, Math.round(Number(parsed.score) || 0)))
     const reasons = String(parsed.reasons || "")
-    const tips = String(parsed.tips || "")
+    const ALLOWED = ["certification", "project", "skill", "cv"]
+    const recommendations = Array.isArray(parsed.recommendations)
+      ? parsed.recommendations
+          .map((r: any) => ({
+            type: ALLOWED.includes(String(r?.type)) ? String(r.type) : "skill",
+            title: String(r?.title || "").trim(),
+            detail: String(r?.detail || "").trim(),
+          }))
+          .filter((r: any) => r.title)
+          .slice(0, 5)
+      : []
 
     await supabase
       .from("internships")
@@ -76,7 +87,7 @@ export async function POST(req: Request) {
       .eq("id", internship_id)
       .eq("user_id", user.id)
 
-    return NextResponse.json({ ok: true, score, reasons, tips })
+    return NextResponse.json({ ok: true, score, reasons, recommendations })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || "match failed" }, { status: 500 })
   }

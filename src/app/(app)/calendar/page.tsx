@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/supabase/server"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
-import { fmtShort, daysUntil, type Internship } from "@/lib/helpers"
+import { fmtShort, fmtRange, daysUntil, type Internship } from "@/lib/helpers"
 
 export const dynamic = "force-dynamic"
 
-const DOW = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"]
-const MONTHS = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+const DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 type Ev = { label: string; color: string }
 
@@ -38,8 +38,9 @@ export default async function CalendarPage() {
     }
   }
   for (const it of items) {
-    push(it.deadline, it.company_name, "var(--pink)")
-    push(it.start_date, it.company_name, "var(--blue)")
+    push(it.open_date, "Opens: " + it.company_name, "var(--green)")
+    push(it.deadline, "Deadline: " + it.company_name, "var(--pink)")
+    push(it.start_date, "Starts: " + it.company_name, "var(--blue)")
   }
 
   const cells: Array<{ day: number | null }> = []
@@ -52,17 +53,25 @@ export default async function CalendarPage() {
     .filter((x) => x.n >= 0 && x.n <= 7)
     .sort((a, b) => a.n - b.n)
 
+  const upcoming = items
+    .filter((i) => i.open_date || i.deadline || i.start_date)
+    .map((i) => ({ i, n: daysUntil(i.deadline ?? i.start_date ?? i.open_date) ?? 9999 }))
+    .filter((x) => x.n >= -1)
+    .sort((a, b) => a.n - b.n)
+    .slice(0, 6)
+
   return (
     <section className="iq-screen is-active">
       <div className="row-between mb-6">
-        <div><h2 style={csx("font-size:22px")}>Calendar</h2><div className="muted">Otomatis dari deadline internship-mu.</div></div>
+        <div><h2 style={csx("font-size:22px")}>Calendar</h2><div className="muted">Built automatically from your internship dates.</div></div>
         <div className="iq-monthnav"><span>{MONTHS[month]} {year}</span></div>
       </div>
       <div className="iq-calwrap">
         <div className="iq-card iq-card__pad">
           <div className="row wrap mb-4" style={csx("gap:8px")}>
+            <span className="iq-chip iq-chip--green">Registration opens</span>
             <span className="iq-chip iq-chip--pink">Deadline</span>
-            <span className="iq-chip iq-chip--blue">Mulai magang</span>
+            <span className="iq-chip iq-chip--blue">Internship starts</span>
           </div>
           <div className="iq-cal">
             {DOW.map((d) => <div key={d} className="iq-cal__h">{d}</div>)}
@@ -78,14 +87,14 @@ export default async function CalendarPage() {
         </div>
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <div className="row mb-4"><Icon name="ic-bell" className="ic ic-18" style={csx("color:var(--pink-text)")} /><h3>Reminder aktif</h3></div>
+            <div className="row mb-4"><Icon name="ic-bell" className="ic ic-18" style={csx("color:var(--pink-text)")} /><h3>Active reminders</h3></div>
             <div className="stack-2">
-              {reminders.length === 0 && <p className="muted">Tidak ada deadline dalam 7 hari ke depan.</p>}
+              {reminders.length === 0 && <p className="muted">No deadlines in the next 7 days.</p>}
               {reminders.map(({ i, n }) => (
                 <div key={i.id} className={"iq-rem " + (n <= 1 ? "iq-rem--warn" : "iq-rem--info")}>
                   <Icon name="ic-clock" className="ic iq-rem__ic" style={csx(n <= 1 ? "color:var(--red-text)" : "color:var(--blue-text)")} />
                   <div>
-                    <div className="iq-rem__t">{i.company_name} · {n === 0 ? "hari ini" : n === 1 ? "besok" : n + " hari lagi"}</div>
+                    <div className="iq-rem__t">{i.company_name} · {n === 0 ? "today" : n === 1 ? "tomorrow" : n + " days left"}</div>
                     <div className="iq-rem__s">Deadline {fmtShort(i.deadline)}</div>
                   </div>
                 </div>
@@ -93,14 +102,21 @@ export default async function CalendarPage() {
             </div>
           </div>
           <div className="iq-card iq-card__pad">
-            <h3 className="mb-4">Jadwal mendatang</h3>
-            {reminders.length === 0 && <p className="muted">Belum ada jadwal.</p>}
-            {reminders.map(({ i }) => (
-              <div key={i.id} className="iq-sched__item">
-                <span className="iq-dot" style={csx("background:var(--pink)")} />
-                <div><b>{fmtShort(i.deadline)} · {i.company_name}</b><div className="iq-rem__s">Deadline lamaran</div></div>
-              </div>
-            ))}
+            <h3 className="mb-4">Upcoming schedule</h3>
+            {upcoming.length === 0 && <p className="muted">Nothing scheduled yet.</p>}
+            {upcoming.map(({ i }) => {
+              const range = fmtRange(i.open_date, i.deadline)
+              return (
+                <div key={i.id} className="iq-sched__item">
+                  <span className="iq-dot" style={csx("background:var(--pink)")} />
+                  <div>
+                    <b>{i.company_name}</b>
+                    <div className="iq-rem__s">{range ? "Registration " + range : "Deadline " + fmtShort(i.deadline)}</div>
+                    {i.start_date && <div className="iq-rem__s">Starts {fmtShort(i.start_date)}</div>}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
