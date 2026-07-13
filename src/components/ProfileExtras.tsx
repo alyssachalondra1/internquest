@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveCv, saveInterests, saveAvatar, savePortfolio } from "@/app/actions/profile"
+import { MASCOT_PRESETS, QuestyFace, isMascot } from "@/components/MascotAvatar"
 import { csx } from "@/lib/csx"
 
 export function ProfileExtras({
@@ -13,12 +14,14 @@ export function ProfileExtras({
   interests: initialInterests,
   hasPortfolio,
   portfolioName,
+  avatarUrl,
 }: {
   hasCv: boolean
   cvName: string | null
   interests: string | null
   hasPortfolio: boolean
   portfolioName: string | null
+  avatarUrl: string | null
 }) {
   const router = useRouter()
   const cvRef = useRef<HTMLInputElement>(null)
@@ -33,6 +36,8 @@ export function ProfileExtras({
   const [interests, setInterests] = useState(initialInterests || "")
   const [savedInt, setSavedInt] = useState(false)
   const [avaBusy, setAvaBusy] = useState(false)
+  const [avaErr, setAvaErr] = useState<string | null>(null)
+  const [ava, setAva] = useState<string | null>(avatarUrl)
 
   async function uploadPdf(file: File, prefix: string) {
     const supabase = createClient()
@@ -103,12 +108,21 @@ export function ProfileExtras({
       if (up.error) throw new Error(up.error.message)
       const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path)
       await saveAvatar(pub.publicUrl)
+      setAva(pub.publicUrl)
+      setAvaErr(null)
       router.refresh()
-    } catch {
-      // ignored
+    } catch (e: any) {
+      setAvaErr(e?.message || "Upload failed. Make sure the 'avatars' storage bucket exists and is public.")
     } finally {
       setAvaBusy(false)
     }
+  }
+
+  async function pickPreset(key: string) {
+    setAvaErr(null)
+    setAva(key)
+    await saveAvatar(key)
+    router.refresh()
   }
 
   async function saveInt() {
@@ -158,10 +172,36 @@ export function ProfileExtras({
 
       <div className="iq-form-row" style={csx("margin-bottom:0")}>
         <label>Profile photo</label>
-        <input ref={avaRef} type="file" accept="image/*" hidden onChange={onPickAvatar} />
-        <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => !avaBusy && avaRef.current?.click()}>
-          <Icon name="ic-upload" className="ic ic-16" /> {avaBusy ? "Uploading…" : "Change profile photo"}
-        </button>
+        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Questy expression, or upload your own photo.</p>
+        <div className="iq-avatar-picker">
+          {MASCOT_PRESETS.map((p) => (
+            <button
+              key={p.key}
+              type="button"
+              className={"iq-avatar-opt" + (ava === p.key ? " is-active" : "")}
+              onClick={() => pickPreset(p.key)}
+              title={p.label}
+            >
+              <QuestyFace mood={p.mood} size={46} />
+            </button>
+          ))}
+          <input ref={avaRef} type="file" accept="image/*" hidden onChange={onPickAvatar} />
+          <button
+            type="button"
+            className={"iq-avatar-opt iq-avatar-opt--upload" + (ava && !isMascot(ava) ? " is-active" : "")}
+            onClick={() => !avaBusy && avaRef.current?.click()}
+            title="Upload your own photo"
+          >
+            {ava && !isMascot(ava) ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={ava} alt="Your photo" />
+            ) : (
+              <Icon name="ic-upload" className="ic ic-18" />
+            )}
+          </button>
+        </div>
+        {avaBusy && <p className="muted" style={csx("font-size:12px;margin-top:8px")}>Uploading…</p>}
+        {avaErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:8px")}>{avaErr}</p>}
       </div>
     </div>
   )

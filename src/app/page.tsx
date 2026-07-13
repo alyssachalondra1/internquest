@@ -13,8 +13,10 @@ const FEATURES = [
   { icon: "ic-ai", bg: "linear-gradient(135deg,#7C5CFF,#3B76FF)", t: "AI writing helper", d: "Generate motivation letters, cover letters, and HR emails that match your CV in seconds." },
   { icon: "ic-target", bg: "linear-gradient(135deg,#2FCB7E,#3B76FF)", t: "CV match score", d: "See how well you fit each role and get clear tips on what to improve before you apply." },
   { icon: "ic-calendar", bg: "linear-gradient(135deg,#3B76FF,#7C5CFF)", t: "Deadline calendar", d: "Every registration window and start date in one place, so you never miss an opportunity." },
-  { icon: "ic-trophy", bg: "linear-gradient(135deg,#FFC53D,#FF6FA5)", t: "Gamified progress", d: "Earn XP, keep your streak, and unlock badges every time you move an application forward." },
+  { icon: "ic-trophy", bg: "linear-gradient(135deg,#FFC53D,#FF6FA5)", t: "Gamified progress", d: "Earn XP and gems, keep your daily streak, and unlock badges every time you move an application forward." },
   { icon: "ic-check", bg: "linear-gradient(135deg,#2FCB7E,#2FCB7E)", t: "Smart checklist", d: "Track the documents each application needs and check them off as you go." },
+  { icon: "ic-list", bg: "linear-gradient(135deg,#3B76FF,#2FCB7E)", t: "Application tracker", d: "Move every internship across a clear board, from To Do to Applied, Interview, and Offer, and see your whole pipeline at a glance." },
+  { icon: "ic-users", bg: "linear-gradient(135deg,#FF6FA5,#7C5CFF)", t: "Study groups", d: "Create or join groups with classmates and friends who share your interests, then share internship opportunities with each other." },
 ]
 
 const STEPS = [
@@ -42,7 +44,7 @@ export default function Landing() {
           <div>
             <span className="iq-lp__badge">✨ Your AI internship companion</span>
             <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
-            <p className="iq-lp__sub">InternQuest helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, and stay motivated with a friendly gamified workspace.</p>
+            <p className="iq-lp__sub">InternQuest helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with study groups, and stay motivated with a friendly gamified workspace.</p>
             <div className="iq-lp__cta">
               <Link className="iq-btn iq-btn--primary" href="/login?mode=signup">Get started free <Icon name="ic-arrow-right" className="ic ic-18" /></Link>
               <Link className="iq-btn iq-btn--ghost" href="/dashboard">Open dashboard</Link>

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { addXp } from "./gamification"
+import { addXp, addGems, syncAchievementGems } from "./gamification"
 
 const DEFAULT_CHECKLIST = ["CV", "Transcript", "Motivation Letter", "Portfolio"]
 
@@ -50,6 +50,7 @@ export async function createInternship(data: NewInternship) {
   )
 
   await addXp(10)
+  await addGems(3)
   revalidatePath("/internships")
   revalidatePath("/dashboard")
   return row.id as string
@@ -67,6 +68,21 @@ export async function updateInternshipStatus(id: string, status: string) {
   if (status === "test") await addXp(50)
   if (status === "interview") await addXp(75)
   if (status === "offer") await addXp(150)
+  if (status === "applied") await addGems(5)
+  if (status === "screening") await addGems(5)
+  if (status === "test") await addGems(6)
+  if (status === "interview") await addGems(10)
+  if (status === "offer") await addGems(30)
+  // Bonus gems each time the applied count reaches a multiple of 5.
+  if (status === "applied") {
+    const { count } = await supabase
+      .from("internships")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .in("status", ["applied", "interview", "offer"])
+    if (count && count % 5 === 0) await addGems(15)
+  }
+  await syncAchievementGems()
   revalidatePath("/internships/" + id)
   revalidatePath("/internships")
   revalidatePath("/dashboard")
@@ -80,6 +96,7 @@ export async function toggleChecklistItem(itemId: string, isDone: boolean) {
   if (!user) redirect("/login")
   await supabase.from("checklist_items").update({ is_done: isDone }).eq("id", itemId).eq("user_id", user.id)
   if (isDone) await addXp(15)
+  if (isDone) await addGems(2)
   revalidatePath("/internships", "layout")
 }
 

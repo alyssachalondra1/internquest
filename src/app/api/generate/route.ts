@@ -35,6 +35,37 @@ export async function POST(req: Request) {
       context = "",
     } = body as Record<string, string>
 
+    // Gems gating: generating polished AI text costs gems.
+    const GEN_COST = 3
+    let gateSupabase: any = null
+    let gateUser: any = null
+    try {
+      gateSupabase = await createClient()
+      const {
+        data: { user },
+      } = await gateSupabase.auth.getUser()
+      gateUser = user
+      if (user) {
+        const { data: bal } = await gateSupabase.from("profiles").select("gems").eq("id", user.id).single()
+        const gems = (bal?.gems as number | null) ?? 0
+        if (gems < GEN_COST) {
+          return NextResponse.json(
+            {
+              ok: false,
+              needGems: true,
+              error:
+                "Not enough gems. You need " +
+                GEN_COST +
+                " gems to generate. Earn gems by opening InternQuest daily, adding internships, completing checklist items, and reaching Interview or Offer.",
+            },
+            { status: 402 },
+          )
+        }
+      }
+    } catch {
+      // If the balance check fails, allow generation rather than blocking the user.
+    }
+
     // Ambil CV, minat, dan portfolio user (bila ada) untuk personalisasi hasil.
     let cvText = ""
     let interests = ""
@@ -83,6 +114,18 @@ export async function POST(req: Request) {
       "Do not use the fire emoji or excessive emojis. Output only the final text, ready to copy."
 
     const content = await generateWithRetry(prompt)
+
+    // Deduct gems only after a successful generation.
+    try {
+      if (gateSupabase && gateUser) {
+        const { data: bal2 } = await gateSupabase.from("profiles").select("gems").eq("id", gateUser.id).single()
+        const cur = (bal2?.gems as number | null) ?? 0
+        await gateSupabase.from("profiles").update({ gems: Math.max(0, cur - GEN_COST) }).eq("id", gateUser.id)
+      }
+    } catch {
+      // ignore deduction errors
+    }
+
     return NextResponse.json({ ok: true, content })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err?.message || "generate failed" }, { status: 500 })

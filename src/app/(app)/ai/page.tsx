@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Questy } from "@/components/Questy"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
@@ -29,6 +29,7 @@ const TYPES: Array<{ value: string; label: string }> = [
 
 function AiInner() {
   const params = useSearchParams()
+  const router = useRouter()
   const internshipId = params.get("internship")
   const [type, setType] = useState(params.get("type") || "motivation_letter")
   const [tone, setTone] = useState("Professional")
@@ -63,7 +64,12 @@ function AiInner() {
         body: JSON.stringify({ answer_type: type, tone, length, company, role, context }),
       })
       const json = await res.json()
-      setOutput(json.ok ? json.content : "Failed to generate: " + (json.error || ""))
+      if (json.ok) {
+        setOutput(json.content)
+        router.refresh() // refresh the gem balance shown in the top bar
+      } else {
+        setOutput(json.needGems ? json.error : "Failed to generate: " + (json.error || ""))
+      }
     } catch (e: any) {
       setOutput("Failed to generate: " + (e?.message || ""))
     } finally {
@@ -100,7 +106,7 @@ function AiInner() {
             />
           </div>
           <button className="iq-btn iq-btn--primary iq-btn--block mb-6" onClick={generate} disabled={loading}>
-            <Icon name="ic-ai" className="ic ic-18" /> {loading ? "Generating…" : "Generate"}
+            <Icon name="ic-ai" className="ic ic-18" /> {loading ? "Generating…" : "Generate · 3 gems"}
           </button>
           <div className="iq-card iq-card__pad" style={csx("background:var(--surface-2);border-style:dashed")}>
             {output ? (

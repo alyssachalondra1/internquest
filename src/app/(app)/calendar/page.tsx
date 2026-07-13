@@ -38,9 +38,9 @@ export default async function CalendarPage() {
     }
   }
   for (const it of items) {
-    push(it.open_date, "Opens: " + it.company_name, "var(--green)")
-    push(it.deadline, "Deadline: " + it.company_name, "var(--pink)")
-    push(it.start_date, "Starts: " + it.company_name, "var(--blue)")
+    push(it.open_date, "Opens: " + it.company_name, "#1FAE70")
+    push(it.deadline, "Deadline: " + it.company_name, "#FB5C93")
+    push(it.start_date, "Starts: " + it.company_name, "#2F6BFF")
   }
 
   const cells: Array<{ day: number | null }> = []

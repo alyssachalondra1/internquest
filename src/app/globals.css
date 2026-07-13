@@ -895,3 +895,46 @@ body{background:var(--canvas)}
 .iq-step.is-current .iq-step__dot{box-shadow:0 0 0 4px rgba(20,27,46,.08)}
 .iq-step.is-current .iq-step__label{color:var(--ink)}
 .iq-step.is-done:not(:last-child)::after{background:#C6D6F5}
+
+/* ============================================================
+   REVISI v7 — calendar polish, group open button, review modal
+   mobile, avatar picker + mascot avatars
+   ============================================================ */
+
+/* --- P2: Open group button text always readable --- */
+.iq-open-btn{color:#243043 !important}
+.iq-icard__foot .iq-open-btn{color:#243043 !important}
+
+/* --- P1: Calendar aligned with the vibrant card design --- */
+.iq-monthnav span{background:linear-gradient(150deg,#3E93F2,#2F6BFF);color:#fff;padding:8px 16px;border-radius:999px;box-shadow:0 8px 18px rgba(47,107,255,.28)}
+.iq-cal__d{border-radius:16px;border:2px solid #EAF0FB;background:#fff}
+.iq-cal__d.is-muted{background:#F4F7FE;border-color:#EEF2FB;color:var(--ink-3)}
+.iq-cal__d.is-today{border-color:#FB5C93;background:linear-gradient(160deg,#FFE7F0,#FFF3F8);color:#E23A7E;box-shadow:0 6px 16px rgba(251,92,147,.20)}
+.iq-cal__ev{border-radius:8px;padding:3px 6px;font-weight:800;box-shadow:0 3px 8px rgba(20,27,46,.14)}
+.iq-cal__h{color:var(--ink-2)}
+.iq-calwrap .iq-card{border-radius:22px}
+.iq-rem{border-radius:16px}
+.iq-sched__item .iq-dot{box-shadow:0 0 0 3px rgba(251,92,147,.16)}
+
+/* --- P3: Add Internship review sheet on mobile --- */
+@media(max-width:640px){
+  .iq-modal__head{padding:16px 18px;position:sticky;top:0;background:var(--surface);z-index:2}
+  .iq-modal__body{padding:16px 18px 28px}
+  .iq-modal .iq-grid--2{grid-template-columns:1fr;gap:0}
+  .iq-modal .iq-input,.iq-modal .iq-select{height:44px}
+  .iq-modal .row{flex-direction:column-reverse;align-items:stretch;gap:10px}
+  .iq-modal .row .iq-btn{width:100%}
+  .iq-method{padding:16px 14px}
+}
+
+/* --- P4/P5: avatar picker + mascot avatars --- */
+.iq-avatar-picker{display:flex;flex-wrap:wrap;gap:10px}
+.iq-avatar-opt{width:56px;height:56px;border-radius:50%;border:2px solid var(--border-2);background:#EAF3FF;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;cursor:pointer;transition:transform .12s,border-color .12s}
+.iq-avatar-opt:hover{transform:translateY(-2px)}
+.iq-avatar-opt.is-active{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-15)}
+.iq-avatar-opt svg{width:46px;height:46px}
+.iq-avatar-opt img{width:100%;height:100%;object-fit:cover}
+.iq-avatar-opt--upload{background:var(--surface-2);color:var(--ink-2)}
+.iq-avatar-lg--mascot{display:flex;align-items:center;justify-content:center;overflow:hidden}
+.iq-avatar-lg--mascot svg{width:104px;height:104px}
+.iq-usermini__av svg{width:100%;height:100%}

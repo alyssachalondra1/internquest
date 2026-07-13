@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Icon } from "@/components/Icons"
 import { AddInternshipModal } from "@/components/AddInternshipModal"
 import { createClient } from "@/lib/supabase/client"
+import { QuestyFace, isMascot, moodOf } from "@/components/MascotAvatar"
 import { csx } from "@/lib/csx"
 
 export type ProfileStats = {
@@ -112,11 +113,15 @@ export function AppShell({
           <div
             className="iq-usermini__av"
             style={
-              profile.avatar_url
+              profile.avatar_url && !isMascot(profile.avatar_url)
                 ? { backgroundImage: `url(${profile.avatar_url})`, backgroundSize: "cover", backgroundPosition: "center" }
                 : undefined
             }
-          />
+          >
+            {(!profile.avatar_url || isMascot(profile.avatar_url)) && (
+              <QuestyFace mood={moodOf(profile.avatar_url)} size={36} />
+            )}
+          </div>
           <div className="iq-usermini__meta">
             <b>{name}</b>
             <span>Lv.{profile.level} · Intern Hunter</span>
@@ -130,11 +135,11 @@ export function AppShell({
       <main className="iq-main">
         <header className="iq-topbar">
           <div className="iq-topbar__title">{title}</div>
-          <span className="iq-stat-pill iq-stat-pill--keep" style={csx("color:#FF7A3D;background:rgba(255,122,61,.14);border-color:transparent")}>
+          <span className="iq-stat-pill" style={csx("color:#FF7A3D;background:rgba(255,122,61,.14);border-color:transparent")}>
             <Icon name="ic-flame" className="ic ic-18 ic--fill" />
             <span style={csx("color:var(--ink)")}>{profile.streak_count}</span>
           </span>
-          <span className="iq-stat-pill" style={csx("color:#F0B400;background:var(--yellow-15);border-color:transparent")}>
+          <span className="iq-stat-pill iq-stat-pill--keep" style={csx("color:#F0B400;background:var(--yellow-15);border-color:transparent")}>
             <Icon name="ic-star" className="ic ic-18 ic--fill" />
             <span style={csx("color:var(--ink)")}>{profile.xp} XP</span>
           </span>
@@ -146,11 +151,11 @@ export function AppShell({
             <Icon name="ic-plus" className="ic ic-18" /> <span className="iq-btn__text">Add Internship</span>
           </button>
           <Link href="/profile" className="iq-topbar__av" aria-label="Profile">
-            {profile.avatar_url ? (
+            {profile.avatar_url && !isMascot(profile.avatar_url) ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={profile.avatar_url} alt="Profile photo" />
             ) : (
-              <svg aria-hidden="true"><use href="#questy" /></svg>
+              <QuestyFace mood={moodOf(profile.avatar_url)} size={34} />
             )}
           </Link>
         </header>

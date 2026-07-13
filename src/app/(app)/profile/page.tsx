@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Questy } from "@/components/Questy"
+import { QuestyFace, isMascot, moodOf } from "@/components/MascotAvatar"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { csx } from "@/lib/csx"
 
@@ -43,15 +44,13 @@ export default async function ProfilePage() {
   return (
     <section className="iq-screen is-active">
       <div className="iq-levelcard mb-6" style={csx("max-width:540px;margin-left:auto;margin-right:auto")}>
-        {profile?.avatar_url ? (
+        {profile?.avatar_url && !isMascot(profile.avatar_url) ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={profile.avatar_url}
-            alt="Profile photo"
-            className="iq-avatar-lg"
-          />
+          <img src={profile.avatar_url} alt="Profile photo" className="iq-avatar-lg" />
         ) : (
-          <Questy size={110} />
+          <div className="iq-avatar-lg iq-avatar-lg--mascot">
+            <QuestyFace mood={moodOf(profile?.avatar_url)} size={104} />
+          </div>
         )}
         <h2 style={csx("font-size:22px")}>Level {level} · Intern Hunter</h2>
         <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
@@ -70,13 +69,13 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
-          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={profile?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} />
+          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={profile?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">
             <Questy size={72} />
             <div className="iq-callout" style={csx("background:var(--pink-15);border-color:var(--pink-50)")}>
-              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Finish one checklist today to keep your streak.</p></div>
+              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Open InternQuest every day to keep your streak alive.</p></div>
             </div>
           </div>
         </div>
