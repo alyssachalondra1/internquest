@@ -4,6 +4,7 @@ import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { Momo } from "@/components/Momo"
+import { AiErrorState } from "@/components/AiErrorState"
 import { createClient } from "@/lib/supabase/client"
 import { createInternship, type NewInternship } from "@/app/actions/internships"
 import { csx } from "@/lib/csx"
@@ -167,7 +168,11 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
             <button className="iq-modal__x" onClick={close}>✕</button>
           </div>
           <div className="iq-modal__body">
-            {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
+            {error && (
+              <div className="mb-6">
+                <AiErrorState message={error} onRetry={() => setError(null)} />
+              </div>
+            )}
             <p className="muted mb-6">Choose how you want to add it.</p>
             <div className="iq-grid iq-grid--2">
               <button className="iq-method" onClick={() => { setMode("poster"); fileRef.current?.click() }}>
@@ -221,7 +226,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
             <button className="iq-modal__x" onClick={close}>✕</button>
           </div>
           <div className="iq-modal__body">
-            {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
+            {error && <p className="iq-inline-note" style={csx("margin-bottom:12px")}>{error}</p>}
             {(mode === "link" || mode === "jd") && (
               <div className="iq-form-row">
                 <label>{mode === "link" ? "Paste the posting link" : "Paste the job description text"}</label>

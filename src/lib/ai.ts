@@ -5,14 +5,15 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 // ============================================================
 // Model aktif — ganti HANYA di sini bila Google mengubah nama model.
 // ============================================================
-// Catatan: gemini-2.0-flash & 2.0-flash-lite DIHENTIKAN Google per 1 Juni 2026.
-// Free tier Flash biasa hanya ~20 request/hari, sedangkan Flash-Lite jauh lebih
-// besar (~500/hari) + paling murah. Karena app ini butuh volume, kita pakai
-// Flash-Lite sebagai model utama untuk SEMUA fitur AI (generate/match/extract).
-// Kalau nanti billing sudah aktif & mau kualitas lebih tinggi, PRIMARY_MODEL
-// boleh diganti ke "gemini-2.5-flash".
-export const PRIMARY_MODEL = "gemini-2.5-flash-lite"
-export const LITE_MODEL = "gemini-2.5-flash-lite"
+// Riwayat: gemini-2.0-* DIHENTIKAN (1 Juni 2026). gemini-2.5-flash-lite TIDAK
+// tersedia untuk user baru (404 "no longer available to new users").
+// Model Flash-Lite yang aktif untuk akun ini = gemini-3.1-flash-lite, dengan
+// free tier ~500 request/hari (jauh lebih besar dari Flash biasa yg ~20/hari)
+// sekaligus paling murah. Dipakai sebagai model utama untuk SEMUA fitur AI.
+// Kalau nanti billing aktif & mau kualitas lebih tinggi, PRIMARY_MODEL boleh
+// diganti ke "gemini-3.5-flash".
+export const PRIMARY_MODEL = "gemini-3.1-flash-lite"
+export const LITE_MODEL = "gemini-3.1-flash-lite"
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 

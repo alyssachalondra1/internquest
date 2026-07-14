@@ -6,6 +6,7 @@ import { Momo } from "@/components/Momo"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveGeneration } from "@/app/actions/ai"
+import { AiErrorState } from "@/components/AiErrorState"
 import { csx } from "@/lib/csx"
 
 const TYPES: Array<{ value: string; label: string }> = [
@@ -41,6 +42,7 @@ function AiInner() {
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
   const [formErr, setFormErr] = useState<string | null>(null)
+  const [genError, setGenError] = useState<string | null>(null)
   const [picked, setPicked] = useState(params.get("internship") || "")
   const [internships, setInternships] = useState<Array<{ id: string; company_name: string; role: string | null }>>([])
 
@@ -72,6 +74,7 @@ function AiInner() {
       return
     }
     setFormErr(null)
+    setGenError(null)
     setLoading(true)
     setSaved(false)
     try {
@@ -85,10 +88,10 @@ function AiInner() {
         setOutput(json.content)
         router.refresh() // refresh the gem balance shown in the top bar
       } else {
-        setOutput(json.error || "Could not generate. Please try again in a moment.")
+        setGenError(json.error || "We couldn't generate that just now. Please try again in a moment.")
       }
     } catch {
-      setOutput("Could not reach the AI service. Check your connection and try again.")
+      setGenError("We couldn't reach the AI service. Please check your connection and try again.")
     } finally {
       setLoading(false)
     }
@@ -146,12 +149,14 @@ function AiInner() {
             <Icon name="ic-ai" className="ic ic-18" /> {loading ? "Generating…" : "Generate · 3 gems"}
           </button>
           <div className="iq-card iq-card__pad" style={csx("background:var(--surface-2);border-style:dashed;overflow-wrap:anywhere;word-break:break-word")}>
-            {output ? (
+            {genError ? (
+              <AiErrorState message={genError} onRetry={generate} />
+            ) : output ? (
               <p style={csx("line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word")} className="iq-justify">{output}</p>
             ) : (
               <p className="muted">Your AI result will appear here. Pick a type and click Generate.</p>
             )}
-            {output && (
+            {output && !genError && (
               <div className="row wrap mt-6" style={csx("gap:8px")}>
                 <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => navigator.clipboard.writeText(output)}><Icon name="ic-copy" className="ic ic-16" /> Copy</button>
                 <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={generate}><Icon name="ic-refresh" className="ic ic-16" /> Regenerate</button>

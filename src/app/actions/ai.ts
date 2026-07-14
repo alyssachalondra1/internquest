@@ -22,7 +22,7 @@ export async function saveGeneration(input: {
     tone: input.tone ?? null,
     length: input.length ?? null,
     content: input.content,
-    model: "gemini-2.5-flash-lite",
+    model: "gemini-3.1-flash-lite",
   })
   revalidatePath("/ai")
 }

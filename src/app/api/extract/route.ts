@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { generateWithRetry, LITE_MODEL, PRIMARY_MODEL } from "@/lib/ai"
+import { friendlyAiError, generateWithRetry, LITE_MODEL, PRIMARY_MODEL } from "@/lib/ai"
 
 export const runtime = "nodejs"
 
@@ -101,6 +101,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, data: parsed, warning })
   } catch (err: any) {
-    return NextResponse.json({ ok: false, error: err?.message || "extract failed" }, { status: 500 })
+    return NextResponse.json({ ok: false, error: friendlyAiError(err) }, { status: 500 })
   }
 }

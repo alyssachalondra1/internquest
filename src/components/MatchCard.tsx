@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
+import { AiErrorState } from "@/components/AiErrorState"
 import { csx } from "@/lib/csx"
 
 type Rec = { type: string; title: string; detail: string }
@@ -113,7 +114,7 @@ export function MatchCard({
             </>
           )}
           {score === null && <p className="muted mb-4 iq-justify">Not checked yet. Click the button below to see your match and get tips to improve your chances.</p>}
-          {err && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{err}</p>}
+          {err && <div className="mt-4"><AiErrorState message={err} compact /></div>}
           <button className="iq-btn iq-btn--blue iq-btn--block iq-btn--sm mt-4" onClick={run} disabled={loading}>
             <Icon name="ic-ai" className="ic ic-16" /> {loading ? "Analyzing…" : score === null ? "Check match & tips" : "Recalculate"}
           </button>
