@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { IconSprite } from "@/components/Icons"
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://internquest-mu.vercel.app"
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sloe.my.id"
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s \u00b7 Sloe",
   },
   description:
-    "Sloe helps students find, track, and win internships with AI-powered writing, deadlines, study groups, and a friendly gamified workspace.",
+    "Sloe helps students find, track, and win internships with AI-powered writing, deadlines, internship groups, and a friendly gamified workspace.",
   applicationName: "Sloe",
   openGraph: {
     type: "website",
@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description:
       "Find, track, and win internships with AI help, deadlines, and a friendly gamified workspace.",
     url: SITE_URL,
+    images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
     title: "Sloe \u2014 Your AI internship companion",
     description:
       "Find, track, and win internships with AI help, deadlines, and a friendly gamified workspace.",

@@ -41,7 +41,7 @@ export default function TermsPage() {
       <p>We may update these Terms. Continued use after changes means you accept the updated Terms.</p>
 
       <h2>Contact</h2>
-      <p>Questions? Email <a href="mailto:sloe@gmail.com">sloe@gmail.com</a>.</p>
+      <p>Questions? Email <a href="mailto:alyssachalondra@student.uns.ac.id">alyssachalondra@student.uns.ac.id</a>.</p>
 
       <p style={csx("margin-top:32px")}><Link href="/privacy">Read our Privacy Policy</Link></p>
     </main>

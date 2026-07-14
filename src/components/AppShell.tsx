@@ -97,7 +97,7 @@ export function AppShell({
     <div className="iq-app">
       <aside className="iq-sidebar">
         <div className="iq-logo">
-          <span className="iq-brand">Intern<i>Quest</i></span>
+          <span className="iq-brand">Sl<i>oe</i></span>
         </div>
         <nav className="iq-nav">
           {navItem(NAV[0])}

@@ -82,7 +82,7 @@ export function deadlineChip(iso?: string | null): { label: string; cls: string 
 
 // Ensure an external URL has a protocol so it opens correctly (fixes the 404
 // when a link was saved without http/https and got treated as a path under
-// internquest.my.id).
+// sloe.my.id).
 export function externalHref(url: string | null | undefined): string {
   const u = (url || "").trim()
   if (!u) return "#"

@@ -16,7 +16,7 @@ const FEATURES = [
   { icon: "ic-trophy", bg: "linear-gradient(135deg,#FFC53D,#FF6FA5)", t: "Gamified progress", d: "Earn XP and gems, keep your daily streak, and unlock badges every time you move an application forward." },
   { icon: "ic-check", bg: "linear-gradient(135deg,#2FCB7E,#2FCB7E)", t: "Smart checklist", d: "Track the documents each application needs and check them off as you go." },
   { icon: "ic-list", bg: "linear-gradient(135deg,#3B76FF,#2FCB7E)", t: "Application tracker", d: "Move every internship across a clear board, from To Do to Applied, Interview, and Offer, and see your whole pipeline at a glance." },
-  { icon: "ic-users", bg: "linear-gradient(135deg,#FF6FA5,#7C5CFF)", t: "Study groups", d: "Create or join groups with classmates and friends who share your interests, then share internship opportunities with each other." },
+  { icon: "ic-users", bg: "linear-gradient(135deg,#FF6FA5,#7C5CFF)", t: "Internship groups", d: "Find or start groups with classmates and friends who share your interests, then swap internship opportunities with each other." },
 ]
 
 const STEPS = [
@@ -31,7 +31,7 @@ export default function Landing() {
     <main className="iq-lp">
       <nav className="iq-lp__nav">
         <span style={csx("font-weight:800;font-size:22px;color:#141B2E;letter-spacing:-.02em")}>
-          Intern<span style={csx("color:#5B3FE0")}>Quest</span>
+          Sl<span style={csx("color:#5B3FE0")}>oe</span>
         </span>
         <div style={csx("display:flex;gap:10px")}>
           <Link className="iq-btn iq-btn--ghost iq-btn--sm" href="/login">Log in</Link>
@@ -44,7 +44,7 @@ export default function Landing() {
           <div>
             <span className="iq-lp__badge">✨ Your AI internship companion</span>
             <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
-            <p className="iq-lp__sub">Sloe helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with study groups, and stay motivated with a friendly gamified workspace.</p>
+            <p className="iq-lp__sub">Sloe helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with internship groups, and stay motivated with a friendly gamified workspace.</p>
             <div className="iq-lp__cta">
               <Link className="iq-btn iq-btn--primary" href="/login?mode=signup">Get started free <Icon name="ic-arrow-right" className="ic ic-18" /></Link>
               <Link className="iq-btn iq-btn--ghost" href="/dashboard">Open dashboard</Link>

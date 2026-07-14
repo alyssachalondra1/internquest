@@ -3,6 +3,7 @@ import { Momo } from "@/components/Momo"
 import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
+import { DeleteAccountButton } from "@/components/DeleteAccountButton"
 import { csx } from "@/lib/csx"
 
 export const dynamic = "force-dynamic"
@@ -89,6 +90,11 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
           <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
+          <div className="iq-card iq-card__pad">
+            <h3 className="mb-4">Danger Zone</h3>
+            <p className="muted mb-4" style={csx("font-size:13px")}>Menghapus akun akan menghapus seluruh datamu (internship, CV, progres, gems) secara permanen dan tidak bisa dikembalikan.</p>
+            <DeleteAccountButton />
+          </div>
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">

@@ -1,8 +1,14 @@
-import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+
+// Lightweight health check for uptime monitors / keep-alive cron.
+// GET /api/health -> { ok: true, service: "sloe", time }
 export async function GET() {
-  const supabase = await createClient()
-  await supabase.from("profiles").select("id").limit(1)
-  return NextResponse.json({ ok: true, at: new Date().toISOString() })
+  return NextResponse.json({
+    ok: true,
+    service: "sloe",
+    time: new Date().toISOString(),
+  })
 }
