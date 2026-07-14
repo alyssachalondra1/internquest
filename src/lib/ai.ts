@@ -5,8 +5,14 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 // ============================================================
 // Model aktif — ganti HANYA di sini bila Google mengubah nama model.
 // ============================================================
-export const PRIMARY_MODEL = "gemini-2.0-flash"
-export const LITE_MODEL = "gemini-2.0-flash-lite"
+// Catatan: gemini-2.0-flash & 2.0-flash-lite DIHENTIKAN Google per 1 Juni 2026.
+// Free tier Flash biasa hanya ~20 request/hari, sedangkan Flash-Lite jauh lebih
+// besar (~500/hari) + paling murah. Karena app ini butuh volume, kita pakai
+// Flash-Lite sebagai model utama untuk SEMUA fitur AI (generate/match/extract).
+// Kalau nanti billing sudah aktif & mau kualitas lebih tinggi, PRIMARY_MODEL
+// boleh diganti ke "gemini-2.5-flash".
+export const PRIMARY_MODEL = "gemini-2.5-flash-lite"
+export const LITE_MODEL = "gemini-2.5-flash-lite"
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -47,4 +53,25 @@ export async function generateWithRetry(
     }
   }
   throw lastErr
+}
+
+/**
+ * Ubah error mentah dari Gemini/SDK jadi pesan singkat & ramah untuk user.
+ * Menghindari menampilkan dump JSON panjang (yang juga bikin layout overflow di HP).
+ */
+export function friendlyAiError(err: any): string {
+  const msg = String(err?.message || err || "")
+  if (/\b429\b|quota|rate limit|resource_exhausted|too many requests/i.test(msg)) {
+    return "Momo is getting a lot of requests right now (Google's free AI quota was hit). Please wait about a minute and try again. If this keeps happening, enable billing in Google AI Studio or use a new API key."
+  }
+  if (/\b(500|502|503|504)\b|unavailable|overload|high demand/i.test(msg)) {
+    return "The AI service is busy for a moment. Please try again in a few seconds."
+  }
+  if (/api[_ ]?key|unauthenticated|permission denied|\b401\b|\b403\b/i.test(msg)) {
+    return "There is a problem with the AI configuration. Please check the GEMINI_API_KEY on Vercel."
+  }
+  if (/network|fetch failed|timeout|etimedout|enotfound/i.test(msg)) {
+    return "Could not reach the AI service. Check your connection and try again."
+  }
+  return "Could not generate the result. Please try again shortly."
 }

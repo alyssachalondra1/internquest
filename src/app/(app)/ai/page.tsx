@@ -40,6 +40,9 @@ function AiInner() {
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [formErr, setFormErr] = useState<string | null>(null)
+  const [picked, setPicked] = useState(params.get("internship") || "")
+  const [internships, setInternships] = useState<Array<{ id: string; company_name: string; role: string | null }>>([])
 
   useEffect(() => {
     if (!internshipId) return
@@ -54,7 +57,21 @@ function AiInner() {
       })
   }, [internshipId])
 
+  useEffect(() => {
+    const supabase = createClient()
+    supabase
+      .from("internships")
+      .select("id, company_name, role")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => { if (data) setInternships(data as any) })
+  }, [])
+
   async function generate() {
+    if (!company.trim() || !role.trim()) {
+      setFormErr("Please fill in both Company and Role first so the result stays relevant.")
+      return
+    }
+    setFormErr(null)
     setLoading(true)
     setSaved(false)
     try {
@@ -68,10 +85,10 @@ function AiInner() {
         setOutput(json.content)
         router.refresh() // refresh the gem balance shown in the top bar
       } else {
-        setOutput(json.needGems ? json.error : "Failed to generate: " + (json.error || ""))
+        setOutput(json.error || "Could not generate. Please try again in a moment.")
       }
-    } catch (e: any) {
-      setOutput("Failed to generate: " + (e?.message || ""))
+    } catch {
+      setOutput("Could not reach the AI service. Check your connection and try again.")
     } finally {
       setLoading(false)
     }
@@ -87,6 +104,25 @@ function AiInner() {
       <div className="iq-grid iq-grid--dash">
         <div className="iq-card iq-card__pad">
           <div className="row mb-6"><Momo size={56} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
+          {internships.length > 0 && (
+            <div className="iq-form-row">
+              <label>Prefill from a saved internship</label>
+              <select
+                className="iq-select"
+                value={picked}
+                onChange={(e) => {
+                  setPicked(e.target.value)
+                  const it = internships.find((x) => x.id === e.target.value)
+                  if (it) { setCompany(it.company_name || ""); setRole(it.role || ""); setFormErr(null) }
+                }}
+              >
+                <option value="">Choose a saved internship…</option>
+                {internships.map((it) => (
+                  <option key={it.id} value={it.id}>{it.company_name}{it.role ? " · " + it.role : ""}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="iq-grid iq-grid--2 mb-4">
             <div className="iq-form-row"><label>Company</label><input className="iq-input" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company name" /></div>
             <div className="iq-form-row"><label>Role</label><input className="iq-input" value={role} onChange={(e) => setRole(e.target.value)} placeholder="Role" /></div>
@@ -105,12 +141,13 @@ function AiInner() {
               placeholder="For example: highlight my organization and data project experience; mention my interest in sustainability…"
             />
           </div>
+          {formErr && <p style={csx("color:var(--red-text);font-size:13px;margin-bottom:10px")}>{formErr}</p>}
           <button className="iq-btn iq-btn--primary iq-btn--block mb-6" onClick={generate} disabled={loading}>
             <Icon name="ic-ai" className="ic ic-18" /> {loading ? "Generating…" : "Generate · 3 gems"}
           </button>
-          <div className="iq-card iq-card__pad" style={csx("background:var(--surface-2);border-style:dashed")}>
+          <div className="iq-card iq-card__pad" style={csx("background:var(--surface-2);border-style:dashed;overflow-wrap:anywhere;word-break:break-word")}>
             {output ? (
-              <p style={csx("line-height:1.7;white-space:pre-wrap")} className="iq-justify">{output}</p>
+              <p style={csx("line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word")} className="iq-justify">{output}</p>
             ) : (
               <p className="muted">Your AI result will appear here. Pick a type and click Generate.</p>
             )}

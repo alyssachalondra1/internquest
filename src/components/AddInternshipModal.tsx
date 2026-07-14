@@ -134,6 +134,10 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
     setSaving(true)
     try {
       if (!form.company_name.trim()) throw new Error("Company name is required")
+      if (form.source_url && form.source_url.trim() && !/^https?:\/\/.+/i.test(form.source_url.trim()))
+        throw new Error("The application link must start with http:// or https://")
+      if (form.open_date && form.deadline && form.deadline < form.open_date)
+        throw new Error("The deadline cannot be earlier than the registration open date.")
       const id = await createInternship({
         ...form,
         duration_months: form.duration_months ? Number(form.duration_months) : null,
@@ -229,7 +233,17 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
                 />
                 <button
                   className="iq-btn iq-btn--blue iq-btn--sm mt-2"
-                  onClick={() => runExtract(mode === "link" ? { source_url: text } : { text })}
+                  onClick={() => {
+                    const val = text.trim()
+                    if (mode === "link") {
+                      if (!val) { setError("Please paste the posting link first."); return }
+                      if (!/^https?:\/\/.+\..+/i.test(val)) { setError("That doesn't look like a valid link. Paste a full URL that starts with https://"); return }
+                    } else if (!val) {
+                      setError("Please paste the job description text first."); return
+                    }
+                    setError(null)
+                    runExtract(mode === "link" ? { source_url: val } : { text: val })
+                  }}
                 >
                   <Icon name="ic-ai" className="ic ic-16" /> Read with AI
                 </button>

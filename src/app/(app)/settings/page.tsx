@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Icon } from "@/components/Icons"
+import { LogoutButton } from "@/components/LogoutButton"
 import { csx } from "@/lib/csx"
 
 function Switch({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
@@ -73,6 +74,11 @@ export default function SettingsPage() {
           <div className="iq-card iq-card__pad iq-set-sec">
             <div className="iq-set-head"><span className="iq-set-ic"><Icon name="ic-star" className="ic ic-18" /></span><h3>About</h3></div>
             <div className="iq-set-row"><div className="iq-set-row__t"><b>Sloe</b><span>Your AI companion for internship hunting</span></div><span className="iq-chip iq-chip--blue">v1.0</span></div>
+          </div>
+
+          <div className="iq-card iq-card__pad iq-set-sec">
+            <div className="iq-set-head"><span className="iq-set-ic"><Icon name="ic-logout" className="ic ic-18" /></span><h3>Account</h3></div>
+            <LogoutButton />
           </div>
 
           <button className="iq-btn iq-btn--primary" onClick={save}>Save settings</button>

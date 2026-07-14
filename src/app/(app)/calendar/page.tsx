@@ -62,9 +62,12 @@ export default async function CalendarPage() {
 
   return (
     <section className="iq-screen is-active">
-      <div className="row-between mb-6">
-        <div><h2 style={csx("font-size:22px")}>Calendar</h2><div className="muted">Built automatically from your internship dates.</div></div>
-        <div className="iq-monthnav"><span>{MONTHS[month]} {year}</span></div>
+      <div className="iq-calhead mb-6">
+        <div className="row-between" style={csx("gap:10px")}>
+          <h2 style={csx("font-size:22px")}>Calendar</h2>
+          <div className="iq-monthnav"><span>{MONTHS[month]} {year}</span></div>
+        </div>
+        <div className="muted mt-1">Built automatically from your internship dates.</div>
       </div>
       <div className="iq-calwrap">
         <div className="iq-card iq-card__pad">

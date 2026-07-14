@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { Momo } from "@/components/Momo"
+import { MomoFace } from "@/components/MascotAvatar"
+import { isMascot, moodOf } from "@/lib/mascot"
 import { CompanyLogo } from "@/components/CompanyLogo"
 import { csx } from "@/lib/csx"
 import {
@@ -29,7 +31,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, level, xp, gems, streak_count")
+    .select("full_name, level, xp, gems, streak_count, avatar_url")
     .eq("id", user!.id)
     .single()
 
@@ -128,7 +130,14 @@ export default async function DashboardPage() {
 
         <div className="stack-6">
           <div className="iq-levelcard">
-            <Momo size={104} />
+            {profile?.avatar_url && !isMascot(profile.avatar_url) ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar_url} alt="Profile photo" className="iq-avatar-lg" />
+            ) : (
+              <div className="iq-avatar-lg iq-avatar-lg--mascot">
+                <MomoFace mood={moodOf(profile?.avatar_url)} size={104} />
+              </div>
+            )}
             <h3 style={csx("font-size:19px")}>Level {level} · Intern Hunter</h3>
             <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
             <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>

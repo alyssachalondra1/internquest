@@ -28,6 +28,8 @@ export function MatchCard({
   const router = useRouter()
   const [score, setScore] = useState<number | null>(initialScore)
   const [reasons, setReasons] = useState<string>(initialReasons || "")
+  const [companyScore, setCompanyScore] = useState<number | null>(null)
+  const [companyNote, setCompanyNote] = useState<string>("")
   const [recs, setRecs] = useState<Rec[]>([])
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState<string | null>(null)
@@ -45,6 +47,8 @@ export function MatchCard({
       if (!json.ok) throw new Error(json.error || "Could not calculate")
       setScore(json.score)
       setReasons(json.reasons || "")
+      setCompanyScore(typeof json.companyScore === "number" ? json.companyScore : null)
+      setCompanyNote(json.companyNote || "")
       setRecs(Array.isArray(json.recommendations) ? json.recommendations : [])
       router.refresh()
     } catch (e: any) {
@@ -58,7 +62,7 @@ export function MatchCard({
     <div className="iq-card iq-card__pad">
       <div className="row mb-4">
         <Icon name="ic-target" className="ic ic-22" style={csx("color:var(--blue-text)")} />
-        <h3>CV &amp; Portfolio Match</h3>
+        <h3>CV &amp; Company Match</h3>
       </div>
       {!hasCv ? (
         <p className="muted iq-justify">
@@ -71,6 +75,16 @@ export function MatchCard({
               <div className="iq-match__score">{score}%</div>
               <div className="iq-match__bar"><i style={csx("width:" + score + "%")} /></div>
               {reasons && <p className="muted iq-justify" style={csx("font-size:13px")}>{reasons}</p>}
+              {companyScore !== null && (
+                <div className="mt-4" style={csx("border-top:1px solid var(--border);padding-top:14px")}>
+                  <div className="row mb-2">
+                    <Icon name="ic-star" className="ic ic-18" style={csx("color:var(--pink-text)")} />
+                    <b>Company fit &amp; quality · {companyScore}%</b>
+                  </div>
+                  <div className="iq-match__bar" style={csx("margin:6px 0")}><i style={csx("width:" + companyScore + "%")} /></div>
+                  {companyNote && <p className="muted iq-justify" style={csx("font-size:13px")}>{companyNote}</p>}
+                </div>
+              )}
               {recs.length > 0 && (
                 <div className="iq-recs mt-4">
                   <div className="row mb-2">

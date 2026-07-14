@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { generateWithRetry } from "@/lib/ai"
+import { generateWithRetry, friendlyAiError } from "@/lib/ai"
 import { createClient } from "@/lib/supabase/server"
 
 export const runtime = "nodejs"
@@ -128,6 +128,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, content })
   } catch (err: any) {
-    return NextResponse.json({ ok: false, error: err?.message || "generate failed" }, { status: 500 })
+    return NextResponse.json({ ok: false, error: friendlyAiError(err) }, { status: 500 })
   }
 }

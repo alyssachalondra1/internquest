@@ -938,3 +938,40 @@ body{background:var(--canvas)}
 .iq-avatar-lg--mascot{display:flex;align-items:center;justify-content:center;overflow:hidden}
 .iq-avatar-lg--mascot svg{width:104px;height:104px}
 .iq-usermini__av svg{width:100%;height:100%}
+
+/* ============================================================
+   REVISI v8 — mobile overflow guard, AI error wrap, tablet/iPad,
+   calendar header tidy, logout di mobile
+   ============================================================ */
+
+/* (#6/#10) Cegah overflow horizontal yang bikin HP "zoom out" ke desktop */
+html,body{max-width:100%;overflow-x:hidden}
+.iq-app,.iq-main,.iq-screen{min-width:0;max-width:100%}
+.iq-content{overflow-x:clip}
+.iq-grid>*{min-width:0}
+
+/* Teks panjang (error / URL) wajib membungkus, tidak memaksa halaman melebar */
+.iq-justify,.iq-field__v,.iq-rec__detail,.iq-rec__head{overflow-wrap:anywhere;word-break:break-word}
+
+/* (#1) Calendar header: judul + bulan/tahun sebaris & rapi */
+.iq-calhead .iq-monthnav{flex:none}
+.iq-calhead .iq-monthnav span{white-space:nowrap}
+@media(max-width:520px){
+  .iq-calhead h2{font-size:19px}
+  .iq-monthnav span{padding:6px 12px;font-size:13px}
+}
+
+/* (#2) Tombol Log out hanya muncul di area mobile (desktop sudah ada di sidebar) */
+.iq-mobile-only{display:none}
+@media(max-width:860px){.iq-mobile-only{display:block}}
+
+/* (#9) Detail internship: stepper bisa digeser, tidak memaksa halaman melebar */
+.iq-stepper{max-width:100%}
+.iq-field{flex-wrap:wrap}
+
+/* (#3) Tablet / iPad: sidebar lebih ramping + padding pas */
+@media(min-width:861px) and (max-width:1180px){
+  :root{--sidebar-w:198px}
+  .iq-content{padding:24px 22px}
+  .iq-topbar{padding:0 22px}
+}

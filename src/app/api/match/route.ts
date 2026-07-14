@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { generateWithRetry, LITE_MODEL, PRIMARY_MODEL } from "@/lib/ai"
+import { generateWithRetry, LITE_MODEL, PRIMARY_MODEL, friendlyAiError } from "@/lib/ai"
 import { createClient } from "@/lib/supabase/server"
 
 export const runtime = "nodejs"
@@ -50,8 +50,8 @@ export async function POST(req: Request) {
     if (!it) return NextResponse.json({ ok: false, error: "Internship not found" }, { status: 404 })
 
     const prompt =
-      "You are a career advisor. Compare the applicant CV, portfolio, and interests against an internship, then estimate a match percentage AND give concrete recommendations to improve the applicant chances for THIS specific role.\n" +
-      'Return ONLY valid JSON: { "score": number (0-100), "reasons": string (2 to 3 sentences in English explaining the score), "recommendations": array of 3 to 5 objects, each { "type": one of "certification" | "project" | "skill" | "cv", "title": short actionable step of at most 8 words, "detail": one sentence in English on how it boosts chances for this role } }.\n' +
+      "You are a career advisor. Compare the applicant CV, portfolio, and interests against an internship. Estimate how well the applicant fits THIS role, evaluate the company itself, and give concrete recommendations to improve the applicant chances for this specific role.\n" +
+      'Return ONLY valid JSON: { "score": number (0-100 how well the applicant CV and portfolio fit THIS role), "reasons": string (2 to 3 sentences in English explaining the fit score), "companyScore": number (0-100 rating how reputable and strong this company is AND how well it aligns with the applicant interests and career goals), "companyNote": string (2 to 3 sentences in English: whether this is a good, credible company and whether it aligns with the applicant field and goals, or is a weaker fit, and why), "recommendations": array of 3 to 5 objects, each { "type": one of "certification" | "project" | "skill" | "cv", "title": short actionable step of at most 8 words, "detail": one sentence in English on how it boosts chances for this role } }.\n' +
       "Make every recommendation specific to the gap between the applicant profile and the internship requirements. Suggest real certification names, concrete personal project ideas, specific skills or tools to learn, or exact things to add to the CV.\n" +
       "STYLE: Write in English. Do not use the em dash character. Do not use the fire emoji.\n\n" +
       "INTERNSHIP:\nCompany: " + (it.company_name || "") + "\nRole: " + (it.role || "") +
@@ -69,6 +69,8 @@ export async function POST(req: Request) {
     const parsed = JSON.parse(raw)
     const score = Math.max(0, Math.min(100, Math.round(Number(parsed.score) || 0)))
     const reasons = String(parsed.reasons || "")
+    const companyScore = Math.max(0, Math.min(100, Math.round(Number(parsed.companyScore) || 0)))
+    const companyNote = String(parsed.companyNote || "")
     const ALLOWED = ["certification", "project", "skill", "cv"]
     const recommendations = Array.isArray(parsed.recommendations)
       ? parsed.recommendations
@@ -87,8 +89,8 @@ export async function POST(req: Request) {
       .eq("id", internship_id)
       .eq("user_id", user.id)
 
-    return NextResponse.json({ ok: true, score, reasons, recommendations })
+    return NextResponse.json({ ok: true, score, reasons, companyScore, companyNote, recommendations })
   } catch (err: any) {
-    return NextResponse.json({ ok: false, error: err?.message || "match failed" }, { status: 500 })
+    return NextResponse.json({ ok: false, error: friendlyAiError(err) }, { status: 500 })
   }
 }

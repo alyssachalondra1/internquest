@@ -4,6 +4,7 @@ import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { DeleteAccountButton } from "@/components/DeleteAccountButton"
+import { LogoutButton } from "@/components/LogoutButton"
 import { csx } from "@/lib/csx"
 
 export const dynamic = "force-dynamic"
@@ -88,6 +89,10 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Name</span><span className="iq-field__v">{profile?.full_name || "—"}</span></div>
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
+          </div>
+          <div className="iq-card iq-card__pad iq-mobile-only">
+            <h3 className="mb-4">Account</h3>
+            <LogoutButton />
           </div>
           <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
           <div className="iq-card iq-card__pad">
