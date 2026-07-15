@@ -107,9 +107,7 @@ export default function LoginPage() {
   return (
     <section className="iq-auth">
       <div className="iq-auth__hero" style={csx("background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)")}>
-        <span style={csx("font-weight:800;font-size:28px;color:var(--blue-text)")}>
-          Sl<span style={csx("color:var(--pink-text)")}>oe</span>
-        </span>
+        <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
         <div className="iq-auth__tag" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
         <Momo size={200} />
         <div className="iq-dots">

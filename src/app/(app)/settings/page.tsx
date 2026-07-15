@@ -73,7 +73,7 @@ export default function SettingsPage() {
         <div>
           <div className="iq-card iq-card__pad iq-set-sec">
             <div className="iq-set-head"><span className="iq-set-ic"><Icon name="ic-star" className="ic ic-18" /></span><h3>About</h3></div>
-            <div className="iq-set-row"><div className="iq-set-row__t"><b>Sloe</b><span>Your AI companion for internship hunting</span></div><span className="iq-chip iq-chip--blue">v1.0</span></div>
+            <div className="iq-set-row"><div className="iq-set-row__t"><b className="iq-wordmark">Sloe</b><span>Your AI companion for internship hunting</span></div><span className="iq-chip iq-chip--blue">v1.0</span></div>
           </div>
 
           <div className="iq-card iq-card__pad iq-set-sec">

@@ -994,3 +994,27 @@ html,body{max-width:100%;overflow-x:hidden}
   border-radius:10px;padding:8px 12px;font-size:13px;line-height:1.5;
   overflow-wrap:anywhere;word-break:break-word;
 }
+
+
+/* ===== REVISI v10 - custom hero mascot + gradient Sloe wordmark ===== */
+.iq-wordmark{
+  background:linear-gradient(120deg,#2F6BFF 0%,#FF5B92 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  font-weight:800;letter-spacing:-.02em;
+}
+/* App sidebar/topbar wordmark -> same blue-pink gradient */
+.iq-brand{
+  background:linear-gradient(120deg,#2F6BFF 0%,#FF5B92 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.iq-brand i{color:inherit;-webkit-text-fill-color:inherit;background:none;font-style:normal}
+/* Custom hero illustration (landing + dashboard only) */
+.iq-heromascot{display:block;object-fit:contain}
+.iq-lp__heromascot{margin-bottom:14px}
+.iq-hero{min-height:170px}
+.iq-hero__mascot{flex:none}
+@media(max-width:860px){
+  .iq-hero__mascot{align-self:center}
+}

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
 
@@ -30,9 +30,7 @@ export default function Landing() {
   return (
     <main className="iq-lp">
       <nav className="iq-lp__nav">
-        <span style={csx("font-weight:800;font-size:22px;color:#141B2E;letter-spacing:-.02em")}>
-          Sl<span style={csx("color:#5B3FE0")}>oe</span>
-        </span>
+        <span className="iq-wordmark" style={csx("font-size:22px")}>Sloe</span>
         <div style={csx("display:flex;gap:10px")}>
           <Link className="iq-btn iq-btn--ghost iq-btn--sm" href="/login">Log in</Link>
           <Link className="iq-btn iq-btn--primary iq-btn--sm" href="/login?mode=signup">Get started</Link>
@@ -42,6 +40,7 @@ export default function Landing() {
       <div className="iq-lp__wrap">
         <section className="iq-lp__hero">
           <div>
+            <HeroMascot size={150} className="iq-lp__heromascot" />
             <span className="iq-lp__badge">✨ Your AI internship companion</span>
             <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
             <p className="iq-lp__sub">Sloe helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with internship groups, and stay motivated with a friendly gamified workspace.</p>
@@ -52,7 +51,7 @@ export default function Landing() {
           </div>
           <div className="iq-lp__art">
             <div className="row" style={csx("gap:12px;margin-bottom:16px")}>
-              <Momo size={64} />
+              <HeroMascot size={72} />
               <div><b style={csx("font-size:16px")}>Today's Quest</b><div style={csx("opacity:.9;font-size:13px")}>3 tasks to level up</div></div>
             </div>
             <div className="iq-lp__arti"><Icon name="ic-check" className="ic ic-18" /> Finish your CV checklist</div>
