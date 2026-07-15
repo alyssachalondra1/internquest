@@ -5,6 +5,7 @@ import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { DeleteAccountButton } from "@/components/DeleteAccountButton"
 import { LogoutButton } from "@/components/LogoutButton"
+import { StreakCelebration } from "@/components/StreakCelebration"
 import { csx } from "@/lib/csx"
 
 export const dynamic = "force-dynamic"
@@ -64,6 +65,7 @@ export default async function ProfilePage() {
 
   return (
     <section className="iq-screen is-active">
+      <StreakCelebration streak={profile?.streak_count ?? 0} />
       <div className="iq-levelcard mb-6" style={csx("max-width:540px;margin-left:auto;margin-right:auto")}>
         {profile?.avatar_url && !isMascot(profile.avatar_url) ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -90,11 +92,11 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
+          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
           <div className="iq-card iq-card__pad iq-mobile-only">
             <h3 className="mb-4">Account</h3>
             <LogoutButton />
           </div>
-          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
           <div className="iq-card iq-card__pad">
             <h3 className="mb-4">Danger Zone</h3>
             <p className="muted mb-4" style={csx("font-size:13px")}>Menghapus akun akan menghapus seluruh datamu (internship, CV, progres, gems) secara permanen dan tidak bisa dikembalikan.</p>

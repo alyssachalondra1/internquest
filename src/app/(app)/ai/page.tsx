@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveGeneration } from "@/app/actions/ai"
@@ -106,7 +106,7 @@ function AiInner() {
     <section className="iq-screen is-active">
       <div className="iq-grid iq-grid--dash">
         <div className="iq-card iq-card__pad">
-          <div className="row mb-6"><Momo size={56} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
+          <div className="row mb-6"><HeroMascot src="/mascot-ai.png" size={62} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
           {internships.length > 0 && (
             <div className="iq-form-row">
               <label>Prefill from a saved internship</label>

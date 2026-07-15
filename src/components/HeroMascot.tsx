@@ -1,32 +1,34 @@
 import { csx } from "@/lib/csx"
 
 /* ============================================================
-   HERO MASCOT — your own illustration, used ONLY on:
-     - the landing page hero (top-left + Today's Quest card)
-     - the dashboard hero ("Hi, ...")
-   Every OTHER place (login, level card, modals, AI helper, etc.)
-   keeps its own image/mascot and is NOT affected by this file.
+   HERO / ILLUSTRATION MASCOT
+   Renders one of YOUR custom PNG illustrations. Each spot can use
+   a DIFFERENT image via the `src` prop. Drop the files in /public.
 
-   HOW TO SET YOUR IMAGE:
-     1. Export your mascot as a PNG with a TRANSPARENT background.
-     2. Save it as:  public/mascot-hero.png
-     3. Recommended: square, about 512x512 px (min 300x300) so it
-        stays crisp when shown large.
-   To use a different file name, just change SRC below.
+   Files used across the app (add the ones you want):
+     /mascot-hero.png     landing hero (left) + dashboard hero
+     /mascot-quest.png    landing "Today's Quest" card
+     /mascot-ai.png       "Generate with AI" header
+     /mascot-insight.png  dashboard "AI Insight" callout
+     /mascot-loading.png  "Reading the details" loading screen
+     /mascot-success.png  "Internship added" success screen
+     /mascot-streak.png   streak popup + recruitment-stage win popup
+
+   Recommended: transparent PNG, square, ~512x512 px (min 300).
    ============================================================ */
-const SRC = "/mascot-hero.png"
-
 export function HeroMascot({
+  src = "/mascot-hero.png",
   size = 150,
   className = "",
 }: {
+  src?: string
   size?: number
   className?: string
 }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={SRC}
+      src={src}
       alt="Momo mascot"
       className={"iq-heromascot " + className}
       style={csx("width:" + size + "px;height:auto")}

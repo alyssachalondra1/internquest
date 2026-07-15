@@ -3,13 +3,13 @@
 import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
-import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { AiErrorState } from "@/components/AiErrorState"
 import { createClient } from "@/lib/supabase/client"
 import { createInternship, type NewInternship } from "@/app/actions/internships"
 import { csx } from "@/lib/csx"
 
-type Step = "method" | "extracting" | "review"
+type Step = "method" | "extracting" | "review" | "success"
 type Mode = "poster" | "ig" | "link" | "jd" | "manual"
 
 const EMPTY: NewInternship = {
@@ -58,6 +58,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
   const [mode, setMode] = useState<Mode>("manual")
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [savedId, setSavedId] = useState<string | null>(null)
 
   if (!open) return null
 
@@ -66,6 +67,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
     setForm(EMPTY)
     setText("")
     setError(null)
+    setSavedId(null)
   }
   function close() {
     reset()
@@ -146,8 +148,8 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         deadline: form.deadline || null,
         start_date: form.start_date || null,
       })
-      close()
-      router.push("/internships/" + id)
+      setSavedId(id)
+      setStep("success")
       router.refresh()
     } catch (e: any) {
       setError(e?.message || "Could not save")
@@ -212,7 +214,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         <div className="iq-modal" style={csx("max-width:440px")}>
           <div className="iq-modal__body center">
             <div className="iq-loader-ring mb-6" />
-            <Momo size={70} className="mb-4" />
+            <HeroMascot src="/mascot-loading.png" size={96} className="mb-4" />
             <h3 className="mb-2">Reading the details…</h3>
             <p className="muted">One moment, AI is putting the posting details together.</p>
           </div>
@@ -274,6 +276,25 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
               <button className="iq-btn iq-btn--ghost" onClick={close}>Cancel</button>
               <button className="iq-btn iq-btn--primary" onClick={save} disabled={saving}>
                 {saving ? "Saving…" : "Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {step === "success" && (
+        <div className="iq-modal" style={csx("max-width:440px")}>
+          <div className="iq-modal__body center">
+            <HeroMascot src="/mascot-success.png" size={120} className="mb-4" />
+            <h3 className="mb-2">Internship added!</h3>
+            <p className="muted mb-6">Nice one. It is saved to your list — time to build your checklist and chase that deadline.</p>
+            <div className="row" style={csx("gap:10px;justify-content:center")}>
+              <button className="iq-btn iq-btn--ghost" onClick={close}>Close</button>
+              <button
+                className="iq-btn iq-btn--primary"
+                onClick={() => { const id = savedId; close(); if (id) router.push("/internships/" + id) }}
+              >
+                View internship
               </button>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { updateInternshipStatus } from "@/app/actions/internships"
 import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { playApply, playLevelUp, playSad } from "@/lib/sound"
 import { csx } from "@/lib/csx"
 
@@ -126,7 +127,11 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
                 <span className="iq-spark" style={csx("top:30px;right:34px")}>✨</span>
               </>
             )}
-            <Momo size={96} />
+            {p.mood === "happy" ? (
+              <HeroMascot src="/mascot-success.png" size={112} />
+            ) : (
+              <Momo size={96} />
+            )}
             <h3>{p.title}</h3>
             <p>{p.body}</p>
             <div>

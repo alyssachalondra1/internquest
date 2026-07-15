@@ -40,8 +40,8 @@ export default function Landing() {
       <div className="iq-lp__wrap">
         <section className="iq-lp__hero">
           <div>
-            <HeroMascot size={150} className="iq-lp__heromascot" />
-            <span className="iq-lp__badge">✨ Your AI internship companion</span>
+            <HeroMascot size={190} className="iq-lp__heromascot" />
+            <span className="iq-lp__badge iq-lp__badge--yellow">Your AI internship companion</span>
             <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
             <p className="iq-lp__sub">Sloe helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with internship groups, and stay motivated with a friendly gamified workspace.</p>
             <div className="iq-lp__cta">
@@ -51,7 +51,7 @@ export default function Landing() {
           </div>
           <div className="iq-lp__art">
             <div className="row" style={csx("gap:12px;margin-bottom:16px")}>
-              <HeroMascot size={72} />
+              <HeroMascot src="/mascot-quest.png" size={80} />
               <div><b style={csx("font-size:16px")}>Today's Quest</b><div style={csx("opacity:.9;font-size:13px")}>3 tasks to level up</div></div>
             </div>
             <div className="iq-lp__arti"><Icon name="ic-check" className="ic ic-18" /> Finish your CV checklist</div>

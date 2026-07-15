@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Momo } from "@/components/Momo"
+import { isMascot } from "@/lib/mascot"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
 import type { Internship } from "@/lib/helpers"
@@ -12,7 +13,7 @@ export default async function AchievementsPage() {
     data: { user },
   } = await supabase.auth.getUser()
   const { data: profile } = await supabase
-    .from("profiles").select("level, xp, gems, streak_count").eq("id", user!.id).single()
+    .from("profiles").select("level, xp, gems, streak_count, avatar_url").eq("id", user!.id).single()
   const { data: internships } = await supabase
     .from("internships").select("status").eq("user_id", user!.id)
   const { count: genCount } = await supabase
@@ -40,7 +41,12 @@ export default async function AchievementsPage() {
   return (
     <section className="iq-screen is-active">
       <div className="iq-ach-hero mb-6">
-        <div className="iq-ach-hero__mascot"><Momo size={96} /></div>
+        {profile?.avatar_url && !isMascot(profile.avatar_url) ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={profile.avatar_url} alt="Profile photo" className="iq-ach-hero__pic" />
+        ) : (
+          <div className="iq-ach-hero__mascot"><Momo size={96} /></div>
+        )}
         <div style={csx("flex:1")}>
           <div className="row-between wrap" style={csx("gap:10px")}>
             <div>

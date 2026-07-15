@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { csx } from "@/lib/csx"
@@ -12,6 +13,15 @@ const TAGLINES = [
   "Manage every application in one place",
   "Write a motivation letter in seconds",
   "Level up every time you apply",
+]
+
+// One custom illustration per slide (transparent PNG, square, ~512x512).
+// Order matches TAGLINES above.
+const SLIDE_IMAGES = [
+  "/mascot-auth-1.png",
+  "/mascot-auth-2.png",
+  "/mascot-auth-3.png",
+  "/mascot-auth-4.png",
 ]
 
 export default function LoginPage() {
@@ -109,7 +119,7 @@ export default function LoginPage() {
       <div className="iq-auth__hero" style={csx("background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)")}>
         <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
         <div className="iq-auth__tag" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
-        <Momo size={200} />
+        <HeroMascot src={SLIDE_IMAGES[slide]} size={200} className="iq-auth__mascot" />
         <div className="iq-dots">
           {TAGLINES.map((_, i) => (
             <i key={i} className={i === slide ? "on" : ""} />

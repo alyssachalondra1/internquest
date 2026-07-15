@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Icon } from "@/components/Icons"
 import { AddInternshipModal } from "@/components/AddInternshipModal"
+import { LevelUpCelebration } from "@/components/LevelUpCelebration"
 import { createClient } from "@/lib/supabase/client"
 import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
@@ -172,6 +173,7 @@ export function AppShell({
         ))}
       </nav>
 
+      <LevelUpCelebration level={profile.level} />
       <AddInternshipModal open={addOpen} onClose={() => setAddOpen(false)} />
     </div>
   )

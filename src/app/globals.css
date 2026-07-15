@@ -1018,3 +1018,39 @@ html,body{max-width:100%;overflow-x:hidden}
 @media(max-width:860px){
   .iq-hero__mascot{align-self:center}
 }
+
+
+/* ===== REVISI v11 - extra mascots, yellow badge, spark fix, celebrations ===== */
+.iq-heromascot{display:block;object-fit:contain}
+
+/* Landing hero mascot: bigger, tighter to the text */
+.iq-lp__heromascot{margin:0 0 8px}
+/* Yellow "companion" badge (replaces the sparkle emoji version) */
+.iq-lp__badge--yellow{background:var(--yellow-15);color:var(--yellow-text)}
+
+/* Dashboard hero sparkle: smaller and tucked into the corner */
+.iq-hero__spark{left:auto;right:20px;top:14px;bottom:auto;font-size:54px;opacity:.22}
+
+/* Achievements: show the uploaded profile photo when set */
+.iq-ach-hero__pic{width:104px;height:104px;border-radius:26px;object-fit:cover;border:2px solid #E7ECF3;flex:none}
+
+/* Streak celebration popup (first profile open of the day) */
+.iq-streakpop-scrim{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:rgba(20,27,46,.42);backdrop-filter:blur(2px);animation:iq-fade .2s ease}
+.iq-streakpop{position:relative;background:#fff;border-radius:26px;padding:26px 30px;max-width:330px;text-align:center;box-shadow:0 24px 60px rgba(20,27,46,.28);animation:iq-pop-in .34s cubic-bezier(.2,.9,.3,1.3)}
+.iq-streakpop__num{font-size:44px;font-weight:900;line-height:1;margin:4px 0 2px;background:linear-gradient(120deg,#FF9F1C,#FF5B92);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.iq-streakpop b{font-size:17px}
+.iq-streakpop p{color:var(--ink-2);font-size:14px;margin-top:6px;line-height:1.5}
+@keyframes iq-fade{from{opacity:0}to{opacity:1}}
+@keyframes iq-pop-in{0%{opacity:0;transform:scale(.7) translateY(10px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+
+@media(max-width:860px){
+  .iq-lp__heromascot{margin-bottom:2px}
+}
+
+
+/* ===== REVISI v12 - auth slide mascots + level-up popup ===== */
+/* Login/get-started carousel: one custom illustration per slide */
+.iq-auth__mascot{max-width:210px;height:auto;margin-top:2px}
+@media(max-width:860px){.iq-auth__mascot{max-width:150px}}
+/* Level-up popup number: blue-violet gradient (distinct from the orange streak number) */
+.iq-levelpop__num{background:linear-gradient(120deg,#2F6BFF,#7C5CFF)!important;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
