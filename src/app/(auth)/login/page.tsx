@@ -130,9 +130,9 @@ export default function LoginPage() {
         <div className="iq-auth__card">
           {step === "welcome" && (
             <div className="iq-auth__step is-active">
-              <div className="iq-peek"><Momo size={120} /></div>
+              <div className="iq-peek"><HeroMascot src="/mascot-quest.png" size={120} /></div>
               <div className="iq-peekcard">
-                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome! 👋</h1>
+                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome!</h1>
                 <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for internships.</p>
                 <button className="iq-authbtn" onClick={google} disabled={loading}>
                   <b style={csx("color:#4285F4;font-size:17px")}>G</b> Continue with Google
