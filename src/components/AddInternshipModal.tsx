@@ -7,6 +7,7 @@ import { HeroMascot } from "@/components/HeroMascot"
 import { AiErrorState } from "@/components/AiErrorState"
 import { createClient } from "@/lib/supabase/client"
 import { createInternship, type NewInternship } from "@/app/actions/internships"
+import { playSuccess } from "@/lib/sound"
 import { csx } from "@/lib/csx"
 
 type Step = "method" | "extracting" | "review" | "success"
@@ -150,6 +151,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       })
       setSavedId(id)
       setStep("success")
+      playSuccess()
       router.refresh()
     } catch (e: any) {
       setError(e?.message || "Could not save")

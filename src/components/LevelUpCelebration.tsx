@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { HeroMascot } from "@/components/HeroMascot"
+import { playLevelUp } from "@/lib/sound"
 
 /**
  * Level-up celebration popup.
@@ -27,7 +28,10 @@ export function LevelUpCelebration({ level }: { level: number }) {
       localStorage.setItem(key, String(level))
       return
     }
-    if (level > seen) setPopupLevel(level)
+    if (level > seen) {
+      setPopupLevel(level)
+      playLevelUp()
+    }
     if (level !== seen) localStorage.setItem(key, String(level))
   }, [level])
 

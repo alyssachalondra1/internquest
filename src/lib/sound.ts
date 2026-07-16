@@ -70,3 +70,21 @@ export function playSad() {
   tone(392, 0, 0.22, "sine", 0.1)
   tone(311, 0.16, 0.32, "sine", 0.1)
 }
+
+// Bright rising chime for "you did it" moments (e.g. internship added).
+export function playSuccess() {
+  if (!enabled()) return
+  resume()
+  tone(659, 0, 0.12)
+  tone(988, 0.09, 0.14)
+  tone(1319, 0.19, 0.2, "triangle", 0.13)
+}
+
+// Energetic "fire" whoosh for streak celebrations.
+export function playStreak() {
+  if (!enabled()) return
+  resume()
+  tone(392, 0, 0.1, "sawtooth", 0.08)
+  tone(587, 0.08, 0.1, "sawtooth", 0.09)
+  tone(880, 0.16, 0.22, "triangle", 0.12)
+}

@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveCv, saveInterests, saveAvatar, savePortfolio } from "@/app/actions/profile"
-import { MomoFace } from "@/components/MascotAvatar"
-import { MASCOT_PRESETS, isMascot } from "@/lib/mascot"
+import { isMascot } from "@/lib/mascot"
 import { csx } from "@/lib/csx"
 
 // Profile-picture options built from the user's own uploaded Momo artwork in /public.
@@ -185,17 +184,18 @@ export function ProfileExtras({
 
       <div className="iq-form-row" style={csx("margin-bottom:0")}>
         <label>Profile photo</label>
-        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Momo expression, choose one of your Momo pictures, or upload your own photo.</p>
+        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Momo expression, or upload your own photo.</p>
         <div className="iq-avatar-picker">
-          {MASCOT_PRESETS.map((p) => (
+          {MASCOT_PHOTOS.map((m) => (
             <button
-              key={p.key}
+              key={m.src}
               type="button"
-              className={"iq-avatar-opt" + (ava === p.key ? " is-active" : "")}
-              onClick={() => pickPreset(p.key)}
-              title={p.label}
+              className={"iq-avatar-opt" + (ava === m.src ? " is-active" : "")}
+              onClick={() => pickPreset(m.src)}
+              title={m.label}
             >
-              <MomoFace mood={p.mood} size={46} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={m.src} alt={m.label} />
             </button>
           ))}
           <input ref={avaRef} type="file" accept="image/*" hidden onChange={onPickAvatar} />
@@ -212,21 +212,6 @@ export function ProfileExtras({
               <Icon name="ic-upload" className="ic ic-18" />
             )}
           </button>
-        </div>
-        <p className="muted" style={csx("font-size:12px;margin:12px 0 8px")}>Or use one of your Momo pictures:</p>
-        <div className="iq-avatar-picker">
-          {MASCOT_PHOTOS.map((m) => (
-            <button
-              key={m.src}
-              type="button"
-              className={"iq-avatar-opt" + (ava === m.src ? " is-active" : "")}
-              onClick={() => pickPreset(m.src)}
-              title={m.label}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={m.src} alt={m.label} />
-            </button>
-          ))}
         </div>
         {avaBusy && <p className="muted" style={csx("font-size:12px;margin-top:8px")}>Uploading…</p>}
         {avaErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:8px")}>{avaErr}</p>}

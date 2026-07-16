@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { HeroMascot } from "@/components/HeroMascot"
+import { playStreak } from "@/lib/sound"
 
 /* Shows a short fire-mascot streak popup the FIRST time the profile is
    opened each day, then disappears on its own. Uses /mascot-streak.png. */
@@ -19,6 +20,7 @@ export function StreakCelebration({ streak }: { streak: number }) {
       return
     }
     setShow(true)
+    playStreak()
     const t = setTimeout(() => setShow(false), 3000)
     return () => clearTimeout(t)
   }, [streak])
