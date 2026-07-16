@@ -69,7 +69,7 @@ export default function PrivacyPage() {
       <p>We may update this policy from time to time. We will revise the "Last updated" date above, and significant changes may be highlighted in the app.</p>
 
       <h2>13. Contact</h2>
-      <p>Questions about this policy? Email <a href="mailto:alyssachalondra@student.uns.ac.id">alyssachalondra@student.uns.ac.id</a>.</p>
+      <p>Questions about this policy? Email <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>.</p>
 
       <p style={csx("margin-top:32px")}><Link href="/terms">Read our Terms of Service</Link></p>
     </main>

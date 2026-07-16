@@ -1,9 +1,8 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { updateInternshipStatus } from "@/app/actions/internships"
-import { Momo } from "@/components/Momo"
 import { HeroMascot } from "@/components/HeroMascot"
 import { playApply, playLevelUp, playSad } from "@/lib/sound"
 import { csx } from "@/lib/csx"
@@ -59,18 +58,23 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
   const [pending, start] = useTransition()
   const [confirmTo, setConfirmTo] = useState<string | null>(null)
   const [pop, setPop] = useState<string | null>(null)
-  const stage = FLOW[status]
+  const [curStatus, setCurStatus] = useState(status)
+  useEffect(() => { setCurStatus(status) }, [status])
+  const stage = FLOW[curStatus]
 
   function apply(to: string) {
     setConfirmTo(null)
-    start(async () => {
-      await updateInternshipStatus(id, to)
-      router.refresh()
-    })
+    // Update the UI right away so the box/stage changes instantly instead of
+    // waiting ~3s for the server round-trip; the server syncs in the background.
+    setCurStatus(to)
     setPop(to)
     if (to === "rejected") playSad()
     else if (to === "applied") playApply()
     else playLevelUp()
+    start(async () => {
+      await updateInternshipStatus(id, to)
+      router.refresh()
+    })
   }
 
   const p = pop ? POP[pop] : null
@@ -90,14 +94,14 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
             </button>
           )}
         </>
-      ) : status === "offer" ? (
+      ) : curStatus === "offer" ? (
         <div className="iq-callout" style={csx("align-items:center")}>
-          <Momo size={46} />
+          <HeroMascot src="/mascot-success.png" size={54} />
           <div><b>Offer secured</b><p className="mt-2" style={csx("font-size:13px")}>This journey is complete. Congratulations on landing the offer!</p></div>
         </div>
-      ) : status === "rejected" ? (
+      ) : curStatus === "rejected" ? (
         <div className="iq-callout" style={csx("align-items:center;background:var(--red-15);border-color:var(--red-40)")}>
-          <Momo size={46} />
+          <HeroMascot src="/mascot-sad.png" size={54} />
           <div><b>Marked as not selected</b><p className="mt-2" style={csx("font-size:13px")}>Keep going. The next opportunity could be the one.</p></div>
         </div>
       ) : null}
@@ -106,7 +110,7 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
         <div className="iq-pop-scrim" onClick={() => setConfirmTo(null)}>
           <div className="iq-pop" onClick={(e) => e.stopPropagation()}>
             <button className="iq-pop__x" onClick={() => setConfirmTo(null)}>✕</button>
-            <Momo size={72} />
+            <HeroMascot src="/mascot-confirm.png" size={104} className="iq-pop__mascot" />
             <h3>{isReject ? "Mark as not selected?" : "Are you sure?"}</h3>
             <p>{isReject ? "This internship will move to Rejected. You cannot change it back afterwards." : "You cannot undo this step later, so only confirm when it is official."}</p>
             <div className="row mt-6" style={csx("gap:10px")}>
@@ -123,14 +127,14 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
             <button className="iq-pop__x" onClick={() => setPop(null)}>✕</button>
             {p.mood === "happy" && (
               <>
-                <span className="iq-spark" style={csx("top:18px;left:26px")}>✨</span>
-                <span className="iq-spark" style={csx("top:30px;right:34px")}>✨</span>
+                <span className="iq-spark" style={csx("top:16px;left:22%")}>✨</span>
+                <span className="iq-spark" style={csx("top:24px;right:22%")}>✨</span>
               </>
             )}
             {p.mood === "happy" ? (
-              <HeroMascot src="/mascot-success.png" size={112} />
+              <HeroMascot src="/mascot-success.png" size={120} className="iq-pop__mascot" />
             ) : (
-              <Momo size={96} />
+              <HeroMascot src="/mascot-sad.png" size={112} className="iq-pop__mascot" />
             )}
             <h3>{p.title}</h3>
             <p>{p.body}</p>

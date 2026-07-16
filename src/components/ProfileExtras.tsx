@@ -9,6 +9,18 @@ import { MomoFace } from "@/components/MascotAvatar"
 import { MASCOT_PRESETS, isMascot } from "@/lib/mascot"
 import { csx } from "@/lib/csx"
 
+// Profile-picture options built from the user's own uploaded Momo artwork in /public.
+// Selecting one stores its path in avatar_url and renders as a normal image.
+const MASCOT_PHOTOS = [
+  { src: "/mascot-hero.png", label: "Momo Hero" },
+  { src: "/mascot-success.png", label: "Momo Success" },
+  { src: "/mascot-ai.png", label: "Momo AI" },
+  { src: "/mascot-quest.png", label: "Momo Quest" },
+  { src: "/mascot-levelup.png", label: "Momo Level Up" },
+  { src: "/mascot-streak.png", label: "Momo Streak" },
+]
+const isMascotPhoto = (u: string | null) => !!u && MASCOT_PHOTOS.some((m) => m.src === u)
+
 export function ProfileExtras({
   hasCv,
   cvName,
@@ -173,7 +185,7 @@ export function ProfileExtras({
 
       <div className="iq-form-row" style={csx("margin-bottom:0")}>
         <label>Profile photo</label>
-        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Momo expression, or upload your own photo.</p>
+        <p className="muted" style={csx("font-size:12px;margin:-2px 0 10px")}>Pick a Momo expression, choose one of your Momo pictures, or upload your own photo.</p>
         <div className="iq-avatar-picker">
           {MASCOT_PRESETS.map((p) => (
             <button
@@ -189,17 +201,32 @@ export function ProfileExtras({
           <input ref={avaRef} type="file" accept="image/*" hidden onChange={onPickAvatar} />
           <button
             type="button"
-            className={"iq-avatar-opt iq-avatar-opt--upload" + (ava && !isMascot(ava) ? " is-active" : "")}
+            className={"iq-avatar-opt iq-avatar-opt--upload" + (ava && !isMascot(ava) && !isMascotPhoto(ava) ? " is-active" : "")}
             onClick={() => !avaBusy && avaRef.current?.click()}
             title="Upload your own photo"
           >
-            {ava && !isMascot(ava) ? (
+            {ava && !isMascot(ava) && !isMascotPhoto(ava) ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={ava} alt="Your photo" />
             ) : (
               <Icon name="ic-upload" className="ic ic-18" />
             )}
           </button>
+        </div>
+        <p className="muted" style={csx("font-size:12px;margin:12px 0 8px")}>Or use one of your Momo pictures:</p>
+        <div className="iq-avatar-picker">
+          {MASCOT_PHOTOS.map((m) => (
+            <button
+              key={m.src}
+              type="button"
+              className={"iq-avatar-opt" + (ava === m.src ? " is-active" : "")}
+              onClick={() => pickPreset(m.src)}
+              title={m.label}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={m.src} alt={m.label} />
+            </button>
+          ))}
         </div>
         {avaBusy && <p className="muted" style={csx("font-size:12px;margin-top:8px")}>Uploading…</p>}
         {avaErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:8px")}>{avaErr}</p>}

@@ -8,6 +8,7 @@ import { GroupAddModal } from "@/components/GroupAddModal"
 import { csx } from "@/lib/csx"
 import { accentAt, deadlineChip, externalHref, fmtRange, fmtShort, guessDomain } from "@/lib/helpers"
 import { deleteGroup, deleteGroupInternship, leaveGroup, removeMember } from "@/app/actions/groups"
+import { createInternship } from "@/app/actions/internships"
 
 type Group = { id: string; name: string; join_code: string; owner_id: string; created_at?: string }
 type Member = { user_id: string; full_name: string | null; avatar_url: string | null; joined_at: string; is_owner: boolean }
@@ -40,6 +41,9 @@ export function GroupDetailClient({
   const [pending, start] = useTransition()
   const [copied, setCopied] = useState(false)
   const [addOpen, setAddOpen] = useState(false)
+  const [detail, setDetail] = useState<GI | null>(null)
+  const [savingId, setSavingId] = useState<string | null>(null)
+  const [savedIds, setSavedIds] = useState<string[]>([])
   const isOwner = group.owner_id === currentUserId
   const nameOf = (uid: string | null) => members.find((m) => m.user_id === uid)?.full_name || "a member"
 
@@ -54,6 +58,30 @@ export function GroupDetailClient({
     start(async () => {
       await deleteGroupInternship(group.id, gi.id)
       router.refresh()
+    })
+  }
+
+  // Copy a shared internship into the member's own private tracker (as To Do).
+  function saveToMine(gi: GI) {
+    if (savedIds.includes(gi.id)) return
+    setSavingId(gi.id)
+    start(async () => {
+      try {
+        await createInternship({
+          company_name: gi.company_name,
+          role: gi.role || "",
+          location: gi.location || "",
+          source_url: gi.source_url || null,
+          open_date: gi.open_date || null,
+          deadline: gi.deadline || null,
+          start_date: gi.start_date || null,
+          duration_months: gi.duration_months ?? null,
+          notes: gi.notes || "",
+        })
+        setSavedIds((s) => [...s, gi.id])
+      } finally {
+        setSavingId(null)
+      }
     })
   }
 
@@ -158,17 +186,68 @@ export function GroupDetailClient({
                   {it.duration_months ? " · " + it.duration_months + " months" : ""}
                 </div>
                 {it.notes && <p className="muted iq-justify" style={csx("font-size:12.5px;margin:6px 0 0")}>{it.notes}</p>}
-                <div className="iq-icard__foot">
+                <div className="iq-icard__foot" style={csx("flex-wrap:wrap;gap:8px")}>
                   <span className="muted" style={csx("font-size:12px")}>Added by {nameOf(it.added_by)}</span>
-                  {it.source_url && (
-                    <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => window.open(externalHref(it.source_url), "_blank", "noopener")}>
-                      <Icon name="ic-link" className="ic ic-16" /> Open
+                  <div className="row" style={csx("gap:6px")}>
+                    <button className="iq-btn iq-btn--ghost iq-btn--sm" onClick={() => setDetail(it)}>
+                      <Icon name="ic-doc" className="ic ic-16" /> Details
                     </button>
-                  )}
+                    <button
+                      className="iq-btn iq-btn--primary iq-btn--sm"
+                      disabled={pending || savedIds.includes(it.id)}
+                      onClick={() => saveToMine(it)}
+                    >
+                      <Icon name="ic-plus" className="ic ic-16" /> {savedIds.includes(it.id) ? "Saved" : savingId === it.id ? "Saving…" : "Save"}
+                    </button>
+                  </div>
                 </div>
               </div>
             )
           })}
+        </div>
+      )}
+
+      {detail && (
+        <div className="iq-pop-scrim" onClick={() => setDetail(null)}>
+          <div className="iq-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="iq-modal__head">
+              <h3>Internship details</h3>
+              <button className="iq-modal__x" onClick={() => setDetail(null)}>✕</button>
+            </div>
+            <div className="iq-modal__body">
+              <div className="row mb-4">
+                <CompanyLogo domain={guessDomain(detail.company_name)} name={detail.company_name} large />
+                <div>
+                  <h2 style={csx("font-size:20px;margin:0")}>{detail.role || "Internship"}</h2>
+                  <div className="muted">{detail.company_name} · {detail.location || "—"}</div>
+                </div>
+              </div>
+              <div className="iq-field"><span className="iq-field__k">Registration window</span><span className="iq-field__v">{fmtRange(detail.open_date, detail.deadline) || "—"}</span></div>
+              <div className="iq-field"><span className="iq-field__k">Registration opens</span><span className="iq-field__v">{fmtShort(detail.open_date)}</span></div>
+              <div className="iq-field"><span className="iq-field__k">Application deadline</span><span className="iq-field__v">{fmtShort(detail.deadline)}</span></div>
+              <div className="iq-field"><span className="iq-field__k">Start date</span><span className="iq-field__v">{fmtShort(detail.start_date)}</span></div>
+              <div className="iq-field"><span className="iq-field__k">Duration</span><span className="iq-field__v">{detail.duration_months ? detail.duration_months + " months" : "—"}</span></div>
+              <div className="iq-field"><span className="iq-field__k">Location</span><span className="iq-field__v">{detail.location || "—"}</span></div>
+              {detail.notes && (
+                <div style={csx("margin-top:12px")}><span className="muted" style={csx("font-size:12px")}>Notes</span><p className="mt-2 iq-justify">{detail.notes}</p></div>
+              )}
+              <span className="muted" style={csx("display:block;margin-top:12px;font-size:12px")}>Added by {nameOf(detail.added_by)}</span>
+              <div className="row mt-6" style={csx("gap:10px;flex-wrap:wrap")}>
+                {detail.source_url && (
+                  <a className="iq-btn iq-btn--blue" href={externalHref(detail.source_url)} target="_blank" rel="noopener">
+                    <Icon name="ic-link" className="ic ic-18" /> Open application page
+                  </a>
+                )}
+                <button
+                  className="iq-btn iq-btn--primary"
+                  disabled={pending || savedIds.includes(detail.id)}
+                  onClick={() => saveToMine(detail)}
+                >
+                  <Icon name="ic-plus" className="ic ic-18" /> {savedIds.includes(detail.id) ? "Saved to your list" : "Save to my list"}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

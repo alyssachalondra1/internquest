@@ -214,7 +214,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         <div className="iq-modal" style={csx("max-width:440px")}>
           <div className="iq-modal__body center">
             <div className="iq-loader-ring mb-6" />
-            <HeroMascot src="/mascot-loading.png" size={96} className="mb-4" />
+            <HeroMascot src="/mascot-loading.png" size={120} className="mb-4 iq-modal__mascot" />
             <h3 className="mb-2">Reading the details…</h3>
             <p className="muted">One moment, AI is putting the posting details together.</p>
           </div>

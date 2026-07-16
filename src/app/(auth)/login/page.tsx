@@ -118,8 +118,8 @@ export default function LoginPage() {
     <section className="iq-auth">
       <div className="iq-auth__hero" style={csx("background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)")}>
         <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
-        <div className="iq-auth__tag" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
-        <HeroMascot src={SLIDE_IMAGES[slide]} size={200} className="iq-auth__mascot" />
+        <div key={"tag-" + slide} className="iq-auth__tag iq-slidein" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
+        <HeroMascot key={"slide-" + slide} src={SLIDE_IMAGES[slide]} size={200} className="iq-auth__mascot iq-slidein" />
         <div className="iq-dots">
           {TAGLINES.map((_, i) => (
             <i key={i} className={i === slide ? "on" : ""} />

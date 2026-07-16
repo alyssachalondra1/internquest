@@ -60,7 +60,7 @@ export default function TermsPage() {
       <p>We may update these Terms from time to time. We will revise the "Last updated" date above, and continued use after changes means you accept the updated Terms.</p>
 
       <h2>14. Contact</h2>
-      <p>Questions? Email <a href="mailto:alyssachalondra@student.uns.ac.id">alyssachalondra@student.uns.ac.id</a>.</p>
+      <p>Questions? Email <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>.</p>
 
       <p style={csx("margin-top:32px")}><Link href="/privacy">Read our Privacy Policy</Link></p>
     </main>

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Icon } from "@/components/Icons"
+import { StatIcon } from "@/components/StatIcon"
 import { AddInternshipModal } from "@/components/AddInternshipModal"
 import { LevelUpCelebration } from "@/components/LevelUpCelebration"
 import { createClient } from "@/lib/supabase/client"
@@ -138,15 +139,15 @@ export function AppShell({
         <header className="iq-topbar">
           <div className="iq-topbar__title">{title}</div>
           <span className="iq-stat-pill" style={csx("color:#FF7A3D;background:rgba(255,122,61,.14);border-color:transparent")}>
-            <Icon name="ic-flame" className="ic ic-18 ic--fill" />
+            <StatIcon name="streak" />
             <span style={csx("color:var(--ink)")}>{profile.streak_count}</span>
           </span>
           <span className="iq-stat-pill iq-stat-pill--keep" style={csx("color:#F0B400;background:var(--yellow-15);border-color:transparent")}>
-            <Icon name="ic-star" className="ic ic-18 ic--fill" />
+            <StatIcon name="xp" />
             <span style={csx("color:var(--ink)")}>{profile.xp} XP</span>
           </span>
           <span className="iq-stat-pill" style={csx("color:var(--blue);background:var(--blue-15);border-color:transparent")}>
-            <Icon name="ic-gem" className="ic ic-18 ic--fill" />
+            <StatIcon name="gems" />
             <span style={csx("color:var(--ink)")}>{profile.gems}</span>
           </span>
           <button className="iq-btn iq-btn--primary" onClick={() => setAddOpen(true)}>

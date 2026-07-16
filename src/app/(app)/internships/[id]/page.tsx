@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyLogo } from "@/components/CompanyLogo"
-import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { Icon } from "@/components/Icons"
 import { ChecklistCard } from "@/components/ChecklistCard"
 import { StatusActions } from "@/components/StatusActions"
@@ -32,27 +32,18 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { data: it } = await supabase
-    .from("internships")
-    .select("*")
-    .eq("id", id)
-    .eq("user_id", user!.id)
-    .single()
+  // Fetch the internship, profile CV flag, and checklist in parallel so opening
+  // the detail page is fast instead of waiting for three sequential round-trips.
+  const [itRes, profRes, checklistRes] = await Promise.all([
+    supabase.from("internships").select("*").eq("id", id).eq("user_id", user!.id).single(),
+    supabase.from("profiles").select("cv_text").eq("id", user!.id).single(),
+    supabase.from("checklist_items").select("id, label, is_done").eq("internship_id", id).order("created_at", { ascending: true }),
+  ])
+  const it = itRes.data
   if (!it) notFound()
   const item = it as Internship
-
-  const { data: prof } = await supabase
-    .from("profiles")
-    .select("cv_text")
-    .eq("id", user!.id)
-    .single()
-  const hasCv = !!prof?.cv_text
-
-  const { data: checklist } = await supabase
-    .from("checklist_items")
-    .select("id, label, is_done")
-    .eq("internship_id", id)
-    .order("created_at", { ascending: true })
+  const hasCv = !!(profRes.data as { cv_text?: string } | null)?.cv_text
+  const checklist = checklistRes.data
   const rows = checklist || []
   const done = rows.filter((r) => r.is_done).length
   const pct = rows.length ? Math.round((done / rows.length) * 100) : 0
@@ -108,12 +99,11 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
         </div>
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
-            <div className="row mb-4"><Momo size={52} /><h3>AI Helper</h3></div>
-            <div className="stack-2">
-              <Link className="iq-btn iq-btn--primary iq-btn--block iq-btn--sm" href={"/ai?internship=" + item.id + "&type=motivation_letter"}>Generate Motivation Letter</Link>
-              <Link className="iq-btn iq-btn--ghost iq-btn--block iq-btn--sm" href={"/ai?internship=" + item.id + "&type=cover_letter"}>Cover Letter</Link>
-              <Link className="iq-btn iq-btn--ghost iq-btn--block iq-btn--sm" href={"/ai?internship=" + item.id + "&type=email_to_hr"}>Email to HR</Link>
-            </div>
+            <div className="row mb-4"><HeroMascot src="/mascot-ai.png" size={56} /><h3>AI Helper</h3></div>
+            <p className="muted mb-4" style={csx("font-size:13px")}>Draft a motivation letter, cover letter, or an email to HR — all tailored to this internship and your CV, in one place.</p>
+            <Link className="iq-btn iq-btn--primary iq-btn--block" href={"/ai?internship=" + item.id}>
+              <Icon name="ic-ai" className="ic ic-18" /> Generate with AI
+            </Link>
           </div>
           <MatchCard internshipId={item.id} initialScore={item.match_score} initialReasons={item.match_reasons} hasCv={hasCv} />
           <div className="iq-card iq-card__pad">

@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
-import { Momo } from "@/components/Momo"
+import { HeroMascot } from "@/components/HeroMascot"
 import { MomoFace } from "@/components/MascotAvatar"
+import { Icon } from "@/components/Icons"
+import { StatIcon } from "@/components/StatIcon"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { DeleteAccountButton } from "@/components/DeleteAccountButton"
@@ -79,9 +81,9 @@ export default async function ProfilePage() {
         <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
         <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP</div>
         <div className="iq-levelstats">
-          <div><div className="big-num">{profile?.streak_count ?? 0}</div><small className="muted">Day Streak</small></div>
-          <div><div className="big-num">{profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
-          <div><div className="big-num">{applied ?? 0}</div><small className="muted">Internships</small></div>
+          <div><div className="big-num"><StatIcon name="streak" size={22} /> {profile?.streak_count ?? 0}</div><small className="muted">Day Streak</small></div>
+          <div><div className="big-num"><StatIcon name="gems" size={22} /> {profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
+          <div><div className="big-num"><Icon name="ic-list" className="ic ic-18" /> {applied ?? 0}</div><small className="muted">Internships</small></div>
         </div>
       </div>
       <div className="iq-grid iq-grid--dash">
@@ -105,7 +107,7 @@ export default async function ProfilePage() {
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">
-            <Momo size={72} />
+            <HeroMascot src="/mascot-hero.png" size={104} />
             <div className="iq-callout" style={csx("background:var(--pink-15);border-color:var(--pink-50)")}>
               <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Open Sloe every day to keep your streak alive.</p></div>
             </div>
