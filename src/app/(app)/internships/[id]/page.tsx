@@ -9,7 +9,7 @@ import { StatusActions } from "@/components/StatusActions"
 import { MatchCard } from "@/components/MatchCard"
 import { DeleteInternshipButton } from "@/components/DeleteInternshipButton"
 import { csx } from "@/lib/csx"
-import { guessDomain, statusMeta, fmtShort, fmtRange, externalHref, type Internship } from "@/lib/helpers"
+import { guessDomain, statusMeta, fmtShort, fmtRange, externalHref, timingLabel, type Internship } from "@/lib/helpers"
 
 export const dynamic = "force-dynamic"
 
@@ -81,7 +81,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
               <div className="iq-field"><span className="iq-field__k">Registration window</span><span className="iq-field__v">{regRange}</span></div>
             )}
             <div className="iq-field"><span className="iq-field__k">Registration opens</span><span className="iq-field__v">{fmtShort(item.open_date)}</span></div>
-            <div className="iq-field"><span className="iq-field__k">Application deadline</span><span className="iq-field__v">{fmtShort(item.deadline)}</span></div>
+            <div className="iq-field"><span className="iq-field__k">Application deadline</span><span className="iq-field__v">{timingLabel(item)}</span></div>
             <div className="iq-field"><span className="iq-field__k">Start date</span><span className="iq-field__v">{fmtShort(item.start_date)}</span></div>
             <div className="iq-field"><span className="iq-field__k">Duration</span><span className="iq-field__v">{item.duration_months ? item.duration_months + " months" : "—"}</span></div>
             <div className="iq-field"><span className="iq-field__k">Location</span><span className="iq-field__v">{item.location || "—"}</span></div>

@@ -26,12 +26,13 @@ const SLIDE_IMAGES = [
 
 export default function LoginPage() {
   const router = useRouter()
-  const [step, setStep] = useState<"welcome" | "password" | "magic">("welcome")
+  const [step, setStep] = useState<"welcome" | "password" | "magic" | "reset">("welcome")
   const [mode, setMode] = useState<"signin" | "signup">("signin")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [sent, setSent] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [slide, setSlide] = useState(0)
@@ -47,6 +48,10 @@ export default function LoginPage() {
       setMode("signup")
       setStep("password")
     }
+    if (p.get("error") === "auth") {
+      setMsg("That login link is invalid or has expired. Please request a new one below.")
+      setStep("magic")
+    }
   }, [])
 
   async function google() {
@@ -54,7 +59,7 @@ export default function LoginPage() {
     const supabase = createClient()
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin + "/auth/callback" },
+      options: { redirectTo: window.location.origin + "/auth/callback?next=/dashboard" },
     })
   }
 
@@ -67,14 +72,24 @@ export default function LoginPage() {
     setLoading(true)
     const supabase = createClient()
     if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({
+      const { data: signUpData, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name }, emailRedirectTo: window.location.origin + "/auth/callback" },
+        options: {
+          data: { full_name: name },
+          emailRedirectTo: window.location.origin + "/auth/callback?next=/dashboard",
+        },
       })
       setLoading(false)
       if (error) {
         setMsg(error.message)
+        return
+      }
+      // Supabase returns a user with an empty identities array when the email is
+      // already registered (the identity is hidden to prevent enumeration).
+      if (signUpData.user && (signUpData.user.identities?.length ?? 0) === 0) {
+        setMsg("This email is already registered. Please sign in instead.")
+        setMode("signin")
         return
       }
       const { data } = await supabase.auth.getSession()
@@ -82,7 +97,7 @@ export default function LoginPage() {
         router.push("/dashboard")
         router.refresh()
       } else {
-        setMsg("Account created. Check your email to verify, then sign in again.")
+        setMsg("Account created! Check your email to confirm your address, then sign in.")
         setMode("signin")
       }
     } else {
@@ -107,11 +122,30 @@ export default function LoginPage() {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + "/auth/callback", data: { full_name: name } },
+      options: {
+        emailRedirectTo: window.location.origin + "/auth/callback?next=/dashboard",
+        data: { full_name: name },
+      },
     })
     setLoading(false)
     if (error) setMsg(error.message)
     else setSent(true)
+  }
+
+  async function sendReset() {
+    setMsg(null)
+    if (!email.trim()) {
+      setMsg("Please enter your email first.")
+      return
+    }
+    setLoading(true)
+    const supabase = createClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + "/reset-password",
+    })
+    setLoading(false)
+    if (error) setMsg(error.message)
+    else setResetSent(true)
   }
 
   return (
@@ -130,10 +164,11 @@ export default function LoginPage() {
         <div className="iq-auth__card">
           {step === "welcome" && (
             <div className="iq-auth__step is-active">
-              <div className="iq-peek"><HeroMascot src="/mascot-quest.png" size={120} /></div>
+              <div className="iq-peek"><Momo size={120} /></div>
               <div className="iq-peekcard">
-                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome!</h1>
+                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome! 👋</h1>
                 <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for internships.</p>
+                {msg && <p style={csx("color:var(--red-text);margin-bottom:12px;font-size:13px;text-align:center")}>{msg}</p>}
                 <button className="iq-authbtn" onClick={google} disabled={loading}>
                   <b style={csx("color:#4285F4;font-size:17px")}>G</b> Continue with Google
                 </button>
@@ -150,7 +185,7 @@ export default function LoginPage() {
 
           {step === "password" && (
             <div className="iq-auth__step is-active">
-              <button className="row muted" style={csx("font-weight:700;margin-bottom:16px")} onClick={() => setStep("welcome")}>
+              <button className="row muted" style={csx("font-weight:700;margin-bottom:16px")} onClick={() => { setStep("welcome"); setMsg(null) }}>
                 <Icon name="ic-back" className="ic ic-18" /> Back
               </button>
               <h1 style={csx("font-size:26px;margin-bottom:8px")}>{mode === "signup" ? "Create Account" : "Sign In"}</h1>
@@ -162,6 +197,11 @@ export default function LoginPage() {
               )}
               <div className="iq-form-row"><label>Email</label><input className="iq-input" type="email" placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
               <div className="iq-form-row"><label>Password</label><input className="iq-input" type="password" placeholder="At least 6 characters" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && passwordAuth()} /></div>
+              {mode === "signin" && (
+                <div className="row" style={csx("justify-content:flex-end;margin:-4px 0 10px")}>
+                  <button className="iq-link" style={csx("display:inline;color:var(--blue-text);font-weight:700;font-size:13px")} onClick={() => { setStep("reset"); setMsg(null); setResetSent(false) }}>Forgot password?</button>
+                </div>
+              )}
               {msg && <p style={csx("color:var(--red-text);margin-bottom:8px;font-size:13px")}>{msg}</p>}
               <button className="iq-btn iq-btn--primary iq-btn--block mt-2" onClick={passwordAuth} disabled={loading}>
                 {loading ? "Working…" : mode === "signup" ? "Sign Up" : "Sign In"}
@@ -177,7 +217,7 @@ export default function LoginPage() {
 
           {step === "magic" && (
             <div className="iq-auth__step is-active">
-              <button className="row muted" style={csx("font-weight:700;margin-bottom:16px")} onClick={() => setStep("welcome")}>
+              <button className="row muted" style={csx("font-weight:700;margin-bottom:16px")} onClick={() => { setStep("welcome"); setMsg(null) }}>
                 <Icon name="ic-back" className="ic ic-18" /> Back
               </button>
               <h1 style={csx("font-size:26px;margin-bottom:8px")}>Login Link</h1>
@@ -193,6 +233,29 @@ export default function LoginPage() {
                   {msg && <p style={csx("color:var(--red-text);margin-bottom:8px;font-size:13px")}>{msg}</p>}
                   <button className="iq-btn iq-btn--primary iq-btn--block mt-2" onClick={emailLink} disabled={loading}>
                     {loading ? "Sending…" : "Send login link"}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+
+          {step === "reset" && (
+            <div className="iq-auth__step is-active">
+              <button className="row muted" style={csx("font-weight:700;margin-bottom:16px")} onClick={() => { setStep("password"); setMsg(null) }}>
+                <Icon name="ic-back" className="ic ic-18" /> Back
+              </button>
+              <h1 style={csx("font-size:26px;margin-bottom:8px")}>Forgot password?</h1>
+              <p className="muted mb-6">Enter your email and we will send you a link to reset your password.</p>
+              {resetSent ? (
+                <div className="iq-callout" style={csx("background:var(--green-15);border-color:var(--green-40)")}>
+                  <div><b>Check your email! ✉️</b><p className="mt-2">We sent a password reset link to {email}.</p></div>
+                </div>
+              ) : (
+                <>
+                  <div className="iq-form-row"><label>Email</label><input className="iq-input" type="email" placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendReset()} /></div>
+                  {msg && <p style={csx("color:var(--red-text);margin-bottom:8px;font-size:13px")}>{msg}</p>}
+                  <button className="iq-btn iq-btn--primary iq-btn--block mt-2" onClick={sendReset} disabled={loading}>
+                    {loading ? "Sending…" : "Send reset link"}
                   </button>
                 </>
               )}

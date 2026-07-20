@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
-import { fmtShort, fmtRange, daysUntil, type Internship } from "@/lib/helpers"
+import { fmtShort, fmtRange, daysUntil, timingLabel, type Internship } from "@/lib/helpers"
 
 export const dynamic = "force-dynamic"
 
@@ -53,6 +53,8 @@ export default async function CalendarPage() {
     .filter((x) => x.n >= 0 && x.n <= 7)
     .sort((a, b) => a.n - b.n)
 
+  const rolling = items.filter((i) => i.deadline_type && i.deadline_type !== "date")
+
   const upcoming = items
     .filter((i) => i.open_date || i.deadline || i.start_date)
     .map((i) => ({ i, n: daysUntil(i.deadline ?? i.start_date ?? i.open_date) ?? 9999 }))
@@ -89,6 +91,22 @@ export default async function CalendarPage() {
           </div>
         </div>
         <div className="stack-6">
+          {rolling.length > 0 && (
+            <div className="iq-card iq-card__pad">
+              <div className="row mb-4"><Icon name="ic-clock" className="ic ic-18" style={csx("color:var(--yellow-text)")} /><h3>Apply anytime</h3></div>
+              <div className="stack-2">
+                {rolling.map((i) => (
+                  <div key={i.id} className="iq-rem iq-rem--info">
+                    <Icon name="ic-clock" className="ic iq-rem__ic" style={csx("color:var(--yellow-text)")} />
+                    <div>
+                      <div className="iq-rem__t">{i.company_name}</div>
+                      <div className="iq-rem__s">{timingLabel(i)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="iq-card iq-card__pad">
             <div className="row mb-4"><Icon name="ic-bell" className="ic ic-18" style={csx("color:var(--pink-text)")} /><h3>Active reminders</h3></div>
             <div className="stack-2">

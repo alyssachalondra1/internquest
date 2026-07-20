@@ -9,7 +9,7 @@ import { deleteInternship } from "@/app/actions/internships"
 import {
   STATUSES,
   accentAt,
-  deadlineChip,
+  timingChip,
   fmtShort,
   fmtRange,
   guessDomain,
@@ -76,7 +76,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
           {shown.map((it, idx) => {
             const a = accentAt(idx)
             const p = progress[it.id] || { done: 0, total: 0, pct: 0 }
-            const chip = deadlineChip(it.deadline)
+            const chip = timingChip(it)
             const sm = statusMeta(it.status)
             const range = fmtRange(it.open_date, it.deadline)
             return (

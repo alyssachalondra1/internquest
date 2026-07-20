@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { HeroMascot } from "@/components/HeroMascot"
+import { MascotLottie } from "@/components/MascotLottie"
 import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { CompanyLogo } from "@/components/CompanyLogo"
@@ -73,7 +74,7 @@ export default async function DashboardPage() {
           <p style={csx("opacity:.92;margin-top:4px")}>Here is your internship quest for today.</p>
         </div>
         <span className="iq-hero__spark">✨</span>
-        <HeroMascot size={180} className="iq-hero__mascot" />
+        <MascotLottie size={180} className="iq-hero__mascot" fallback="/mascot-hero.png" />
       </div>
 
       <div className="iq-callout mb-6">

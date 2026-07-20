@@ -7,6 +7,11 @@ import { addXp, addGems, syncAchievementGems } from "./gamification"
 
 const DEFAULT_CHECKLIST = ["CV", "Transcript", "Motivation Letter", "Portfolio"]
 
+// Columns that may not exist yet if the database has not been migrated. If the
+// insert fails because one of these is missing, we strip it and retry so saving
+// always works.
+const OPTIONAL_COLUMNS = ["open_date", "deadline_type", "timing_note"]
+
 export type NewInternship = {
   company_name: string
   role?: string
@@ -17,6 +22,8 @@ export type NewInternship = {
   source_url?: string | null
   open_date?: string | null
   deadline?: string | null
+  deadline_type?: string | null
+  timing_note?: string | null
   start_date?: string | null
   duration_months?: number | null
   notes?: string | null
@@ -31,11 +38,16 @@ export async function createInternship(data: NewInternship) {
 
   const insertData: Record<string, any> = { ...data, user_id: user.id, status: "todo" }
   let ins = await supabase.from("internships").insert(insertData).select("id").single()
-  // The open_date column is optional; if the database has not been migrated yet,
-  // retry the insert without it so saving still works.
-  if (ins.error && /open_date/i.test(ins.error.message)) {
-    const { open_date, ...rest } = insertData
-    ins = await supabase.from("internships").insert(rest).select("id").single()
+  // Retry while the DB complains about an optional column that hasn't been
+  // migrated yet, dropping that column each time.
+  let guard = 0
+  while (ins.error && guard < OPTIONAL_COLUMNS.length) {
+    const msg = ins.error.message || ""
+    const col = OPTIONAL_COLUMNS.find((c) => msg.includes(c) && c in insertData)
+    if (!col) break
+    delete insertData[col]
+    ins = await supabase.from("internships").insert(insertData).select("id").single()
+    guard++
   }
   if (ins.error) throw new Error(ins.error.message)
   const row = ins.data!
