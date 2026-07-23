@@ -169,13 +169,14 @@ export default function LoginPage() {
                 <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome! 👋</h1>
                 <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for internships.</p>
                 {msg && <p style={csx("color:var(--red-text);margin-bottom:12px;font-size:13px;text-align:center")}>{msg}</p>}
-                <button className="iq-authbtn" onClick={google} disabled={loading}>
+                <button className="iq-authbtn iq-authbtn--google" onClick={google} disabled={loading}>
                   <b style={csx("color:#4285F4;font-size:17px")}>G</b> Continue with Google
                 </button>
+                <p className="muted center" style={csx("font-size:12px;margin:-4px 0 12px")}>Fastest way in, no password to remember</p>
+                <div className="iq-divider-or">or use email</div>
                 <button className="iq-authbtn" onClick={() => { setStep("password"); setMsg(null) }}>
                   <Icon name="ic-user" /> Sign in with Email &amp; Password
                 </button>
-                <div className="iq-divider-or">or</div>
                 <button className="iq-authbtn" onClick={() => { setStep("magic"); setMsg(null) }}>
                   <Icon name="ic-doc" /> Send a login link to my email
                 </button>

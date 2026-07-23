@@ -40,9 +40,8 @@ export function LevelUpCelebration({ level }: { level: number }) {
   return (
     <div className="iq-streakpop-scrim" onClick={() => setPopupLevel(null)}>
       <div className="iq-streakpop" onClick={(e) => e.stopPropagation()}>
-        <HeroMascot src="/mascot-levelup.png" size={140} />
-        <div className="iq-streakpop__num iq-levelpop__num">{popupLevel}</div>
-        <b>Level up!</b>
+        <HeroMascot src="/mascot-levelup.png" size={150} className="iq-streakpop__mascot" />
+        <b>Level {popupLevel}!</b>
         <p>You reached Level {popupLevel}. Amazing progress on your internship quest, keep it going!</p>
         <button className="iq-btn iq-btn--primary iq-btn--block mt-6" onClick={() => setPopupLevel(null)}>
           Continue

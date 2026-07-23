@@ -46,8 +46,11 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
   const checklist = checklistRes.data
   const rows = checklist || []
   const done = rows.filter((r) => r.is_done).length
-  const pct = rows.length ? Math.round((done / rows.length) * 100) : 0
   const current = STEP_BY_STATUS[item.status] ?? 1
+  // Progress reflects the recruitment STAGE reached (Applied → Screening → ... →
+  // Offer), NOT the checklist. The checklist is just a helper and no longer
+  // drives this number.
+  const stagePct = Math.round((current / (STEPS.length - 1)) * 100)
   const sm = statusMeta(item.status)
   const regRange = fmtRange(item.open_date, item.deadline)
 
@@ -108,8 +111,9 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
           <MatchCard internshipId={item.id} initialScore={item.match_score} initialReasons={item.match_reasons} hasCv={hasCv} />
           <div className="iq-card iq-card__pad">
             <h3 className="mb-4">Progress</h3>
-            <div className="center big-num" style={csx("color:var(--blue-text)")}>{pct}%</div>
-            <div className="iq-progress mt-4"><div className="iq-progress__fill" style={csx("width:" + pct + "%")} /></div>
+            <div className="center big-num" style={csx("color:var(--blue-text)")}>{stagePct}%</div>
+            <div className="iq-progress mt-4"><div className="iq-progress__fill" style={csx("width:" + stagePct + "%")} /></div>
+            <p className="muted center mt-2" style={csx("font-size:12px")}>Stage {current + 1} of {STEPS.length} · {STEPS[current]}</p>
             <StatusActions id={item.id} status={item.status} />
             <div className="mt-4"><DeleteInternshipButton id={item.id} name={item.company_name} /></div>
           </div>

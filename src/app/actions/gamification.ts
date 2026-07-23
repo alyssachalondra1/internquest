@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { computeBadges } from "@/lib/achievements"
 
 /** Award XP to the current user via the add_xp RPC (also recomputes level). */
 export async function addXp(amount: number) {
@@ -122,5 +123,83 @@ export async function syncAchievementGems() {
       .eq("id", user.id)
   } catch {
     // profiles.awarded_achievements may not exist yet; ignore until migrated
+  }
+}
+
+/**
+ * Returns the keys of achievements the user has unlocked but has NOT seen yet.
+ * Powers the sidebar count badge and the achievement unlock popup.
+ */
+export async function getUnseenAchievements(): Promise<string[]> {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return []
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("level, streak_count, last_seen_achievements")
+      .eq("id", user.id)
+      .single()
+    const { data: internships } = await supabase
+      .from("internships")
+      .select("status")
+      .eq("user_id", user.id)
+    const { count: genCount } = await supabase
+      .from("ai_generations")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+    const statuses = ((internships || []) as Array<{ status: string }>).map((i) => i.status)
+    const badges = computeBadges({
+      level: (profile?.level as number | null) ?? 1,
+      streak: (profile?.streak_count as number | null) ?? 0,
+      gens: genCount ?? 0,
+      statuses,
+    })
+    const unlocked = badges.filter((b) => b.on).map((b) => b.key)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const seen = Array.isArray((profile as any)?.last_seen_achievements)
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ((profile as any).last_seen_achievements as string[])
+      : []
+    return unlocked.filter((k) => !seen.includes(k))
+  } catch {
+    return []
+  }
+}
+
+/** Marks all currently-unlocked achievements as seen (clears the count badge). */
+export async function markAchievementsSeen() {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("level, streak_count")
+      .eq("id", user.id)
+      .single()
+    const { data: internships } = await supabase
+      .from("internships")
+      .select("status")
+      .eq("user_id", user.id)
+    const { count: genCount } = await supabase
+      .from("ai_generations")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+    const statuses = ((internships || []) as Array<{ status: string }>).map((i) => i.status)
+    const badges = computeBadges({
+      level: (profile?.level as number | null) ?? 1,
+      streak: (profile?.streak_count as number | null) ?? 0,
+      gens: genCount ?? 0,
+      statuses,
+    })
+    const unlocked = badges.filter((b) => b.on).map((b) => b.key)
+    await supabase.from("profiles").update({ last_seen_achievements: unlocked }).eq("id", user.id)
+  } catch {
+    // profiles.last_seen_achievements may not exist yet; ignore until migrated
   }
 }

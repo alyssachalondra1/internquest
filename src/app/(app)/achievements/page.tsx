@@ -4,6 +4,8 @@ import { isMascot } from "@/lib/mascot"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
 import type { Internship } from "@/lib/helpers"
+import { computeBadges } from "@/lib/achievements"
+import { markAchievementsSeen } from "@/app/actions/gamification"
 
 export const dynamic = "force-dynamic"
 
@@ -20,23 +22,22 @@ export default async function AchievementsPage() {
     .from("ai_generations").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
 
   const items = (internships || []) as Pick<Internship, "status">[]
-  const applied = items.filter((i) => ["applied", "interview", "offer"].includes(i.status)).length
   const level = profile?.level ?? 1
   const xp = profile?.xp ?? 0
   const target = level * 200
   const levelPct = Math.min(100, Math.round(((xp - (level - 1) * 200) / 200) * 100))
 
-  const badges = [
-    { t: "First Application", s: "Send your first application", icon: "ic-target", bg: "var(--pink-15)", fg: "var(--pink-text)", on: applied >= 1 },
-    { t: "7 Day Streak", s: "Active 7 days in a row", icon: "ic-flame", bg: "rgba(255,122,61,.15)", fg: "#FF7A3D", on: (profile?.streak_count ?? 0) >= 7 },
-    { t: "Active AI User", s: "Generate 10 times", icon: "ic-star", bg: "var(--yellow-15)", fg: "var(--yellow-text)", on: (genCount ?? 0) >= 10 },
-    { t: "10 Applications", s: applied + "/10 applications", icon: "ic-list", bg: "var(--blue-15)", fg: "var(--blue-text)", on: applied >= 10 },
-    { t: "Interview Star", s: "Reach the interview stage", icon: "ic-user", bg: "var(--blue-15)", fg: "var(--blue-text)", on: items.some((i) => ["interview", "offer"].includes(i.status)) },
-    { t: "Offer Getter", s: "Land an internship offer", icon: "ic-trophy", bg: "var(--green-15)", fg: "var(--green-text)", on: items.some((i) => i.status === "offer") },
-    { t: "Deadline Master", s: "Finish right on time", icon: "ic-clock", bg: "var(--pink-15)", fg: "var(--pink-text)", on: false },
-    { t: "Level 10", s: "Reach Level 10", icon: "ic-star", bg: "var(--yellow-15)", fg: "var(--yellow-text)", on: level >= 10 },
-  ]
+  const badges = computeBadges({
+    level,
+    streak: profile?.streak_count ?? 0,
+    gens: genCount ?? 0,
+    statuses: items.map((i) => i.status),
+  })
   const unlocked = badges.filter((b) => b.on).length
+
+  // Opening this page marks the currently-unlocked badges as seen, which clears
+  // the count badge shown on the sidebar nav.
+  await markAchievementsSeen()
 
   return (
     <section className="iq-screen is-active">
@@ -67,10 +68,10 @@ export default async function AchievementsPage() {
       <h3 className="mb-4">Badges</h3>
       <div className="iq-grid iq-grid--4">
         {badges.map((b) => (
-          <div key={b.t} className={"iq-badge " + (b.on ? "is-unlocked" : "is-locked")}>
+          <div key={b.key} className={"iq-badge " + (b.on ? "is-unlocked" : "is-locked")}>
             {b.on && <span className="iq-badge__spark">✨</span>}
             <div className="iq-badge__ic" style={csx(b.on ? "background:" + b.bg + ";color:" + b.fg : "")}><Icon name={b.icon} className="ic ic-22" /></div>
-            <b>{b.t}</b><span>{b.on ? b.s : "Locked"}</span>
+            <b>{b.title}</b><span>{b.on ? b.desc : "Locked"}</span>
           </div>
         ))}
       </div>

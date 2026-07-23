@@ -1118,3 +1118,32 @@ html,body{max-width:100%;overflow-x:hidden}
   .iq-tm__grid{grid-template-columns:1fr}
   .iq-contact{grid-template-columns:1fr}
 }
+
+/* ============================================================
+   Revisi batch: Momo PNG, XP mini-bar, celebration cleanup,
+   calendar month nav + sticky header, review prompt.
+   ============================================================ */
+
+/* Momo mascot rendered as a PNG illustration */
+.iq-momo-img{object-fit:contain}
+
+/* #8 Topbar level mini-bar (XP to next level, next to the avatar) */
+.iq-lvlmini{display:flex;align-items:center;gap:8px;text-decoration:none;padding:7px 12px;border-radius:16px;background:var(--surface-2);border:2px solid var(--border)}
+.iq-lvlmini:hover{border-color:var(--border-2)}
+.iq-lvlmini__lv{font-size:12px;font-weight:800;color:var(--ink-2);white-space:nowrap}
+.iq-lvlmini__track{display:block;width:78px;height:8px;border-radius:999px;background:var(--border-2);overflow:hidden}
+.iq-lvlmini__track i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#8B7CFF,#FF5B92)}
+@media(max-width:900px){.iq-lvlmini{display:none}}
+
+/* #7 Streak / level-up / achievement popups: center the mascot, no gradient box */
+.iq-streakpop__mascot{margin:0 auto 8px !important}
+
+/* #5 Calendar: keep the month/year visible while scrolling, add nav arrows */
+.iq-calhead{position:sticky;top:var(--topbar-h,64px);z-index:6;background:var(--surface);padding:10px 0;margin-bottom:10px}
+.iq-monthnav a{width:34px;height:34px;border-radius:10px;border:2px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:var(--ink-2);background:var(--surface);text-decoration:none;font-size:18px;line-height:1}
+.iq-monthnav a:hover{background:var(--surface-2)}
+.iq-monthnav .iq-monthnav__today{width:auto;padding:0 14px;font-size:13px;color:var(--blue-text)}
+
+/* #10 Make Google sign-in stand out to reduce email volume */
+.iq-authbtn--google{border-color:var(--blue-40);background:var(--blue-15);box-shadow:0 4px 14px rgba(47,107,255,.12)}
+.iq-authbtn--google:hover{background:var(--blue-15);border-color:var(--blue)}

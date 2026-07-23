@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
@@ -10,7 +11,11 @@ const MONTHS = ["January", "February", "March", "April", "May", "June", "July", 
 
 type Ev = { label: string; color: string }
 
-export default async function CalendarPage() {
+export default async function CalendarPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ y?: string; m?: string }>
+}) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -21,12 +26,28 @@ export default async function CalendarPage() {
     .eq("user_id", user!.id)
   const items = (internships || []) as Internship[]
 
+  // Which month are we viewing? Defaults to the real current month, but the
+  // prev/next arrows navigate via ?y=&m= so you can browse any month.
+  const sp = await searchParams
   const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth()
+  const realYear = now.getFullYear()
+  const realMonth = now.getMonth()
+  let y = parseInt(sp.y ?? "", 10)
+  let m = parseInt(sp.m ?? "", 10)
+  if (!Number.isFinite(y)) y = realYear
+  if (!Number.isFinite(m)) m = realMonth
+  // Normalise so out-of-range months roll over correctly.
+  const base = new Date(y, m, 1)
+  const year = base.getFullYear()
+  const month = base.getMonth()
+  const isCurrentMonth = year === realYear && month === realMonth
   const today = now.getDate()
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   const firstDow = (new Date(year, month, 1).getDay() + 6) % 7 // Monday = 0
+
+  const prev = new Date(year, month - 1, 1)
+  const next = new Date(year, month + 1, 1)
+  const href = (d: Date) => "/calendar?y=" + d.getFullYear() + "&m=" + d.getMonth()
 
   const evByDay: Record<number, Ev[]> = {}
   const push = (iso: string | null, label: string, color: string) => {
@@ -67,7 +88,14 @@ export default async function CalendarPage() {
       <div className="iq-calhead mb-6">
         <div className="row-between" style={csx("gap:10px")}>
           <h2 style={csx("font-size:22px")}>Calendar</h2>
-          <div className="iq-monthnav"><span>{MONTHS[month]} {year}</span></div>
+          <div className="iq-monthnav">
+            <Link href={href(prev)} aria-label="Previous month">‹</Link>
+            <span>{MONTHS[month]} {year}</span>
+            <Link href={href(next)} aria-label="Next month">›</Link>
+            {!isCurrentMonth && (
+              <Link href="/calendar" className="iq-monthnav__today">Today</Link>
+            )}
+          </div>
         </div>
         <div className="muted mt-1">Built automatically from your internship dates.</div>
       </div>
@@ -81,7 +109,7 @@ export default async function CalendarPage() {
           <div className="iq-cal">
             {DOW.map((d) => <div key={d} className="iq-cal__h">{d}</div>)}
             {cells.map((c, i) => (
-              <div key={i} className={"iq-cal__d" + (c.day === null ? " is-muted" : "") + (c.day === today ? " is-today" : "")}>
+              <div key={i} className={"iq-cal__d" + (c.day === null ? " is-muted" : "") + (c.day === today && isCurrentMonth ? " is-today" : "")}>
                 {c.day}
                 {c.day && (evByDay[c.day] || []).map((ev, j) => (
                   <div key={j} className="iq-cal__ev" style={csx("background:" + ev.color)}>{ev.label}</div>

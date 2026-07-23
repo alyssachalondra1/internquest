@@ -11,12 +11,12 @@ import { csx } from "@/lib/csx"
 // Profile-picture options built from the user's own uploaded Momo artwork in /public.
 // Selecting one stores its path in avatar_url and renders as a normal image.
 const MASCOT_PHOTOS = [
-  { src: "/mascot-hero.png", label: "Momo Hero" },
-  { src: "/mascot-success.png", label: "Momo Success" },
-  { src: "/mascot-ai.png", label: "Momo AI" },
-  { src: "/mascot-quest.png", label: "Momo Quest" },
-  { src: "/mascot-levelup.png", label: "Momo Level Up" },
-  { src: "/mascot-streak.png", label: "Momo Streak" },
+  { src: "/momoface1.png", label: "Momo 1" },
+  { src: "/momoface2.png", label: "Momo 2" },
+  { src: "/momoface3.png", label: "Momo 3" },
+  { src: "/momoface4.png", label: "Momo 4" },
+  { src: "/momoface5.png", label: "Momo 5" },
+  { src: "/momoface6.png", label: "Momo 6" },
 ]
 const isMascotPhoto = (u: string | null) => !!u && MASCOT_PHOTOS.some((m) => m.src === u)
 

@@ -7,6 +7,8 @@ import { Icon } from "@/components/Icons"
 import { StatIcon } from "@/components/StatIcon"
 import { AddInternshipModal } from "@/components/AddInternshipModal"
 import { LevelUpCelebration } from "@/components/LevelUpCelebration"
+import { AchievementPopup } from "@/components/AchievementPopup"
+import { ReviewPrompt } from "@/components/ReviewPrompt"
 import { createClient } from "@/lib/supabase/client"
 import { MomoFace } from "@/components/MascotAvatar"
 import { isMascot, moodOf } from "@/lib/mascot"
@@ -55,10 +57,14 @@ const TITLES: Record<string, string> = {
 export function AppShell({
   profile,
   internshipCount,
+  achievementCount = 0,
+  newAchievements = [],
   children,
 }: {
   profile: ProfileStats
   internshipCount: number
+  achievementCount?: number
+  newAchievements?: string[]
   children: React.ReactNode
 }) {
   const pathname = usePathname()
@@ -75,6 +81,8 @@ export function AppShell({
       ? "Group"
       : "Sloe")
   const name = profile.full_name || "You"
+  const lvTarget = profile.level * 200
+  const lvPct = Math.min(100, Math.max(0, Math.round(((profile.xp - (profile.level - 1) * 200) / 200) * 100)))
 
   async function signOut() {
     const supabase = createClient()
@@ -106,7 +114,7 @@ export function AppShell({
           {navItem(NAV[1], internshipCount)}
           {navItem(NAV[2])}
           {navItem(NAV[3])}
-          {navItem(NAV[4])}
+          {navItem(NAV[4], achievementCount)}
           {navItem(NAV[5])}
           <div className="iq-nav__label">Account</div>
           {navItem(NAV_ACCOUNT[0])}
@@ -153,6 +161,14 @@ export function AppShell({
           <button className="iq-btn iq-btn--primary" onClick={() => setAddOpen(true)}>
             <Icon name="ic-plus" className="ic ic-18" /> <span className="iq-btn__text">Add Internship</span>
           </button>
+          <Link
+            href="/profile"
+            className="iq-lvlmini"
+            title={"Level " + profile.level + " · " + profile.xp + "/" + lvTarget + " XP"}
+          >
+            <span className="iq-lvlmini__lv">Lv {profile.level}</span>
+            <span className="iq-lvlmini__track"><i style={csx("width:" + lvPct + "%")} /></span>
+          </Link>
           <Link href="/profile" className="iq-topbar__av" aria-label="Profile">
             {profile.avatar_url && !isMascot(profile.avatar_url) ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -175,6 +191,8 @@ export function AppShell({
       </nav>
 
       <LevelUpCelebration level={profile.level} />
+      <AchievementPopup achievements={newAchievements} />
+      <ReviewPrompt profileName={profile.full_name} />
       <AddInternshipModal open={addOpen} onClose={() => setAddOpen(false)} />
     </div>
   )

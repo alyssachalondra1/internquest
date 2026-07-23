@@ -30,9 +30,8 @@ export function StreakCelebration({ streak }: { streak: number }) {
   return (
     <div className="iq-streakpop-scrim" onClick={() => setShow(false)}>
       <div className="iq-streakpop" onClick={(e) => e.stopPropagation()}>
-        <HeroMascot src="/mascot-streak.png" size={140} />
-        <div className="iq-streakpop__num">{streak}</div>
-        <b>{streak === 1 ? "Day streak started!" : "Day streak!"}</b>
+        <HeroMascot src="/mascot-streak.png" size={150} className="iq-streakpop__mascot" />
+        <b>{streak === 1 ? "Day streak started!" : streak + " day streak!"}</b>
         <p>You showed up again today. Keep the fire going!</p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { AppShell, type ProfileStats } from "@/components/AppShell"
+import { getUnseenAchievements } from "@/app/actions/gamification"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -20,6 +21,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id)
 
+  const newAchievements = await getUnseenAchievements()
+
   const stats: ProfileStats = {
     full_name: profile?.full_name ?? user.email ?? "there",
     level: profile?.level ?? 1,
@@ -30,7 +33,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <AppShell profile={stats} internshipCount={count ?? 0}>
+    <AppShell
+      profile={stats}
+      internshipCount={count ?? 0}
+      achievementCount={newAchievements.length}
+      newAchievements={newAchievements}
+    >
       {children}
     </AppShell>
   )
