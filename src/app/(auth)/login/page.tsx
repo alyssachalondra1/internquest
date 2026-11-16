@@ -1,12 +1,36 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import Script from "next/script"
 import { Momo } from "@/components/Momo"
 import { HeroMascot } from "@/components/HeroMascot"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { csx } from "@/lib/csx"
+
+// Minimal Google Identity Services surface — used directly so we don't pull in
+// a dependency just to render one button.
+type GsiId = {
+  initialize: (options: {
+    client_id: string
+    callback: (response: { credential: string }) => void
+    ux_mode?: "popup" | "redirect"
+    auto_select?: boolean
+  }) => void
+  renderButton: (parent: HTMLElement, options: Record<string, unknown>) => void
+}
+
+declare global {
+  interface Window {
+    google?: { accounts?: { id?: GsiId } }
+  }
+}
+
+// Public Google OAuth client id. When set, Google sign-in runs entirely on our
+// own origin (no *.supabase.co hop); when unset we fall back to the redirect flow.
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+const REDIRECT_PATH = "/auth/callback?next=/dashboard"
 
 const TAGLINES = [
   "Your AI companion for the internship hunt",
@@ -36,6 +60,8 @@ export default function LoginPage() {
   const [msg, setMsg] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [slide, setSlide] = useState(0)
+  const gsiMountRef = useRef<HTMLDivElement>(null)
+  const gsiReadyRef = useRef(false)
 
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % TAGLINES.length), 3000)
@@ -54,14 +80,61 @@ export default function LoginPage() {
     }
   }, [])
 
-  async function google() {
+  // Fallback only (no client id configured): the redirect flow, which exposes
+  // the *.supabase.co domain.
+  async function googleRedirect() {
     setLoading(true)
     const supabase = createClient()
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin + "/auth/callback?next=/dashboard" },
+      options: { redirectTo: window.location.origin + REDIRECT_PATH },
     })
   }
+
+  // Google Identity Services: sign in with the Google-issued ID token on our
+  // own origin — no page ever touches *.supabase.co.
+  const initGoogle = useCallback(() => {
+      const gsi = window.google?.accounts?.id
+      const mount = gsiMountRef.current
+      if (!GOOGLE_CLIENT_ID || !gsi || !mount) return
+      // initialize() once; the welcome step can remount, so the button itself is
+      // re-rendered on every mount (a fresh mount node is empty).
+      if (!gsiReadyRef.current) {
+        gsiReadyRef.current = true
+        gsi.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          ux_mode: "popup",
+          callback: async (res) => {
+            setLoading(true)
+            const supabase = createClient()
+            const { error } = await supabase.auth.signInWithIdToken({ provider: "google", token: res.credential })
+            if (error) {
+              setMsg("Google sign-in failed. Please try again.")
+              setLoading(false)
+              return
+            }
+            router.push("/dashboard")
+            router.refresh()
+          },
+        })
+      }
+      // Render Google's own button invisibly on top of our styled button: the
+      // visual design stays, and the clickable control is Google's real button.
+      mount.innerHTML = ""
+      gsi.renderButton(mount, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        shape: "rectangular",
+        text: "continue_with",
+        logo_alignment: "left",
+        width: Math.min(400, Math.round(mount.offsetWidth || 320)),
+      })
+    }, [router])
+
+  useEffect(() => {
+    if (step === "welcome") initGoogle()
+  }, [step, initGoogle])
 
   async function passwordAuth() {
     setMsg(null)
@@ -150,6 +223,7 @@ export default function LoginPage() {
 
   return (
     <section className="iq-auth">
+      <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={initGoogle} />
       <div className="iq-auth__hero" style={csx("background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)")}>
         <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
         <div key={"tag-" + slide} className="iq-auth__tag iq-slidein" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
@@ -169,9 +243,21 @@ export default function LoginPage() {
                 <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome! 👋</h1>
                 <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for internships.</p>
                 {msg && <p style={csx("color:var(--red-text);margin-bottom:12px;font-size:13px;text-align:center")}>{msg}</p>}
-                <button className="iq-authbtn iq-authbtn--google" onClick={google} disabled={loading}>
-                  <b style={csx("color:#4285F4;font-size:17px")}>G</b> Continue with Google
-                </button>
+                {GOOGLE_CLIENT_ID ? (
+                  <div className="iq-google" style={csx("position:relative")}>
+                    <div className="iq-authbtn iq-authbtn--google" style={csx("pointer-events:none")} aria-hidden="true">
+                      <b style={csx("color:#4285F4;font-size:17px")}>G</b> Continue with Google
+                    </div>
+                    <div
+                      ref={gsiMountRef}
+                      style={csx("position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;opacity:0")}
+                    />
+                  </div>
+                ) : (
+                  <button className="iq-authbtn iq-authbtn--google" onClick={googleRedirect} disabled={loading}>
+                    <b style={csx("color:#4285F4;font-size:17px")}>G</b> Continue with Google
+                  </button>
+                )}
                 <p className="muted center" style={csx("font-size:12px;margin:-4px 0 12px")}>Fastest way in, no password to remember</p>
                 <div className="iq-divider-or">or use email</div>
                 <button className="iq-authbtn" onClick={() => { setStep("password"); setMsg(null) }}>

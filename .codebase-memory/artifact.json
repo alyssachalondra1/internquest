@@ -1,0 +1,11 @@
+{
+    "schema_version": 2,
+    "commit": "72845feb046b66e0dced07b2204cb7ae8873ea78",
+    "indexed_at": "2026-11-09T09:02:51Z",
+    "project": "internquest",
+    "nodes": 555,
+    "edges": 1376,
+    "original_size": 4587520,
+    "compressed_size": 593208,
+    "compression_level": 9
+}
