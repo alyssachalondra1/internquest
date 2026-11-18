@@ -28,7 +28,7 @@ export async function addGems(amount: number) {
 /**
  * Daily streak: counts one visit per calendar day (Asia/Jakarta). Opening the
  * app on consecutive days grows the streak; a missed day resets it to 1.
- * Also grants login gems (20 on the very first visit, +2 each new day).
+ * Also grants login gems (5 on the very first visit, +1 each new day).
  * Safe to call on every page load: it only writes once per day.
  */
 export async function touchStreak() {
@@ -50,11 +50,11 @@ export async function touchStreak() {
     const prevStreak = (data?.streak_count as number | null) ?? 0
     const prevGems = (data?.gems as number | null) ?? 0
     let streak = 1
-    let bonus = 20 // welcome gems on the very first visit
+    let bonus = 5 // welcome gems on the very first visit
     if (last) {
       const diff = Math.round((Date.parse(today) - Date.parse(last)) / 86400000)
       streak = diff === 1 ? prevStreak + 1 : 1
-      bonus = 5 // daily login gems
+      bonus = 1 // daily login gems
     }
     // Milestone: every 7-day streak grants a big bonus.
     if (streak > 0 && streak % 7 === 0) bonus += 15
@@ -74,7 +74,7 @@ export async function touchStreak() {
  * page. Safe to call on page loads and after status changes.
  */
 export async function syncAchievementGems() {
-  const ACHIEVEMENT_GEMS = 25
+  const ACHIEVEMENT_GEMS = 0 // badges no longer grant gems; rewards are premium-gated
   try {
     const supabase = await createClient()
     const {

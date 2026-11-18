@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
-import { generateWithRetry, LITE_MODEL, PRIMARY_MODEL, friendlyAiError } from "@/lib/ai"
+import { generateWithRetry, friendlyAiError } from "@/lib/ai"
 import { createClient } from "@/lib/supabase/server"
+import { consumeAiCredit, quotaBlocked, readQuota } from "@/lib/quota"
+import { logAiUsage } from "@/lib/usage"
 
 export const runtime = "nodejs"
 
@@ -18,6 +20,11 @@ export async function POST(req: Request) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 })
+
+    // Server-side AI quota gate (one action per successful match).
+    const quota = await readQuota(supabase, user.id)
+    const blocked = quotaBlocked("ai", quota)
+    if (blocked) return NextResponse.json({ ok: false, ...blocked }, { status: 402 })
 
     const { data: prof } = await supabase
       .from("profiles")
@@ -60,12 +67,11 @@ export async function POST(req: Request) {
       (portfolioText ? "APPLICANT PORTFOLIO:\n" + portfolioText + "\n\n" : "") +
       "APPLICANT CV:\n" + String(prof.cv_text).slice(0, 6000)
 
-    const raw = stripFences(
-      await generateWithRetry(prompt, {
-        models: [LITE_MODEL, PRIMARY_MODEL],
-        generationConfig: { responseMimeType: "application/json" },
-      }),
-    )
+    const ai = await generateWithRetry(prompt, {
+      tier: quota.plan,
+      generationConfig: { responseMimeType: "application/json" },
+    })
+    const raw = stripFences(ai.text)
     const parsed = JSON.parse(raw)
     const score = Math.max(0, Math.min(100, Math.round(Number(parsed.score) || 0)))
     const reasons = String(parsed.reasons || "")
@@ -88,6 +94,10 @@ export async function POST(req: Request) {
       .update({ match_score: score, match_reasons: reasons })
       .eq("id", internship_id)
       .eq("user_id", user.id)
+
+    // Record token/cost, then consume one AI action only after a successful match.
+    await logAiUsage(supabase, user.id, "match", ai)
+    await consumeAiCredit(supabase, "ai")
 
     return NextResponse.json({ ok: true, score, reasons, companyScore, companyNote, recommendations })
   } catch (err: any) {

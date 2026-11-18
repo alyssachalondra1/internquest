@@ -98,8 +98,13 @@ function AiInner() {
   }
 
   async function save() {
-    await saveGeneration({ internship_id: internshipId, answer_type: type, tone, length, content: output })
-    setSaved(true)
+    try {
+      await saveGeneration({ internship_id: internshipId, answer_type: type, tone, length, content: output })
+      setSaved(true)
+    } catch {
+      setSaved(false)
+      setGenError("We couldn't save this generation. Please try again.")
+    }
   }
 
   return (

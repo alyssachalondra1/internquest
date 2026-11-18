@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server"
-import { friendlyAiError, generateWithRetry, LITE_MODEL, PRIMARY_MODEL } from "@/lib/ai"
+import { friendlyAiError, generateWithRetry } from "@/lib/ai"
+import { createClient } from "@/lib/supabase/server"
+import { consumeAiCredit, quotaBlocked, readQuota } from "@/lib/quota"
+import { logAiUsage } from "@/lib/usage"
 
 export const runtime = "nodejs"
 
@@ -93,6 +96,17 @@ export async function POST(req: Request) {
       : []
     const separate = multi_mode === "separate" && urls.length > 1
 
+    // Server-side auth + quota gate. Image extractions consume a screenshot credit.
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 })
+    const kind: "ai" | "shot" = urls.length ? "shot" : "ai"
+    const quota = await readQuota(supabase, user.id)
+    const quotaMsg = quotaBlocked(kind, quota)
+    if (quotaMsg) return NextResponse.json({ ok: false, ...quotaMsg }, { status: 402 })
+
     const parts: any[] = [{ text: separate ? SEPARATE_PROMPT : SINGLE_PROMPT }]
 
     let fetched = ""
@@ -128,13 +142,16 @@ export async function POST(req: Request) {
       }
     }
 
-    const raw = stripFences(
-      await generateWithRetry(parts, {
-        models: [LITE_MODEL, PRIMARY_MODEL],
-        generationConfig: { responseMimeType: "application/json" },
-      }),
-    )
+    const ai = await generateWithRetry(parts, {
+      tier: quota.plan,
+      generationConfig: { responseMimeType: "application/json" },
+    })
+    const raw = stripFences(ai.text)
     const parsed = JSON.parse(raw)
+
+    // Record token/cost; one AI action per successful extraction (retries don't count).
+    await logAiUsage(supabase, user.id, kind, ai)
+    await consumeAiCredit(supabase, kind)
 
     if (separate) {
       const arr: any[] = Array.isArray(parsed)
@@ -151,12 +168,12 @@ export async function POST(req: Request) {
 
     const isInstagram = !!source_url && /instagram\.com/i.test(source_url)
     const isLinkedin = !!source_url && /linkedin\.com/i.test(source_url)
-    const blocked = (isInstagram || isLinkedin) && !fetched && !parsed.company_name
+    const blockedSite = (isInstagram || isLinkedin) && !fetched && !parsed.company_name
     let warning: string | undefined
-    if (isInstagram && blocked) {
+    if (isInstagram && blockedSite) {
       warning =
         "Instagram does not allow automatic reading of posts. For the best result, upload a screenshot of the poster image from the post so AI can read it directly."
-    } else if (isLinkedin && blocked) {
+    } else if (isLinkedin && blockedSite) {
       warning =
         "LinkedIn limits automatic access, so some fields may be empty. Fill them in manually, or copy and paste the job text using the Paste JD option."
     }

@@ -15,7 +15,7 @@ export async function saveGeneration(input: {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return
-  await supabase.from("ai_generations").insert({
+  const { error } = await supabase.from("ai_generations").insert({
     user_id: user.id,
     internship_id: input.internship_id ?? null,
     answer_type: input.answer_type,
@@ -24,5 +24,9 @@ export async function saveGeneration(input: {
     content: input.content,
     model: "gemini-3.1-flash-lite",
   })
+  if (error) {
+    console.error("[saveGeneration] insert failed:", error.message)
+    throw new Error("Could not save this generation")
+  }
   revalidatePath("/ai")
 }

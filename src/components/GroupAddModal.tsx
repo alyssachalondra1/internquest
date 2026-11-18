@@ -34,7 +34,7 @@ const EMPTY: Form = {
   notes: "",
 }
 
-async function compressImage(file: File, max = 1400, quality = 0.82): Promise<Blob> {
+async function compressImage(file: File, max = 768, quality = 0.82): Promise<Blob> {
   try {
     if (!file.type.startsWith("image/")) return file
     const bitmap = await createImageBitmap(file)

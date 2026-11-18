@@ -54,7 +54,7 @@ function fromExtracted(d: any, poster_url: string | null): NewInternship {
 }
 
 // Compress and resize the poster image before upload so upload and AI reading are much faster.
-async function compressImage(file: File, max = 1400, quality = 0.82): Promise<Blob> {
+async function compressImage(file: File, max = 768, quality = 0.82): Promise<Blob> {
   try {
     if (!file.type.startsWith("image/")) return file
     const bitmap = await createImageBitmap(file)

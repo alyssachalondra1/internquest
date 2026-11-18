@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { generateWithRetry, friendlyAiError } from "@/lib/ai"
 import { createClient } from "@/lib/supabase/server"
+import { consumeAiCredit, quotaBlocked, readQuota } from "@/lib/quota"
+import { logAiUsage } from "@/lib/usage"
 
 export const runtime = "nodejs"
 
@@ -35,62 +37,36 @@ export async function POST(req: Request) {
       context = "",
     } = body as Record<string, string>
 
-    // Gems gating: generating polished AI text costs gems.
-    const GEN_COST = 3
-    let gateSupabase: any = null
-    let gateUser: any = null
-    try {
-      gateSupabase = await createClient()
-      const {
-        data: { user },
-      } = await gateSupabase.auth.getUser()
-      gateUser = user
-      if (user) {
-        const { data: bal } = await gateSupabase.from("profiles").select("gems").eq("id", user.id).single()
-        const gems = (bal?.gems as number | null) ?? 0
-        if (gems < GEN_COST) {
-          return NextResponse.json(
-            {
-              ok: false,
-              needGems: true,
-              error:
-                "Not enough gems. You need " +
-                GEN_COST +
-                " gems to generate. Earn gems by opening Sloe daily, adding internships, completing checklist items, and reaching Interview or Offer.",
-            },
-            { status: 402 },
-          )
-        }
-      }
-    } catch {
-      // If the balance check fails, allow generation rather than blocking the user.
-    }
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 })
+
+    // Server-side AI quota gate (one action per successful generation).
+    const quota = await readQuota(supabase, user.id)
+    const blocked = quotaBlocked("ai", quota)
+    if (blocked) return NextResponse.json({ ok: false, ...blocked }, { status: 402 })
 
     // Ambil CV, minat, dan portfolio user (bila ada) untuk personalisasi hasil.
     let cvText = ""
     let interests = ""
     let portfolioText = ""
     try {
-      const supabase = await createClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        const { data: prof } = await supabase
-          .from("profiles")
-          .select("cv_text, interests")
-          .eq("id", user.id)
-          .single()
-        if (prof?.cv_text) cvText = String(prof.cv_text).slice(0, 6000)
-        if (prof?.interests) interests = String(prof.interests)
-        // Portfolio diambil terpisah agar aman bila kolomnya belum ada.
-        const { data: p2 } = await supabase
-          .from("profiles")
-          .select("portfolio_text")
-          .eq("id", user.id)
-          .single()
-        if (p2?.portfolio_text) portfolioText = String(p2.portfolio_text).slice(0, 4000)
-      }
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("cv_text, interests")
+        .eq("id", user.id)
+        .single()
+      if (prof?.cv_text) cvText = String(prof.cv_text).slice(0, 6000)
+      if (prof?.interests) interests = String(prof.interests)
+      // Portfolio diambil terpisah agar aman bila kolomnya belum ada.
+      const { data: p2 } = await supabase
+        .from("profiles")
+        .select("portfolio_text")
+        .eq("id", user.id)
+        .single()
+      if (p2?.portfolio_text) portfolioText = String(p2.portfolio_text).slice(0, 4000)
     } catch {
       // abaikan, tetap bisa generate tanpa CV
     }
@@ -113,18 +89,12 @@ export async function POST(req: Request) {
       "Do NOT use the em dash or en dash character; use commas or full stops instead. Avoid overusing colons. " +
       "Do not use the fire emoji or excessive emojis. Output only the final text, ready to copy."
 
-    const content = await generateWithRetry(prompt)
+    const ai = await generateWithRetry(prompt, { tier: quota.plan })
+    const content = ai.text
 
-    // Deduct gems only after a successful generation.
-    try {
-      if (gateSupabase && gateUser) {
-        const { data: bal2 } = await gateSupabase.from("profiles").select("gems").eq("id", gateUser.id).single()
-        const cur = (bal2?.gems as number | null) ?? 0
-        await gateSupabase.from("profiles").update({ gems: Math.max(0, cur - GEN_COST) }).eq("id", gateUser.id)
-      }
-    } catch {
-      // ignore deduction errors
-    }
+    // Record token/cost, then consume one AI action only after success.
+    await logAiUsage(supabase, user.id, "generate", ai)
+    await consumeAiCredit(supabase, "ai")
 
     return NextResponse.json({ ok: true, content })
   } catch (err: any) {
