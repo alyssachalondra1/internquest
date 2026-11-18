@@ -5,6 +5,14 @@
       "args": [],
       "disabled": false,
       "timeout": 120
+    },
+    "obsidian_vault": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:/Users/alyss/OneDrive/Documents/Internquest_Brain"
+      ]
     }
   }
 }
