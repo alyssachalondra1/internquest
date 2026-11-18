@@ -51,8 +51,10 @@ function hasImage(parts: any): boolean {
 
 function defaultModels(tier: string, image: boolean): string[] {
   const premium = tier === "plus" || tier === "pro"
+  // Vision: Gemini Flash Lite for ALL tiers — DeepSeek vision under-reads
+  // Indonesian posters (missed role lists and date ranges). Text stays tier-based.
   if (image) {
-    return premium ? [PREMIUM_VISION_MODEL, FREE_VISION_MODEL] : [FREE_VISION_MODEL, PREMIUM_VISION_MODEL]
+    return [PREMIUM_VISION_MODEL, FREE_VISION_MODEL]
   }
   return premium ? [PREMIUM_TEXT_MODEL, FREE_TEXT_MODEL] : [FREE_TEXT_MODEL, PREMIUM_TEXT_MODEL]
 }

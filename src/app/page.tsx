@@ -8,8 +8,8 @@ import { createClient } from "@/lib/supabase/server"
 import { csx } from "@/lib/csx"
 
 export const metadata = {
-  title: "Sloe - Your AI internship companion",
-  description: "Find, track, and win internships with an AI companion that keeps you organized and motivated.",
+  title: "Sloe",
+  description: "Find, track, and win opportunities with an AI companion that keeps you organized and motivated.",
 }
 
 const FEATURES = [

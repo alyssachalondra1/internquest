@@ -8,7 +8,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sloe.my.id"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Sloe \u2014 Your AI internship companion",
+    default: "Sloe",
     template: "%s \u00b7 Sloe",
   },
   description:

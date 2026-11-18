@@ -13,7 +13,7 @@ function stripFences(s: string) {
 // Shared description of every field we want back from the model.
 const SHAPE = `{
   "company_name": string,
-  "role": string,
+  "role": string,            // list ALL position titles visible, comma-separated; never summarize
   "location": string,
   "work_type": "on-site" | "remote" | "hybrid" | "",
   "is_paid": boolean,
@@ -30,6 +30,8 @@ const SHAPE = `{
 const RULES = `Rules:
 - Use "" or 0 when a field is missing. Do not invent data.
 - If a registration PERIOD is shown (for example "12 to 30 July" or "open until 30 July"), set open_date to the start of the period and deadline to the end of the period, and set deadline_type to "date".
+- role: list EVERY position/role title visible, comma-separated (e.g. "ESG Data Analyst, Electrical Engineering, HSE"). Never summarize as "Engineering and Administrative roles".
+- Timelines: read each phase separately. Put the REGISTRATION (Pendaftaran/Registrasi) start in open_date and its end in deadline. Do NOT use selection (Seleksi) or announcement (Pengumuman) end dates as the registration deadline.
 - deadline_type: use "date" when a specific closing date is given. Use "urgent" when it says urgent / immediately / segera / dibutuhkan cepat. Use "until_filled" when it says open until filled / rolling / sampai posisi terisi. Use "asap" when it says as soon as possible / secepatnya with no specific date.
 - When deadline_type is not "date", set deadline to "". If the source hints at a rough time (e.g. "around June", "sekitar Juli"), put that short phrase in timing_note; otherwise leave timing_note as "".
 - If the source contains a link to apply or register (a full URL, bit.ly, tinyurl, s.id, Google Form, or an "apply here / register at" link), put it EXACTLY as written into source_url.
