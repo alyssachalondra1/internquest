@@ -27,6 +27,7 @@ export function ProfileExtras({
   hasPortfolio,
   portfolioName,
   avatarUrl,
+  plan,
 }: {
   hasCv: boolean
   cvName: string | null
@@ -34,6 +35,7 @@ export function ProfileExtras({
   hasPortfolio: boolean
   portfolioName: string | null
   avatarUrl: string | null
+  plan: string
 }) {
   const router = useRouter()
   const cvRef = useRef<HTMLInputElement>(null)
@@ -50,6 +52,7 @@ export function ProfileExtras({
   const [avaBusy, setAvaBusy] = useState(false)
   const [avaErr, setAvaErr] = useState<string | null>(null)
   const [ava, setAva] = useState<string | null>(avatarUrl)
+  const isFree = plan === "free"
 
   async function uploadPdf(file: File, prefix: string) {
     const supabase = createClient()
@@ -89,6 +92,10 @@ export function ProfileExtras({
   }
 
   async function onPickPortfolio(e: React.ChangeEvent<HTMLInputElement>) {
+    if (isFree) {
+      setPfErr("Portfolio upload is a Sloe Plus/Pro feature. Upgrade to unlock it.")
+      return
+    }
     const file = e.target.files?.[0]
     if (!file) return
     setPfBusy(true)
@@ -158,11 +165,19 @@ export function ProfileExtras({
 
       <div className="iq-form-row">
         <label>Portfolio (PDF), also read by AI for more relevant results</label>
-        <input ref={pfRef} type="file" accept="application/pdf" hidden onChange={onPickPortfolio} />
-        <div className={"iq-cvbox" + (pfLabel ? " is-set" : "")} onClick={() => !pfBusy && pfRef.current?.click()}>
-          {pfBusy ? "Reading your portfolio with AI…" : pfLabel ? "✓ " + pfLabel + " · click to replace" : "Click to upload your Portfolio (PDF)"}
-        </div>
-        {pfErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{pfErr}</p>}
+        {isFree ? (
+          <div className="iq-cvbox" style={csx("opacity:.75;cursor:not-allowed")}>
+            🔒 Portfolio upload is a Plus/Pro feature — upgrade to unlock it.
+          </div>
+        ) : (
+          <>
+            <input ref={pfRef} type="file" accept="application/pdf" hidden onChange={onPickPortfolio} />
+            <div className={"iq-cvbox" + (pfLabel ? " is-set" : "")} onClick={() => !pfBusy && pfRef.current?.click()}>
+              {pfBusy ? "Reading your portfolio with AI…" : pfLabel ? "✓ " + pfLabel + " · click to replace" : "Click to upload your Portfolio (PDF)"}
+            </div>
+            {pfErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{pfErr}</p>}
+          </>
+        )}
       </div>
 
       <div className="iq-form-row">

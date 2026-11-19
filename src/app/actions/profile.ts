@@ -43,6 +43,11 @@ export async function savePortfolio(input: { portfolio_url: string; portfolio_te
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return
+  // Server-side entitlement: portfolio upload is not available on the Free plan.
+  const { data: prof } = await supabase.from("profiles").select("plan").eq("id", user.id).single()
+  if ((((prof as any)?.plan as string) ?? "free") === "free") {
+    throw new Error("Portfolio upload is a Sloe Plus/Pro feature. Upgrade to unlock it.")
+  }
   await supabase
     .from("profiles")
     .update({ portfolio_url: input.portfolio_url, portfolio_text: input.portfolio_text })

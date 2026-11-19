@@ -55,6 +55,13 @@ export default async function ProfilePage() {
     portfolio = (data as any) ?? null
   } catch {}
 
+  // Plan is read separately so the page still renders if the column is missing.
+  let plan = "free"
+  try {
+    const { data } = await supabase.from("profiles").select("plan").eq("id", user!.id).single()
+    plan = ((data as any)?.plan as string) || "free"
+  } catch {}
+
   const level = profile?.level ?? 1
   const xp = profile?.xp ?? 0
   const target = level * 200
@@ -94,7 +101,7 @@ export default async function ProfilePage() {
             <div className="iq-field"><span className="iq-field__k">Email</span><span className="iq-field__v">{profile?.email || user?.email}</span></div>
             <div className="iq-field"><span className="iq-field__k">Level</span><span className="iq-field__v">{level}</span></div>
           </div>
-          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} />
+          <ProfileExtras hasCv={hasCv} cvName={cvName} interests={extra?.interests ?? null} hasPortfolio={hasPortfolio} portfolioName={portfolioName} avatarUrl={profile?.avatar_url ?? null} plan={plan} />
           <div className="iq-card iq-card__pad iq-mobile-only">
             <h3 className="mb-4">Account</h3>
             <LogoutButton />
