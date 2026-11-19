@@ -616,39 +616,155 @@ body{background:var(--canvas)}
 /* ============================================================
    Landing page (#3)
    ============================================================ */
-.iq-lp{min-height:100vh;background:radial-gradient(1100px 560px at 82% -12%,rgba(124,92,255,.18),transparent),radial-gradient(900px 500px at -12% 6%,rgba(47,107,255,.16),transparent),var(--canvas)}
-.iq-lp__nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:20px 24px}
-.iq-lp__wrap{max-width:1120px;margin:0 auto;padding:0 24px 40px}
-.iq-lp__hero{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;padding:36px 0 24px}
-.iq-lp__badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,92,255,.12);color:var(--violet-text);font-weight:800;font-size:13px;padding:7px 14px;border-radius:999px;margin-bottom:18px}
-.iq-lp__title{font-size:46px;line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
-.iq-lp__grad{background:linear-gradient(120deg,#3B76FF,#7C5CFF);-webkit-background-clip:text;background-clip:text;color:transparent}
-.iq-lp__sub{font-size:17px;color:var(--ink-2);max-width:520px;margin-bottom:24px;line-height:1.6}
-.iq-lp__cta{display:flex;gap:12px;flex-wrap:wrap}
-.iq-lp__art{background:linear-gradient(135deg,#6D4BFF,#3B76FF);border-radius:30px;padding:30px;color:#fff;box-shadow:0 24px 50px rgba(59,76,255,.3);position:relative;overflow:hidden}
-.iq-lp__art h3{color:#fff;margin-bottom:14px}
-.iq-lp__arti{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.14);border-radius:16px;padding:12px 14px;margin-bottom:10px;font-weight:700;font-size:14px}
-.iq-lp__sec{padding:44px 0}
-.iq-lp__h2{font-size:30px;text-align:center;margin-bottom:8px}
-.iq-lp__lead{text-align:center;color:var(--ink-2);max-width:560px;margin:0 auto 30px;line-height:1.6}
-.iq-lp__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.iq-lp__card{background:#fff;border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:0 8px 24px rgba(20,27,46,.05)}
-.iq-lp__card h3{margin-bottom:6px}
-.iq-lp__card p{color:var(--ink-2);font-size:14px;line-height:1.55}
-.iq-lp__ic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff}
-.iq-lp__steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.iq-lp__step{background:#fff;border:1px solid var(--border);border-radius:20px;padding:22px}
-.iq-lp__step p{color:var(--ink-2);font-size:13.5px;line-height:1.55;margin-top:4px}
-.iq-lp__num{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#3B76FF,#7C5CFF);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-.iq-lp__cta-band{background:linear-gradient(135deg,#6D4BFF,#3B76FF);border-radius:28px;padding:44px 28px;text-align:center;color:#fff;box-shadow:0 20px 44px rgba(59,76,255,.26);margin:28px 0}
-.iq-lp__cta-band h2{color:#fff;font-size:30px;margin-bottom:10px}
-.iq-lp__cta-band p{color:rgba(255,255,255,.92);margin-bottom:20px}
-.iq-lp__foot{text-align:center;padding:26px 0 40px;color:var(--ink-3);font-size:13px}
-@media(max-width:860px){
-  .iq-lp__hero{grid-template-columns:1fr}
-  .iq-lp__title{font-size:34px}
-  .iq-lp__cards,.iq-lp__steps{grid-template-columns:1fr}
-  .iq-lp__sec{padding:30px 0}
+/* --- Landing: "study desk" — warm paper, blue ink, one yellow sticky note.
+   Chrome stays quiet; colour lives in the mascot print and the note. --- */
+.iq-lp{
+  --lp-paper:#F7F4EE;
+  --lp-card:#FDFBF7;
+  --lp-ink:#1A1712;
+  --lp-ink-2:#5E5648;
+  --lp-ink-3:#7B7266;
+  --lp-line:rgba(26,23,18,.12);
+  --lp-line-2:rgba(26,23,18,.06);
+  --lp-blue:#2F6BFF;
+  --lp-blue-ink:#1F4FD1;
+  --lp-note:#FEE362;
+  --lp-note-ink:#4A3B00;
+  --lp-mono:ui-monospace,"SFMono-Regular","Cascadia Mono",Menlo,Consolas,monospace;
+  min-height:100vh;background:var(--lp-paper);color:var(--lp-ink);
+}
+.iq-lp__mono{font-family:var(--lp-mono);font-variant-numeric:tabular-nums;letter-spacing:0}
+
+/* Buttons inside the landing use one control radius, not the app pill */
+.iq-lp .iq-btn{border-radius:10px;height:48px;padding:0 20px;font-weight:500;font-size:15px;transition:background .15s ease,border-color .15s ease,color .15s ease,transform .12s ease}
+.iq-lp .iq-btn--sm{height:38px;padding:0 16px;font-size:14px;border-radius:8px}
+.iq-lp .iq-btn--primary{background:var(--lp-blue);color:#fff}
+.iq-lp .iq-btn--primary:hover{background:var(--lp-blue-ink);filter:none}
+.iq-lp .iq-btn--ghost{background:transparent;color:var(--lp-ink);border:1px solid var(--lp-line)}
+.iq-lp .iq-btn--ghost:hover{background:rgba(26,23,18,.04)}
+.iq-lp .iq-btn:active{transform:translateY(1px)}
+.iq-lp :focus-visible{outline:2px solid var(--lp-blue);outline-offset:2px}
+
+.iq-lp__nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:32px;padding:20px 32px}
+.iq-lp__wordmark{font-size:21px;font-weight:600;letter-spacing:-.02em;color:var(--lp-ink);text-decoration:none;line-height:1}
+.iq-lp__navlinks{display:flex;gap:28px;flex:1}
+.iq-lp__navlinks a{font-size:14px;color:var(--lp-ink-2);text-decoration:none}
+.iq-lp__navlinks a:hover{color:var(--lp-ink)}
+.iq-lp__navactions{display:flex;align-items:center;gap:20px}
+.iq-lp__login{font-size:14px;color:var(--lp-ink);text-decoration:none}
+.iq-lp__login:hover{text-decoration:underline;text-underline-offset:3px}
+
+.iq-lp__wrap{max-width:1120px;margin:0 auto;padding:0 32px 48px}
+.iq-lp__hero{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center;padding:56px 0 72px;min-height:min(620px,calc(100vh - 120px))}
+.iq-lp__eyebrow{font-family:var(--lp-mono);font-size:12px;color:var(--lp-ink-3);margin-bottom:20px}
+.iq-lp__title{font-size:clamp(34px,4.4vw,56px);line-height:1.06;letter-spacing:-.025em;font-weight:500;color:var(--lp-ink);margin-bottom:20px;max-width:16ch}
+.iq-lp__sub{font-size:17px;line-height:1.65;color:var(--lp-ink-2);max-width:50ch;margin-bottom:28px}
+.iq-lp__cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.iq-lp__fineprint{font-size:13px;color:var(--lp-ink-3);margin-top:20px}
+
+/* Desk stack: a printed mascot, the product preview, and the sticky note */
+.iq-lp__desk{position:relative;padding-bottom:64px}
+.iq-lp__print{position:relative;width:272px;margin-left:auto;background:#fff;padding:8px;border:1px solid var(--lp-line);border-radius:10px;transform:rotate(2deg);box-shadow:0 10px 26px rgba(26,23,18,.10)}
+.iq-lp__printimg{border-radius:4px;overflow:hidden}
+.iq-lp__preview{position:relative;background:var(--lp-card);border:1px solid var(--lp-line);border-radius:14px;padding:20px 20px 16px;margin-top:-32px;margin-right:28px;box-shadow:0 14px 34px rgba(26,23,18,.08)}
+.iq-lp__preview-head{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:13px;color:var(--lp-ink-2);padding-bottom:12px;border-bottom:1px solid var(--lp-line)}
+.iq-lp__preview-head .iq-lp__mono{font-size:12px;color:var(--lp-ink-3)}
+.iq-lp__prow{display:grid;grid-template-columns:8px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--lp-line-2)}
+.iq-lp__prow:last-of-type{border-bottom:0}
+.iq-lp__dot{width:8px;height:8px;border-radius:50%;display:block}
+.iq-lp__dot--blue{background:var(--lp-blue)}
+.iq-lp__dot--yellow{background:#B58900}
+.iq-lp__dot--green{background:#2FA23C}
+.iq-lp__prow-role{font-size:14px;font-weight:500;color:var(--lp-ink);line-height:1.3}
+.iq-lp__prow-company{font-size:12.5px;color:var(--lp-ink-3);margin-top:2px}
+.iq-lp__prow-status{font-family:var(--lp-mono);font-size:11.5px;color:var(--lp-ink-2);white-space:nowrap}
+.iq-lp__preview-foot{font-size:12px;color:var(--lp-ink-3);padding-top:12px;border-top:1px solid var(--lp-line-2);margin-top:2px}
+
+/* Signature detail: a slanted yellow note that always carries one number */
+.iq-lp__note{position:absolute;left:0;bottom:-19px;width:172px;background:var(--lp-note);color:var(--lp-note-ink);padding:12px 14px;border-radius:2px;transform:rotate(-3deg);box-shadow:0 8px 18px rgba(26,23,18,.18)}
+.iq-lp__note-num{display:block;font-family:var(--lp-mono);font-size:26px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.iq-lp__note-label{display:block;font-size:12px;line-height:1.35;margin-top:4px}
+
+.iq-lp__sec{padding:64px 0;border-top:1px solid var(--lp-line)}
+.iq-lp__sechead{max-width:620px;margin-bottom:40px}
+.iq-lp__h2{font-size:clamp(24px,2.6vw,30px);font-weight:500;letter-spacing:-.015em;line-height:1.2;color:var(--lp-ink);text-align:left;margin-bottom:12px}
+.iq-lp__lead{font-size:16px;line-height:1.65;color:var(--lp-ink-2);text-align:left;max-width:56ch;margin:0}
+
+/* Four groups, not eight cards: hairline rows in a two-column plan */
+.iq-lp__groups{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;row-gap:0}
+.iq-lp__group{border-top:1px solid var(--lp-line);padding:28px 0 32px}
+.iq-lp__group-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;color:var(--lp-ink-3)}
+.iq-lp__group-num{font-size:12px;color:var(--lp-ink-3)}
+.iq-lp__group h3{font-size:17px;font-weight:500;color:var(--lp-ink);margin-bottom:8px;line-height:1.35}
+.iq-lp__group p{font-size:14px;line-height:1.65;color:var(--lp-ink-2);max-width:44ch}
+.iq-lp__group-meta{font-family:var(--lp-mono);font-size:12px;color:var(--lp-ink-3);margin-top:14px}
+
+.iq-lp__steps{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.iq-lp__step{border-top:1px solid var(--lp-line);padding-top:20px}
+.iq-lp__step h3{font-size:15px;font-weight:500;color:var(--lp-ink);margin-bottom:6px;line-height:1.35}
+.iq-lp__step p{font-size:13.5px;line-height:1.6;color:var(--lp-ink-2)}
+.iq-lp__num{font-size:13px;color:var(--lp-ink-3);margin-bottom:14px}
+
+.iq-lp__cta-band{background:#1A1712;border-radius:20px;padding:56px;margin:32px 0 8px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;color:#F7F4EE;box-shadow:none}
+.iq-lp__cta-band h2{color:#F7F4EE;font-size:clamp(22px,2.4vw,30px);font-weight:500;letter-spacing:-.015em;line-height:1.2;margin-bottom:12px;max-width:22ch}
+.iq-lp__cta-band p{color:rgba(247,244,238,.72);font-size:15px;line-height:1.65;margin-bottom:24px;max-width:44ch}
+.iq-lp__note--band{position:static;transform:rotate(2deg);width:188px;flex:none}
+
+.iq-lp__foot{text-align:left;padding:28px 0 40px;border-top:1px solid var(--lp-line);color:var(--lp-ink-3);font-size:13px}
+.iq-lp__foot a{color:var(--lp-ink-2);text-decoration:underline;text-underline-offset:2px}
+
+/* Testimonials + contact keep their components, lose the coloured shadows */
+.iq-lp .iq-tm__summary{justify-content:flex-start;margin:-12px 0 28px}
+.iq-lp .iq-tm__avg{font-weight:500}
+.iq-lp .iq-tm__avgstars{color:var(--lp-ink-3)}
+.iq-lp .iq-tm__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.iq-lp .iq-tm__card{background:var(--lp-card);border:1px solid var(--lp-line);border-radius:12px;padding:20px;box-shadow:none}
+.iq-lp .iq-tm__card:last-child:nth-child(odd){grid-column:1/-1;max-width:calc(50% - 10px);justify-self:center}
+.iq-lp .iq-tm__stars{color:var(--yellow-text);margin-bottom:10px}
+.iq-lp .iq-tm__body{font-size:14px;line-height:1.65;color:var(--lp-ink-2)}
+.iq-lp .iq-tm__by{font-weight:500;font-size:13px;color:var(--lp-ink-2)}
+.iq-lp .iq-tm__form{background:var(--lp-card);border:1px solid var(--lp-line);border-radius:14px;box-shadow:none}
+.iq-lp .iq-tm__formwrap{max-width:none;margin:0}
+.iq-lp__formrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.iq-lp .iq-tm__gate{max-width:none;margin:0;text-align:left;background:var(--lp-card);border:1px solid var(--lp-line);border-radius:12px}
+.iq-lp .iq-tm__gate p{max-width:44ch}
+.iq-lp__tmnote{font-size:13px;line-height:1.65;color:var(--lp-ink-3);max-width:34ch;padding-top:20px}
+.iq-lp .iq-contact{align-items:stretch}
+.iq-lp .iq-contact__info{height:100%;gap:14px}
+.iq-lp .iq-contact__item{background:var(--lp-card);border:1px solid var(--lp-line);border-radius:12px;flex:1;min-height:96px}
+.iq-lp .iq-contact__ic{background:rgba(47,107,255,.08);color:var(--lp-blue-ink);border-radius:8px}
+.iq-lp .iq-contact__label{color:var(--lp-ink-3);font-weight:500}
+.iq-lp .iq-contact__val{overflow-wrap:anywhere}
+.iq-lp .iq-contact__form{background:var(--lp-card);border:1px solid var(--lp-line);border-radius:14px;box-shadow:none}
+
+@media(max-width:980px){
+  .iq-lp__hero{grid-template-columns:1fr;gap:40px;padding:32px 0 56px;min-height:0}
+  .iq-lp__title{max-width:20ch}
+  .iq-lp__desk{max-width:420px;width:100%;margin:0 auto}
+  .iq-lp__groups{grid-template-columns:1fr;column-gap:0}
+  .iq-lp__steps{grid-template-columns:1fr 1fr;gap:28px}
+  .iq-lp__cta-band{grid-template-columns:1fr;padding:40px;gap:32px}
+  .iq-lp__note--band{transform:rotate(-2deg)}
+}
+@media(max-width:760px){
+  .iq-lp__nav{padding:16px 20px;gap:16px}
+  .iq-lp__navlinks{display:none}
+  .iq-lp__navactions{margin-left:auto;gap:14px}
+  .iq-lp__wrap{padding:0 20px 32px}
+  .iq-lp__sec{padding:44px 0}
+  .iq-lp__h2{font-size:24px}
+  .iq-lp__steps{grid-template-columns:1fr}
+  .iq-lp__cta-band{padding:32px 24px;border-radius:16px}
+  .iq-lp .iq-tm__grid{grid-template-columns:1fr}
+  .iq-lp .iq-tm__card:last-child:nth-child(odd){grid-column:auto;max-width:none;justify-self:stretch}
+  .iq-lp .iq-contact{grid-template-columns:1fr}
+  .iq-lp .iq-contact__info{height:auto}
+  .iq-lp__formrow{grid-template-columns:1fr;gap:20px}
+}
+@media(max-width:460px){
+  .iq-lp__preview{margin-right:0;padding:16px}
+  .iq-lp__note{width:156px;left:0}
+  .iq-lp__prow-status{font-size:11px}
 }
 
 /* Match recommendations */
@@ -1012,7 +1128,6 @@ html,body{max-width:100%;overflow-x:hidden}
 .iq-brand i{color:inherit;-webkit-text-fill-color:inherit;background:none;font-style:normal}
 /* Custom hero illustration (landing + dashboard only) */
 .iq-heromascot{display:block;object-fit:contain}
-.iq-lp__heromascot{margin-bottom:14px}
 .iq-hero{min-height:170px}
 .iq-hero__mascot{flex:none}
 @media(max-width:860px){
@@ -1023,10 +1138,7 @@ html,body{max-width:100%;overflow-x:hidden}
 /* ===== REVISI v11 - extra mascots, yellow badge, spark fix, celebrations ===== */
 .iq-heromascot{display:block;object-fit:contain}
 
-/* Landing hero mascot: bigger, tighter to the text */
-.iq-lp__heromascot{margin:0 0 8px}
-/* Yellow "companion" badge (replaces the sparkle emoji version) */
-.iq-lp__badge--yellow{background:var(--yellow-15);color:var(--yellow-text)}
+/* Landing mascot now lives in the printed desk stack (see Landing page block) */
 
 /* Dashboard hero sparkle: smaller and tucked into the corner */
 .iq-hero__spark{left:auto;right:20px;top:14px;bottom:auto;font-size:54px;opacity:.22}
@@ -1058,11 +1170,7 @@ html,body{max-width:100%;overflow-x:hidden}
 
 /* ===== REVISI v13 (visual polish batch) ===== */
 
-/* Landing hero mascot: larger + better spacing (desktop & mobile) */
-.iq-lp__heromascot { display:block; margin-bottom:20px; }
-@media (max-width: 820px) {
-  .iq-lp__heromascot { width:220px !important; margin-left:auto; margin-right:auto; }
-}
+/* Landing hero mascot: sized by the desk stack in the Landing page block */
 
 /* Auth sign up / login: slide each tagline + mascot in */
 @keyframes iq-slidein {
@@ -1209,8 +1317,25 @@ html{background:var(--canvas)}
 :root[data-theme="dark"] .iq-input,
 :root[data-theme="dark"] .iq-select,
 :root[data-theme="dark"] .iq-textarea{background:var(--surface-2);border-color:var(--border-2);color:var(--ink)}
-:root[data-theme="dark"] .iq-lp{background:var(--canvas)}
-:root[data-theme="dark"] .iq-lp__cta-band{box-shadow:0 20px 44px rgba(0,0,0,.4)}
+/* Landing keeps its own warm-paper ramp, so the desk world survives dark mode */
+:root[data-theme="dark"] .iq-lp{
+  --lp-paper:#14110D;
+  --lp-card:#1C1813;
+  --lp-ink:#F3EDE2;
+  --lp-ink-2:#C4BBA9;
+  --lp-ink-3:#A69B88;
+  --lp-line:rgba(243,237,226,.14);
+  --lp-line-2:rgba(243,237,226,.07);
+  --lp-blue:#5B8CFF;
+  --lp-blue-ink:#7EA5FF;
+  --lp-note:#E8CF62;
+  --lp-note-ink:#2A2308;
+  background:var(--lp-paper);
+}
+:root[data-theme="dark"] .iq-lp__print{background:#1C1813;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+:root[data-theme="dark"] .iq-lp .iq-btn--ghost:hover{background:rgba(243,237,226,.06)}
+:root[data-theme="dark"] .iq-lp__cta-band{background:#0B0907;color:#F3EDE2}
+:root[data-theme="dark"] .iq-lp__cta-band h2{color:#F3EDE2}
 
 /* --- Login hero: soft gradient, defined per theme --- */
 .iq-auth__hero--soft{background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)}
@@ -1227,3 +1352,14 @@ html{background:var(--canvas)}
 .iq-stars-row .ic--fill{color:var(--yellow-text)}
 .iq-star .ic{fill:none}
 .iq-star.on .ic{fill:currentColor}
+
+/* ============================================================
+   MASCOT RENDERER (single system — see components/Mascot.tsx)
+   The box is sized from each drawing's measured content, so padding
+   inside the PNG never eats the layout slot again.
+   ============================================================ */
+.iq-mascotbox{position:relative;flex:none;display:block;max-width:100%}
+.iq-mascotbox--round{border-radius:50%;overflow:hidden}
+.iq-mascotlayer{position:absolute;display:block;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none;transition:opacity .35s ease;will-change:opacity}
+.iq-heromascot{display:block;position:relative}
+.iq-momo{display:block}

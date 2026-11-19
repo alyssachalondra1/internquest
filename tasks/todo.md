@@ -68,18 +68,35 @@ Yang dilindungi: tata letak & palet sidebar, isi kartu daftar lowongan (hanya te
 - [x] Satu lapisan token tema; dark mode mengikuti OS (`prefers-color-scheme`) + toggle manual di topbar & Settings (System/Light/Dark, tersimpan).
 - [x] Skrip anti-kedip sebelum paint; tema gelap diverifikasi lewat render nyata (landing & login, desktop & mobile, tanpa error konsol).
 
-### P3 — Login (belum)
-- [ ] Komposisi hero: adegan `welcomee.png` besar, satu maskot mengintip, tagline berhenti berputar, isi ruang kosong.
+### P3a — Sistem maskot tunggal (FONDASI, SELESAI)
+- [x] Registry aset: satu peta untuk `mascot-*.png`, `momoface1–6`, `welcomee.png`, `signature-pose.json`, `momo.png.png`.
+- [x] Kotak konten terukur per file (cropdetect) → slot mengikuti gambar, bukan kanvas transparan.
+- [x] Satu komponen renderer: `contain`/`cover`, alignment, ukuran eksplisit, preload, crossfade (tanpa jeda kosong).
+- [x] `Momo`, `HeroMascot`, `MomoFace`, poster Lottie diarahkan ke renderer yang sama; SVG inline generik dibuang.
+- [x] Login: keempat slide dipreload, garis kosong 0 dari 40 sampel saat rotasi.
+- [ ] Sapu semua titik pakai: ukuran & crop per konteks dinaikkan bertahap di M1 (landing), M2 (login), M3 (achievements/profile).
 
-### P4 — Landing (belum)
-- [ ] Buang 8 kartu gradient-tile, gradient text judul, hero satu momen, copy tanpa "quest"/tanda seru, sticky-note sebagai detail khas.
+### P3b — Landing page (unslop penuh) — SELESAI
+- [x] 8 kartu gradient-tile dibuang → 4 kelompok fitur (hairline, tanpa kartu) + 1 hero momen.
+- [x] Gradient text judul & badge ungu dihapus; latar pucat `#F4F7FE` → kertas hangat `#F7F4EE` (kartu `#FDFBF7`); aksen tunggal biru `#2F6BFF`.
+- [x] Hero: split asimetris (teks kiri) + pratinjau produk "desk" (kartu lowongan + status, mono) + sticky note kuning miring berisi satu angka.
+- [x] Copy ditulis ulang: "quest" 0×, tanda seru 0×, label uppercase-tracking dihapus; testimoni asli dipertahankan.
+- [x] Maskot hero lewat sistem tunggal (`Mascot`), ukuran/crop dari registry; kartu pratinjau & note diproporsikan.
+- [x] Dark mode landing punya ramp kertas-gelap sendiri (bukan `--canvas`), kontras teks kecil dinaikkan.
+- [x] Verifikasi: `npm run build` hijau; render 1440/390 light+dark, 0 overflow horizontal, 0 teks "Internship".
 
-### P5 — Achievements & Profile (belum)
-- [ ] Grid badge satu ramp + satu aksen, kartu terkunci tanpa ✨, baris angka pakai mono, satu sistem maskot.
+### P3c — Login — belum
+- [ ] Komposisi hero: adegan `welcomee.png` besar, satu maskot mengintip, tagline berhenti berputar.
+- [ ] Crossfade slide maskot (lewat renderer baru), ruang kosong diisi.
 
-### P6/P7 — Harga & Midtrans
-- [ ] (P6) Halaman `/pricing` 3 kolom + meter kuota AI + modal upgrade saat kena batas.
-- [ ] (P7) Tabel `passes`, Server Action transaksi, webhook signature, UI QRIS/e-wallet.
+### P4 — Achievements & Profile — belum
+- [ ] Grid badge satu ramp + satu aksen, kartu terkunci tanpa ✨, baris angka mono, satu sistem maskot.
 
-### P8 — QA
-- [ ] Cek dark mode tiap halaman app (butuh login), `npm run lint` (masih merah pra-ada: `any` di `src/lib/ai.ts` & `sound.ts`).
+### P5 — Harga & Midtrans — belum
+- [ ] Halaman `/pricing` 3 kolom + meter kuota AI + modal upgrade saat kena batas.
+- [ ] Tabel `passes`, Server Action transaksi, webhook signature, UI QRIS/e-wallet.
+
+### P6 — QA — belum
+- [ ] Cek tiap halaman (light & dark), `npm run lint` (masih merah pra-ada: `any` di `src/lib/ai.ts` & `sound.ts`).
+
+> Dark mode: **tidak diubah** — tetap ada, bisa switch System/Light/Dark dari topbar & Settings.

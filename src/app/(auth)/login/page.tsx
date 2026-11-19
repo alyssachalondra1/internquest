@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Script from "next/script"
 import { Momo } from "@/components/Momo"
 import { HeroMascot } from "@/components/HeroMascot"
+import { preloadMascots } from "@/components/Mascot"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { csx } from "@/lib/csx"
@@ -66,6 +67,11 @@ export default function LoginPage() {
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % TAGLINES.length), 3000)
     return () => clearInterval(t)
+  }, [])
+
+  // Warm all four slide images up front so a swap never shows a blank frame.
+  useEffect(() => {
+    preloadMascots(SLIDE_IMAGES)
   }, [])
 
   useEffect(() => {
@@ -227,7 +233,7 @@ export default function LoginPage() {
       <div className="iq-auth__hero iq-auth__hero--soft">
         <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
         <div key={"tag-" + slide} className="iq-auth__tag iq-slidein" style={csx("min-height:28px")}>{TAGLINES[slide]}</div>
-        <HeroMascot key={"slide-" + slide} src={SLIDE_IMAGES[slide]} size={200} className="iq-auth__mascot iq-slidein" />
+        <HeroMascot src={SLIDE_IMAGES[slide]} size={200} w={220} h={180} className="iq-auth__mascot" priority />
         <div className="iq-dots">
           {TAGLINES.map((_, i) => (
             <i key={i} className={i === slide ? "on" : ""} />

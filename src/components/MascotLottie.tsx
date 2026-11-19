@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { csx } from "@/lib/csx"
+import { Mascot, preloadMascots } from "@/components/Mascot"
 
 /* ============================================================
    ANIMATED MASCOT ("signature pose").
@@ -59,6 +60,10 @@ export function MascotLottie({
   const [animated, setAnimated] = useState(false)
 
   useEffect(() => {
+    preloadMascots([fallback])
+  }, [fallback])
+
+  useEffect(() => {
     const reduce =
       typeof window !== "undefined" &&
       window.matchMedia &&
@@ -104,16 +109,15 @@ export function MascotLottie({
       className={"iq-heromascot " + className}
       style={csx("width:" + size + "px;height:" + size + "px;max-width:100%;position:relative")}
     >
-      {/* PNG poster: shown instantly, fades out once the animation is ready. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={fallback}
-        alt="Momo the sloth"
+      {/* PNG poster (from the shared mascot system): shown instantly, fades
+          out once the animation is ready. */}
+      <div
         style={csx(
-          "width:100%;height:100%;object-fit:contain;position:absolute;inset:0;transition:opacity .35s ease;opacity:" +
-            (animated ? "0" : "1"),
+          "position:absolute;inset:0;transition:opacity .35s ease;opacity:" + (animated ? "0" : "1"),
         )}
-      />
+      >
+        <Mascot src={fallback} w={size} h={size} priority />
+      </div>
       <div ref={boxRef} style={csx("width:100%;height:100%")} />
     </div>
   )
