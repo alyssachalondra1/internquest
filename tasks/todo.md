@@ -14,8 +14,8 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [x] **T1-F3** Storage bucket `posters/cvs/avatars` + RLS ditambahkan ke `0001_init.sql`.
 
 ### Checkpoint T1
-- [ ] `db diff` bersih / `db reset` sukses.
-- [ ] `npm run build` hijau.
+- [ ] `db diff` bersih / `db reset` sukses. (belum dijalankan — CLI/Docker tak tersedia)
+- [x] `npm run build` hijau.
 
 ## Task terpisah (setelah T1)
 - [ ] **Hardening `add_xp`**: ganti argumen `p_user` dari client → `auth.uid()` di SQL; sesuaikan `src/app/actions/gamification.ts`.
@@ -36,11 +36,12 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [x] Tier routing: Free=`deepseek-v4.1-flash-1017`(vision)/`deepseek-v4-flash-0731`(teks); Plus/Pro=`gemini-3.1-flash-lite`.
 - [x] Resize gambar client-side ≤768px (`compressImage` di AddInternshipModal & GroupAddModal).
 - [x] Log token + estimasi biaya Rupiah ke tabel `ai_usage` (`supabase/migrations/0003_ai_usage.sql`, helper `src/lib/usage.ts`).
-- [ ] **Uji nyata 20–30 panggilan** dengan `OPENROUTER_API_KEY` di `.env.local` (belum bisa dijalankan di sesi ini).
+- [x] **Uji nyata** panggilan AI di produksi dengan OpenRouter (key standar); biaya tercatat di `ai_usage` (~Rp6,7–44,6/aksi).
 
-## T5 — Batas grup di RPC
-- [ ] `create_group`: free 2 / plus 10 / pro unlimited.
-- [ ] `join_group_by_code`: free 10 / plus 30 / pro unlimited. Keluar grup membebaskan slot.
+## T5 — Batas grup + kunci Portfolio (SELESAI)
+- [x] `create_group`: free 2 / plus 10 / pro unlimited (`0004_group_limits.sql`).
+- [x] `join_group_by_code`: free 10 / plus 30 / pro unlimited; keluar grup membebaskan slot; sudah anggota tak memakai slot.
+- [x] **Portfolio dikunci untuk Free**: UI Profile tampil terkunci + ajakan upgrade; server `savePortfolio` menolak bila paket Free. Upload CV tetap gratis.
 
 ## T6 — Billing Midtrans
 - [ ] Tabel `passes` (user_id, tier, starts_at, ends_at, channel, order_id, status).
