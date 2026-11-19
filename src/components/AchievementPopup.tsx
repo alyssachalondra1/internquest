@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { HeroMascot } from "@/components/HeroMascot"
+import { Icon } from "@/components/Icons"
 import { markAchievementsSeen } from "@/app/actions/gamification"
 import { csx } from "@/lib/csx"
 
@@ -45,7 +46,7 @@ export function AchievementPopup({ achievements }: { achievements: string[] }) {
             "display:inline-block;margin-bottom:8px;background:var(--yellow-15);color:var(--yellow-text);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px",
           )}
         >
-          🏅 Achievement unlocked
+          <Icon name="ic-trophy" className="ic" /> Achievement unlocked
         </span>
         <b>{title}</b>
         <p>

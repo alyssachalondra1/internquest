@@ -51,3 +51,35 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [ ] Meter "x/10 aksi AI bulan ini".
 - [ ] Modal upgrade di momen kena batas (bukan banner permanen).
 - [ ] Halaman harga 3 kolom; gate avatar premium.
+
+## T8 — UI/UX Polish (unslop) + Dark Mode
+Arah desain: "meja belajar" (kertas, sticky note, pena koreksi) · karakter hangat/rapi/jenaka · aksen biru brand · detail khas = sticky note kuning.
+Yang dilindungi: tata letak & palet sidebar, isi kartu daftar lowongan (hanya teksnya berubah).
+
+### P0 — Penyeragaman istilah (SELESAI)
+- [x] Semua teks UI "Internship" → "Job / Role / Opportunity"; nav jadi "Jobs"; judul level "Applicant, Level X".
+- [x] Meta title/description, Terms §7, Privacy diselaraskan. URL `/internships`, tabel, tipe, dan nama komponen tetap.
+
+### P1 — Emoji → ikon vektor (SELESAI)
+- [x] ~30 emoji (🏅 ✨ 🦥 👋 ✉️ 🎉 💌 💜 🔒 ✕ ★) diganti ikon SVG set yang sama; 7 glyph baru ditambah (mail, lock, close, sun, moon).
+- [x] Rating bintang testimoni jadi ikon isi/garis, bukan karakter teks.
+
+### P2 — Token warna + Dark Mode (SELESAI)
+- [x] Satu lapisan token tema; dark mode mengikuti OS (`prefers-color-scheme`) + toggle manual di topbar & Settings (System/Light/Dark, tersimpan).
+- [x] Skrip anti-kedip sebelum paint; tema gelap diverifikasi lewat render nyata (landing & login, desktop & mobile, tanpa error konsol).
+
+### P3 — Login (belum)
+- [ ] Komposisi hero: adegan `welcomee.png` besar, satu maskot mengintip, tagline berhenti berputar, isi ruang kosong.
+
+### P4 — Landing (belum)
+- [ ] Buang 8 kartu gradient-tile, gradient text judul, hero satu momen, copy tanpa "quest"/tanda seru, sticky-note sebagai detail khas.
+
+### P5 — Achievements & Profile (belum)
+- [ ] Grid badge satu ramp + satu aksen, kartu terkunci tanpa ✨, baris angka pakai mono, satu sistem maskot.
+
+### P6/P7 — Harga & Midtrans
+- [ ] (P6) Halaman `/pricing` 3 kolom + meter kuota AI + modal upgrade saat kena batas.
+- [ ] (P7) Tabel `passes`, Server Action transaksi, webhook signature, UI QRIS/e-wallet.
+
+### P8 — QA
+- [ ] Cek dark mode tiap halaman app (butuh login), `npm run lint` (masih merah pra-ada: `any` di `src/lib/ai.ts` & `sound.ts`).

@@ -10,14 +10,14 @@ export default function PrivacyPage() {
       <h1>Privacy Policy</h1>
       <p className="muted">Last updated: July 15, 2026</p>
 
-      <p>This Privacy Policy explains how Sloe ("Sloe", "we", "us", or "our") collects, uses, and protects your information when you use our website and app (the "Service"). Sloe helps students find, track, and apply to internships. By using the Service, you agree to the practices described here.</p>
+      <p>This Privacy Policy explains how Sloe ("Sloe", "we", "us", or "our") collects, uses, and protects your information when you use our website and app (the "Service"). Sloe helps you find, track, and apply to jobs and roles. By using the Service, you agree to the practices described here.</p>
 
       <h2>1. Information we collect</h2>
       <ul>
         <li><b>Account information:</b> your name and email address, provided when you sign up with email or Google.</li>
         <li><b>Profile content:</b> details you add such as interests, your uploaded CV/resume file and its extracted text, and portfolio information.</li>
-        <li><b>Internship data:</b> the internships, links, posters, deadlines, checklists, notes, and application status you save.</li>
-        <li><b>Groups content:</b> internship groups you create or join and the opportunities you share within them.</li>
+        <li><b>Job data:</b> the jobs, links, posters, deadlines, checklists, notes, and application status you save.</li>
+        <li><b>Groups content:</b> the groups you create or join and the opportunities you share within them.</li>
         <li><b>AI inputs and outputs:</b> the prompts, details, and CV content you submit for AI writing, and the text the AI returns.</li>
         <li><b>Gamification data:</b> your XP, level, gems, streaks, and achievements.</li>
         <li><b>Technical data:</b> basic log and device information needed to operate and secure the Service.</li>
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
       <h2>2. How we use your information</h2>
       <ul>
         <li>To provide and maintain the Service, including your account and saved data.</li>
-        <li>To read internship postings you upload or paste and pre-fill their details for you.</li>
+        <li>To read job postings you upload or paste and pre-fill their details for you.</li>
         <li>To generate AI writing tailored to the details and CV you provide.</li>
         <li>To operate gamification features such as levels, streaks, gems, and achievements.</li>
         <li>To secure the Service, prevent abuse, and comply with legal obligations.</li>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
       <p>We do not sell your personal information. We share data only with the providers above, when required by law, or to protect the rights and safety of our users and the Service. Content you post into a group is visible to other members of that group.</p>
 
       <h2>6. Data retention and deletion</h2>
-      <p>We keep your data while your account is active. You can delete your account at any time from Settings; this permanently removes your profile, saved internships, uploads, AI history, and related data, except where we must retain limited records to meet legal obligations.</p>
+      <p>We keep your data while your account is active. You can delete your account at any time from Settings; this permanently removes your profile, saved jobs, uploads, AI history, and related data, except where we must retain limited records to meet legal obligations.</p>
 
       <h2>7. Security</h2>
       <p>We use reputable infrastructure providers and reasonable technical measures to protect your data, including encrypted connections and access controls. No method of transmission or storage is completely secure, so we cannot guarantee absolute security.</p>

@@ -208,16 +208,16 @@ export function GroupAddModal({
       {step === "method" && (
         <div className="iq-modal">
           <div className="iq-modal__head">
-            <h3>Add internship to group</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <h3>Add job to group</h3>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
-            <p className="muted mb-6">Choose how you want to add it. Only the internship details are shared with the group.</p>
+            <p className="muted mb-6">Choose how you want to add it. Only the job details are shared with the group.</p>
             <div className="iq-grid iq-grid--2">
               <button className="iq-method" onClick={openMine}>
                 <span className="iq-method__ic" style={csx("background:var(--pink-15);color:var(--pink-text)")}><Icon name="ic-list" /></span>
-                <b>From My Internships</b>
+                <b>From my saved jobs</b>
                 <span className="muted">Pick one you already saved</span>
               </button>
               <button className="iq-method" onClick={() => { setMode("poster"); fileRef.current?.click() }}>
@@ -259,17 +259,17 @@ export function GroupAddModal({
       {step === "picker" && (
         <div className="iq-modal">
           <div className="iq-modal__head">
-            <h3>Pick from your internships</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <h3>Pick from your saved jobs</h3>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             <button className="iq-btn iq-btn--ghost iq-btn--sm mb-4" onClick={() => setStep("method")}>
               <Icon name="ic-back" className="ic ic-16" /> Back
             </button>
             {loadingMine ? (
-              <p className="muted">Loading your internships…</p>
+              <p className="muted">Loading your jobs…</p>
             ) : mine.length === 0 ? (
-              <p className="muted">You have not saved any internships yet.</p>
+              <p className="muted">You have not saved any jobs yet.</p>
             ) : (
               <div className="stack-2">
                 {mine.map((it) => (
@@ -291,7 +291,7 @@ export function GroupAddModal({
         <div className="iq-modal">
           <div className="iq-modal__head">
             <h3>{mode === "manual" || mode === "mine" ? "Confirm the details" : "Review & Save"}</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             {error && <p style={csx("color:var(--red-text);margin-bottom:12px")}>{error}</p>}
@@ -310,7 +310,7 @@ export function GroupAddModal({
               <div className="iq-form-row"><label>Location</label><input className="iq-input" value={form.location} onChange={(e) => upd("location", e.target.value)} /></div>
               <div className="iq-form-row"><label>Registration opens</label><input className="iq-input" type="date" value={form.open_date} onChange={(e) => upd("open_date", e.target.value)} /></div>
               <div className="iq-form-row"><label>Registration closes / Deadline</label><input className="iq-input" type="date" value={form.deadline} onChange={(e) => upd("deadline", e.target.value)} /></div>
-              <div className="iq-form-row"><label>Internship start</label><input className="iq-input" type="date" value={form.start_date} onChange={(e) => upd("start_date", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Job start</label><input className="iq-input" type="date" value={form.start_date} onChange={(e) => upd("start_date", e.target.value)} /></div>
               <div className="iq-form-row"><label>Duration (months)</label><input className="iq-input" type="number" value={form.duration_months} onChange={(e) => upd("duration_months", e.target.value)} /></div>
             </div>
             <div className="iq-form-row"><label>Application link (optional)</label><input className="iq-input" value={form.source_url} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://… apply / register link" /></div>

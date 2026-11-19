@@ -11,6 +11,7 @@ import { AchievementPopup } from "@/components/AchievementPopup"
 import { ReviewPrompt } from "@/components/ReviewPrompt"
 import { createClient } from "@/lib/supabase/client"
 import { MomoFace } from "@/components/MascotAvatar"
+import { ThemeButton } from "@/components/ThemeToggle"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { csx } from "@/lib/csx"
 
@@ -25,7 +26,7 @@ export type ProfileStats = {
 
 const NAV = [
   { href: "/dashboard", icon: "ic-dashboard", label: "Dashboard" },
-  { href: "/internships", icon: "ic-list", label: "Internships" },
+  { href: "/internships", icon: "ic-list", label: "Jobs" },
   { href: "/calendar", icon: "ic-calendar", label: "Calendar" },
   { href: "/ai", icon: "ic-ai", label: "AI Assistant" },
   { href: "/achievements", icon: "ic-trophy", label: "Achievements" },
@@ -36,7 +37,7 @@ const NAV_ACCOUNT = [
   { href: "/settings", icon: "ic-settings", label: "Settings" },
 ]
 const MOBILE_NAV = [
-  { href: "/internships", icon: "ic-list", label: "Internships" },
+  { href: "/internships", icon: "ic-list", label: "Jobs" },
   { href: "/groups", icon: "ic-users", label: "Groups" },
   { href: "/dashboard", icon: "ic-dashboard", label: "Home" },
   { href: "/calendar", icon: "ic-calendar", label: "Calendar" },
@@ -45,7 +46,7 @@ const MOBILE_NAV = [
 
 const TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
-  "/internships": "Internships",
+  "/internships": "Jobs",
   "/calendar": "Calendar",
   "/ai": "AI Assistant",
   "/achievements": "Achievements",
@@ -135,7 +136,7 @@ export function AppShell({
           </div>
           <div className="iq-usermini__meta">
             <b>{name}</b>
-            <span>Lv.{profile.level} · Intern Hunter</span>
+            <span>Lv.{profile.level} · Applicant</span>
           </div>
         </Link>
         <button className="iq-nav__item iq-signout" onClick={signOut} title="Log out">
@@ -159,8 +160,9 @@ export function AppShell({
             <span style={csx("color:var(--ink)")}>{profile.gems}</span>
           </span>
           <button className="iq-btn iq-btn--primary" onClick={() => setAddOpen(true)}>
-            <Icon name="ic-plus" className="ic ic-18" /> <span className="iq-btn__text">Add Internship</span>
+            <Icon name="ic-plus" className="ic ic-18" /> <span className="iq-btn__text">Add job</span>
           </button>
+          <ThemeButton />
           <Link
             href="/profile"
             className="iq-lvlmini"

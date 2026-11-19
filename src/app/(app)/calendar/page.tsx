@@ -97,14 +97,14 @@ export default async function CalendarPage({
             )}
           </div>
         </div>
-        <div className="muted mt-1">Built automatically from your internship dates.</div>
+        <div className="muted mt-1">Built automatically from your job dates.</div>
       </div>
       <div className="iq-calwrap">
         <div className="iq-card iq-card__pad">
           <div className="row wrap mb-4" style={csx("gap:8px")}>
             <span className="iq-chip iq-chip--green">Registration opens</span>
             <span className="iq-chip iq-chip--pink">Deadline</span>
-            <span className="iq-chip iq-chip--blue">Internship starts</span>
+            <span className="iq-chip iq-chip--blue">Job starts</span>
           </div>
           <div className="iq-cal">
             {DOW.map((d) => <div key={d} className="iq-cal__h">{d}</div>)}

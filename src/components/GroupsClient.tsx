@@ -61,10 +61,10 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
         <div className="row">
           <span className="iq-rec__ic"><Icon name="ic-users" className="ic ic-20" /></span>
           <div>
-            <h3 style={csx("margin:0")}>Internship Groups</h3>
+            <h3 style={csx("margin:0")}>Groups</h3>
             <p className="muted iq-justify" style={csx("margin:2px 0 0;font-size:13px")}>
-              Share a collection of internships with friends who share the same interest using a join code. Only the shared
-              internship list is visible to members. Your CV, portfolio, and AI results always stay private.
+              Share a collection of jobs with friends who share the same interest using a join code. Only the shared
+              job list is visible to members. Your CV, portfolio, and AI results always stay private.
             </p>
           </div>
         </div>
@@ -131,7 +131,7 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
                   <div className="iq-icard__sub">{g.owner_id === currentUserId ? "Owner" : "Member"}</div>
                 </div>
               </div>
-              <div className="iq-icard__meta">Code {g.join_code} · {g.member_count} members · {g.internship_count} internships</div>
+              <div className="iq-icard__meta">Code {g.join_code} · {g.member_count} members · {g.internship_count} jobs</div>
               <div className="iq-icard__foot">
                 <span className="iq-open-btn">Open group</span>
                 <Icon name="ic-arrow-right" className="ic ic-18" />

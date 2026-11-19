@@ -52,9 +52,9 @@ export default async function AchievementsPage() {
           <div className="row-between wrap" style={csx("gap:10px")}>
             <div>
               <div className="muted" style={csx("font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:11px")}>Current level</div>
-              <h2 style={csx("font-size:26px")}>Level {level} · Intern Hunter</h2>
+              <h2 style={csx("font-size:26px")}>Applicant, Level {level}</h2>
             </div>
-            <span className="iq-chip iq-chip--yellow" style={csx("height:34px")}>🏅 {unlocked}/{badges.length} badges</span>
+            <span className="iq-chip iq-chip--yellow" style={csx("height:34px")}><Icon name="ic-trophy" className="ic ic-16" /> {unlocked}/{badges.length} badges</span>
           </div>
           <div className="iq-progress mt-4" style={csx("height:16px")}><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
           <div className="muted mt-2" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>
@@ -69,7 +69,6 @@ export default async function AchievementsPage() {
       <div className="iq-grid iq-grid--4">
         {badges.map((b) => (
           <div key={b.key} className={"iq-badge " + (b.on ? "is-unlocked" : "is-locked")}>
-            {b.on && <span className="iq-badge__spark">✨</span>}
             <div className="iq-badge__ic" style={csx(b.on ? "background:" + b.bg + ";color:" + b.fg : "")}><Icon name={b.icon} className="ic ic-22" /></div>
             <b>{b.title}</b><span>{b.on ? b.desc : "Locked"}</span>
           </div>

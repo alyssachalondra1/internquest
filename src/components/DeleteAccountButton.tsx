@@ -11,7 +11,7 @@ export function DeleteAccountButton() {
 
   async function remove() {
     const yes = confirm(
-      "Yakin hapus akun? Semua data (internship, CV, progres, gems) dihapus permanen dan tidak bisa dikembalikan.",
+      "Yakin hapus akun? Semua data (lowongan, CV, progres, gems) dihapus permanen dan tidak bisa dikembalikan.",
     )
     if (!yes) return
     setErr(null)

@@ -71,9 +71,8 @@ export default async function DashboardPage() {
         <div style={csx("flex:1;color:#fff")}>
           <div style={csx("font-weight:800;letter-spacing:.08em;font-size:11px;opacity:.85;text-transform:uppercase")}>Today's Quest</div>
           <h1 style={csx("font-size:26px;margin-top:4px;color:#fff")}>Hi, {name}!</h1>
-          <p style={csx("opacity:.92;margin-top:4px")}>Here is your internship quest for today.</p>
+          <p style={csx("opacity:.92;margin-top:4px")}>Here is your job hunt for today.</p>
         </div>
-        <span className="iq-hero__spark">✨</span>
         <MascotLottie size={180} className="iq-hero__mascot" fallback="/mascot-hero.png" />
       </div>
 
@@ -82,10 +81,10 @@ export default async function DashboardPage() {
         <div>
           <b>AI Insight</b>
           <p className="mt-2 iq-justify">
-            You have saved <b>{items.length} internships</b>, and <b>{applied}</b> are in progress.
+            You have saved <b>{items.length} jobs</b>, and <b>{applied}</b> are in progress.
             {priority[0]
               ? " Your nearest deadline is at " + priority[0].company_name + ". Focus on finishing its checklist first."
-              : " Add your first internship to get started."}
+              : " Add your first job to get started."}
           </p>
         </div>
       </div>
@@ -95,7 +94,7 @@ export default async function DashboardPage() {
           <div className="iq-sec-title"><h3>Priority Deadlines</h3><Link href="/internships">See all</Link></div>
           <div className="stack-4">
             {priority.length === 0 && (
-              <div className="iq-card iq-card__pad muted">No deadlines yet. Add an internship with the Add Internship button.</div>
+              <div className="iq-card iq-card__pad muted">No deadlines yet. Add a job with the Add job button.</div>
             )}
             {priority.map((it, idx) => {
               const a = accentAt(idx)

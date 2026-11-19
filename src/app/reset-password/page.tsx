@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
           <p className="muted center">Loading…</p>
         ) : done ? (
           <>
-            <h1 style={csx("font-size:24px;text-align:center;margin-bottom:8px")}>Password updated! 🎉</h1>
+            <h1 style={csx("font-size:24px;text-align:center;margin-bottom:8px")}>Password updated</h1>
             <p className="muted center mb-6">Your new password is ready. Let's get back to the hunt.</p>
             <button className="iq-btn iq-btn--primary iq-btn--block" onClick={() => { router.push("/dashboard"); router.refresh() }}>Go to dashboard</button>
           </>

@@ -158,7 +158,7 @@ export function ProfileExtras({
         <label>CV (PDF), used by AI for personalized results</label>
         <input ref={cvRef} type="file" accept="application/pdf" hidden onChange={onPickCv} />
         <div className={"iq-cvbox" + (cvLabel ? " is-set" : "")} onClick={() => !cvBusy && cvRef.current?.click()}>
-          {cvBusy ? "Reading your CV with AI…" : cvLabel ? "✓ " + cvLabel + " · click to replace" : "Click to upload your CV (PDF)"}
+          {cvBusy ? "Reading your CV with AI…" : cvLabel ? (<><Icon name="ic-check" className="ic ic-16" /> {cvLabel} · click to replace</>) : "Click to upload your CV (PDF)"}
         </div>
         {cvErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{cvErr}</p>}
       </div>
@@ -167,13 +167,13 @@ export function ProfileExtras({
         <label>Portfolio (PDF), also read by AI for more relevant results</label>
         {isFree ? (
           <div className="iq-cvbox" style={csx("opacity:.75;cursor:not-allowed")}>
-            🔒 Portfolio upload is a Plus/Pro feature — upgrade to unlock it.
+            <Icon name="ic-lock" className="ic ic-18" /> Portfolio upload is a Plus/Pro feature — upgrade to unlock it.
           </div>
         ) : (
           <>
             <input ref={pfRef} type="file" accept="application/pdf" hidden onChange={onPickPortfolio} />
             <div className={"iq-cvbox" + (pfLabel ? " is-set" : "")} onClick={() => !pfBusy && pfRef.current?.click()}>
-              {pfBusy ? "Reading your portfolio with AI…" : pfLabel ? "✓ " + pfLabel + " · click to replace" : "Click to upload your Portfolio (PDF)"}
+              {pfBusy ? "Reading your portfolio with AI…" : pfLabel ? (<><Icon name="ic-check" className="ic ic-16" /> {pfLabel} · click to replace</>) : "Click to upload your Portfolio (PDF)"}
             </div>
             {pfErr && <p style={csx("color:var(--red-text);font-size:12px;margin-top:6px")}>{pfErr}</p>}
           </>

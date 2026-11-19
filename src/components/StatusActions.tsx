@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { updateInternshipStatus } from "@/app/actions/internships"
 import { HeroMascot } from "@/components/HeroMascot"
+import { Icon } from "@/components/Icons"
 import { playApply, playLevelUp, playSad } from "@/lib/sound"
 import { csx } from "@/lib/csx"
 
@@ -45,7 +46,7 @@ const FLOW: Record<string, Stage> = {
 type Pop = { title: string; body: string; badge: string; cls: string; mood: "happy" | "sad" }
 
 const POP: Record<string, Pop> = {
-  applied: { title: "Application sent!", body: "One step closer to your dream internship. Good luck!", badge: "+25 XP", cls: "iq-chip--yellow", mood: "happy" },
+  applied: { title: "Application sent!", body: "One step closer to the role. Good luck!", badge: "+25 XP", cls: "iq-chip--yellow", mood: "happy" },
   screening: { title: "You passed screening!", body: "Great start. Get ready for the online test, you have got this.", badge: "+40 XP", cls: "iq-chip--blue", mood: "happy" },
   test: { title: "Online test cleared!", body: "Awesome work. The interview is next, keep the momentum going.", badge: "+50 XP", cls: "iq-chip--blue", mood: "happy" },
   interview: { title: "Interview passed!", body: "So close now. Fingers crossed for the offer!", badge: "+75 XP", cls: "iq-chip--blue", mood: "happy" },
@@ -109,10 +110,10 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
       {confirmTo && (
         <div className="iq-pop-scrim" onClick={() => setConfirmTo(null)}>
           <div className="iq-pop" onClick={(e) => e.stopPropagation()}>
-            <button className="iq-pop__x" onClick={() => setConfirmTo(null)}>✕</button>
+            <button className="iq-pop__x" onClick={() => setConfirmTo(null)}><Icon name="ic-close" className="ic ic-16" /></button>
             <HeroMascot src="/mascot-confirm.png" size={104} className="iq-pop__mascot" />
             <h3>{isReject ? "Mark as not selected?" : "Are you sure?"}</h3>
-            <p>{isReject ? "This internship will move to Rejected. You cannot change it back afterwards." : "You cannot undo this step later, so only confirm when it is official."}</p>
+            <p>{isReject ? "This job will move to Rejected. You cannot change it back afterwards." : "You cannot undo this step later, so only confirm when it is official."}</p>
             <div className="row mt-6" style={csx("gap:10px")}>
               <button className="iq-btn iq-btn--ghost iq-btn--block" onClick={() => setConfirmTo(null)}>Cancel</button>
               <button className={"iq-btn iq-btn--block " + (isReject ? "iq-btn--ghost" : "iq-btn--primary")} disabled={pending} onClick={() => apply(confirmTo)}>Confirm</button>
@@ -124,13 +125,7 @@ export function StatusActions({ id, status }: { id: string; status: string }) {
       {p && (
         <div className="iq-pop-scrim" onClick={() => setPop(null)}>
           <div className="iq-pop" onClick={(e) => e.stopPropagation()}>
-            <button className="iq-pop__x" onClick={() => setPop(null)}>✕</button>
-            {p.mood === "happy" && (
-              <>
-                <span className="iq-spark" style={csx("top:16px;left:22%")}>✨</span>
-                <span className="iq-spark" style={csx("top:24px;right:22%")}>✨</span>
-              </>
-            )}
+            <button className="iq-pop__x" onClick={() => setPop(null)}><Icon name="ic-close" className="ic ic-16" /></button>
             {p.mood === "happy" ? (
               <HeroMascot src="/mascot-success.png" size={120} className="iq-pop__mascot" />
             ) : (

@@ -98,7 +98,18 @@ Aturan wajib:
 7. **Dokumen nilai yang baru.** Setiap perubahan angka XP/Gems harus punya satu tempat kebenaran (konstanta bernama seperti `ACHIEVEMENT_GEMS`, bukan magic number tersebar).
 8. **Jangan pernah menambah mekanisme "reset/refund/free grant"** Gems/XP di UI tanpa otorisasi server + review.
 
-## 6. Alur Kerja & Git (WAJIB)
+## 6. Bootstrap Sesi Baru & Sinkron Progres (WAJIB)
+
+Folder repo ini juga dibuka sebagai vault Obsidian; `tasks/todo.md` dan `docs/` adalah kanal pelacakan progres. Urutan wajib di **setiap awal sesi baru**, sebelum menyentuh kode:
+
+1. **Baca `tasks/todo.md` dulu** — sumber tunggal status task (`[x]` selesai, `[ ]` belum). Urutan task sudah dikunci, jangan diacak.
+2. **Baca `docs/` dulu** — `ls docs/` lalu baca isinya (saat ini `docs/security-audit/SECURITY_AUDIT_HANDOFF.md`). Dokumen di `docs/` adalah konteks, keputusan, dan temuan resmi.
+3. **Baca `tasks/plan.md`** untuk rencana/urutan besar yang sudah disepakati.
+4. **Baru buka file kode** yang disebut oleh task aktif. Dilarang memindai ulang seluruh `src/` di awal sesi — `todo.md` + `docs/` adalah peta konteksnya. Scan penuh hanya bila task aktif benar-benar tidak bisa dikerjakan tanpanya.
+5. **Perbarui `tasks/todo.md` begitu satu task selesai** — di sesi yang sama, bukan ditunda: `[ ]` → `[x]`, tambahkan baris follow-up untuk sisa pekerjaan, dan jangan menghapus riwayat yang sudah selesai.
+6. **Konflik = lapor.** Kalau `todo.md`/`docs/` tidak cocok dengan kondisi kode nyata, laporkan ke user dan perbaiki dokumennya lebih dulu; jangan diam-diam memilih salah satu versi.
+
+## 7. Alur Kerja & Git (WAJIB)
 
 1. **Plan-before-building:** sebelum mengubah **kode proyek apa pun**, susun rencana perbaikan (gunakan skill `planning-and-task-breakdown`) dan **minta persetujuan user dulu**. Jangan menulis/mengubah satu baris kode proyek tanpa approval.
 2. **Skill wajib** untuk pekerjaan software-development di repo ini: `planning-and-task-breakdown`, `security-and-hardening`, `frontend-ui-engineering`, `debugging-and-error-recovery`. Gunakan **hanya** empat ini; hindari skill debugging lama yang tumpang tindih.

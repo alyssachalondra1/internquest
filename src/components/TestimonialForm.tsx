@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { csx } from "@/lib/csx"
+import { Icon } from "@/components/Icons"
 import { saveTestimonial } from "@/app/actions/testimonials"
 
 export function TestimonialForm({
@@ -39,7 +40,7 @@ export function TestimonialForm({
     return (
       <div className="iq-tm__gate">
         <p>
-          <b>Thanks for your review! 🦥</b>
+          <b>Thanks for your review</b>
         </p>
         <p className="muted">It&apos;s now visible to other students on this page.</p>
       </div>
@@ -80,15 +81,15 @@ export function TestimonialForm({
         <div className="iq-stars-pick">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
-              key={n}
-              type="button"
-              className={"iq-star " + ((hover || rating) >= n ? "on" : "")}
+            key={n}
+            type="button"
+            className={"iq-star " + ((hover || rating) >= n ? "on" : "")}
               onMouseEnter={() => setHover(n)}
               onMouseLeave={() => setHover(0)}
               onClick={() => setRating(n)}
               aria-label={n + " stars"}
             >
-              ★
+              <Icon name="ic-star" className="ic ic-22" />
             </button>
           ))}
         </div>

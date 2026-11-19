@@ -265,8 +265,8 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       {step === "method" && (
         <div className="iq-modal">
           <div className="iq-modal__head">
-            <h3>Add Internship</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <h3>Add job</h3>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             {error && (
@@ -327,7 +327,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         <div className="iq-modal" style={csx("max-width:480px")}>
           <div className="iq-modal__head">
             <h3>How should we add these?</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             {error && <p className="iq-inline-note" style={csx("margin-bottom:12px")}>{error}</p>}
@@ -359,7 +359,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         <div className="iq-modal">
           <div className="iq-modal__head">
             <h3>{mode === "manual" ? "Fill in the details" : "Review & Save"}</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             {error && <p className="iq-inline-note" style={csx("margin-bottom:12px")}>{error}</p>}
@@ -411,7 +411,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
               ) : (
                 <div className="iq-form-row"><label>Timing note (optional)</label><input className="iq-input" value={form.timing_note || ""} onChange={(e) => upd("timing_note", e.target.value)} placeholder="e.g. around late June / apply soon" /></div>
               )}
-              <div className="iq-form-row"><label>Internship start</label><input className="iq-input" type="date" value={form.start_date || ""} onChange={(e) => upd("start_date", e.target.value)} /></div>
+              <div className="iq-form-row"><label>Job start</label><input className="iq-input" type="date" value={form.start_date || ""} onChange={(e) => upd("start_date", e.target.value)} /></div>
               <div className="iq-form-row"><label>Duration (months)</label><input className="iq-input" type="number" value={form.duration_months ?? ""} onChange={(e) => upd("duration_months", e.target.value)} /></div>
             </div>
             <div className="iq-form-row"><label>Application link (optional)</label><input className="iq-input" value={form.source_url || ""} onChange={(e) => upd("source_url", e.target.value)} placeholder="https://… apply / register link" /></div>
@@ -429,8 +429,8 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
       {step === "reviewList" && (
         <div className="iq-modal">
           <div className="iq-modal__head">
-            <h3>Review {list.length} internships</h3>
-            <button className="iq-modal__x" onClick={close}>✕</button>
+            <h3>Review {list.length} jobs</h3>
+            <button className="iq-modal__x" onClick={close}><Icon name="ic-close" className="ic ic-16" /></button>
           </div>
           <div className="iq-modal__body">
             {error && <p className="iq-inline-note" style={csx("margin-bottom:12px")}>{error}</p>}
@@ -476,7 +476,7 @@ export function AddInternshipModal({ open, onClose }: { open: boolean; onClose: 
         <div className="iq-modal" style={csx("max-width:440px")}>
           <div className="iq-modal__body center">
             <HeroMascot src="/mascot-success.png" size={120} className="mb-4" />
-            <h3 className="mb-2">{savedCount > 1 ? savedCount + " internships added!" : "Internship added!"}</h3>
+            <h3 className="mb-2">{savedCount > 1 ? savedCount + " jobs added!" : "Job added!"}</h3>
             <p className="muted mb-6">Nice one. {savedCount > 1 ? "They are" : "It is"} saved to your list — time to build your checklist and chase those deadlines.</p>
             <div className="row" style={csx("gap:10px;justify-content:center")}>
               <button className="iq-btn iq-btn--ghost" onClick={close}>Close</button>

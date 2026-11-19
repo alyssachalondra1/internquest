@@ -114,7 +114,7 @@ function AiInner() {
           <div className="row mb-6"><HeroMascot src="/mascot-ai.png" size={62} /><h2 style={csx("font-size:20px")}>Generate with AI</h2></div>
           {internships.length > 0 && (
             <div className="iq-form-row">
-              <label>Prefill from a saved internship</label>
+              <label>Prefill from a saved job</label>
               <select
                 className="iq-select"
                 value={picked}
@@ -124,7 +124,7 @@ function AiInner() {
                   if (it) { setCompany(it.company_name || ""); setRole(it.role || ""); setFormErr(null) }
                 }}
               >
-                <option value="">Choose a saved internship…</option>
+                <option value="">Choose a saved job…</option>
                 {internships.map((it) => (
                   <option key={it.id} value={it.id}>{it.company_name}{it.role ? " · " + it.role : ""}</option>
                 ))}
@@ -177,7 +177,7 @@ function AiInner() {
           </div>
           <div className="iq-card iq-card__pad">
             <div className="row mb-4"><Icon name="ic-target" className="ic ic-22" style={csx("color:var(--green-text)")} /><h3>Tips</h3></div>
-            <p className="muted iq-justify">Open an internship and click the AI Helper button so Company and Role are filled in here automatically.</p>
+            <p className="muted iq-justify">Open a saved job and click the AI helper button so Company and Role are filled in here automatically.</p>
           </div>
         </div>
       </div>

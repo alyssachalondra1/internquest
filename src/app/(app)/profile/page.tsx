@@ -84,13 +84,13 @@ export default async function ProfilePage() {
             <MomoFace mood={moodOf(profile?.avatar_url)} size={104} />
           </div>
         )}
-        <h2 style={csx("font-size:22px")}>Level {level} · Intern Hunter</h2>
+        <h2 style={csx("font-size:22px")}>Applicant, Level {level}</h2>
         <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
         <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP</div>
         <div className="iq-levelstats">
           <div><div className="big-num"><StatIcon name="streak" size={22} /> {profile?.streak_count ?? 0}</div><small className="muted">Day Streak</small></div>
           <div><div className="big-num"><StatIcon name="gems" size={22} /> {profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
-          <div><div className="big-num"><Icon name="ic-list" className="ic ic-18" /> {applied ?? 0}</div><small className="muted">Internships</small></div>
+          <div><div className="big-num"><Icon name="ic-list" className="ic ic-18" /> {applied ?? 0}</div><small className="muted">Saved jobs</small></div>
         </div>
       </div>
       <div className="iq-grid iq-grid--dash">
@@ -108,7 +108,7 @@ export default async function ProfilePage() {
           </div>
           <div className="iq-card iq-card__pad">
             <h3 className="mb-4">Danger Zone</h3>
-            <p className="muted mb-4" style={csx("font-size:13px")}>Menghapus akun akan menghapus seluruh datamu (internship, CV, progres, gems) secara permanen dan tidak bisa dikembalikan.</p>
+            <p className="muted mb-4" style={csx("font-size:13px")}>Menghapus akun akan menghapus seluruh datamu (lowongan tersimpan, CV, progres, gems) secara permanen dan tidak bisa dikembalikan.</p>
             <DeleteAccountButton />
           </div>
         </div>

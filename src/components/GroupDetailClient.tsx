@@ -119,7 +119,7 @@ export function GroupDetailClient({
             <span className="iq-rec__ic"><Icon name="ic-users" className="ic ic-20" /></span>
             <div>
               <h2 style={csx("margin:0")}>{group.name}</h2>
-              <p className="muted" style={csx("margin:2px 0 0;font-size:13px")}>{members.length} members · {internships.length} shared internships</p>
+              <p className="muted" style={csx("margin:2px 0 0;font-size:13px")}>{members.length} members · {internships.length} shared jobs</p>
             </div>
           </div>
           <div className="row" style={csx("gap:8px")}>
@@ -144,7 +144,7 @@ export function GroupDetailClient({
               </span>
               <span className="iq-member__name">{m.full_name || "Member"}{m.is_owner ? " · Owner" : ""}</span>
               {isOwner && !m.is_owner && (
-                <button className="iq-member__x" onClick={() => kick(m)} title="Remove member">✕</button>
+                <button className="iq-member__x" onClick={() => kick(m)} title="Remove member"><Icon name="ic-close" className="ic ic-16" /></button>
               )}
             </div>
           ))}
@@ -152,14 +152,14 @@ export function GroupDetailClient({
       </div>
 
       <div className="iq-sec-title">
-        <h3>Shared internships</h3>
+        <h3>Shared jobs</h3>
         <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={() => setAddOpen(true)}>
-          <Icon name="ic-plus" className="ic ic-16" /> Add internship
+          <Icon name="ic-plus" className="ic ic-16" /> Add job
         </button>
       </div>
 
       {internships.length === 0 ? (
-        <div className="iq-card iq-card__pad muted">No shared internships yet. Add the first one so your group can see it.</div>
+        <div className="iq-card iq-card__pad muted">No shared jobs yet. Add the first one so your group can see it.</div>
       ) : (
         <div className="iq-grid iq-grid--3">
           {internships.map((it, idx) => {
@@ -169,7 +169,7 @@ export function GroupDetailClient({
             const canRemove = isOwner || it.added_by === currentUserId
             return (
               <div key={it.id} className={"iq-icard iq-icard--" + a}>
-                {canRemove && <button className="iq-card-del" title="Remove" onClick={() => removeInternship(it)}>✕</button>}
+                {canRemove && <button className="iq-card-del" title="Remove" onClick={() => removeInternship(it)}><Icon name="ic-close" className="ic ic-16" /></button>}
                 {chip && (
                   <span className="iq-timechip"><Icon name="ic-clock" className="ic ic-16" /> {chip.label}</span>
                 )}
@@ -177,7 +177,7 @@ export function GroupDetailClient({
                   <CompanyLogo domain={guessDomain(it.company_name)} name={it.company_name} />
                   <div>
                     <div className="iq-icard__title">{it.company_name}</div>
-                    <div className="iq-icard__sub">{it.role || "Internship"}</div>
+                    <div className="iq-icard__sub">{it.role || "Role"}</div>
                   </div>
                 </div>
                 <div className="iq-icard__meta">
@@ -211,14 +211,14 @@ export function GroupDetailClient({
         <div className="iq-pop-scrim" onClick={() => setDetail(null)}>
           <div className="iq-modal" onClick={(e) => e.stopPropagation()}>
             <div className="iq-modal__head">
-              <h3>Internship details</h3>
-              <button className="iq-modal__x" onClick={() => setDetail(null)}>✕</button>
+              <h3>Job details</h3>
+              <button className="iq-modal__x" onClick={() => setDetail(null)}><Icon name="ic-close" className="ic ic-16" /></button>
             </div>
             <div className="iq-modal__body">
               <div className="row mb-4">
                 <CompanyLogo domain={guessDomain(detail.company_name)} name={detail.company_name} large />
                 <div>
-                  <h2 style={csx("font-size:20px;margin:0")}>{detail.role || "Internship"}</h2>
+                  <h2 style={csx("font-size:20px;margin:0")}>{detail.role || "Role"}</h2>
                   <div className="muted">{detail.company_name} · {detail.location || "—"}</div>
                 </div>
               </div>

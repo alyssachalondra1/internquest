@@ -13,10 +13,10 @@ export default function TermsPage() {
       <p>Welcome to Sloe. These Terms of Service ("Terms") govern your use of the Sloe website and app (the "Service"). By creating an account or using the Service, you agree to these Terms. If you do not agree, please do not use the Service.</p>
 
       <h2>1. Who can use Sloe</h2>
-      <p>You must be old enough to consent to use online services in your country. You confirm that the information you provide is accurate and that you use Sloe for your own studies and internship search.</p>
+      <p>You must be old enough to consent to use online services in your country. You confirm that the information you provide is accurate and that you use Sloe for your own job search.</p>
 
       <h2>2. The service</h2>
-      <p>Sloe is a tool that helps students discover, organize, and apply to internships, including optional AI-assisted writing, deadline tracking, checklists, internship groups, and a gamified progress system. The Service is provided for personal, non-commercial use.</p>
+      <p>Sloe is a tool that helps you discover, organize, and apply to jobs and roles, including optional AI-assisted writing, deadline tracking, checklists, peer groups, and a gamified progress system. The Service is provided for personal, non-commercial use.</p>
 
       <h2>3. Your account</h2>
       <ul>
@@ -38,8 +38,8 @@ export default function TermsPage() {
       <h2>6. Your content</h2>
       <p>You keep ownership of the content you upload (such as your CV, notes, and posts). You grant us a limited license to store and process it solely to provide the Service to you and, for group posts, to display them to other members of that group.</p>
 
-      <h2>7. Internship information</h2>
-      <p>Internship details read from posters, links, or text may be incomplete or inaccurate. Always confirm deadlines and requirements with the official source before applying. Sloe is not affiliated with the companies or programs you save.</p>
+      <h2>7. Job listing information</h2>
+      <p>Job details read from posters, links, or text may be incomplete or inaccurate. Always confirm deadlines and requirements with the official source before applying. Sloe is not affiliated with the companies or programs you save.</p>
 
       <h2>8. Virtual items</h2>
       <p>XP, levels, gems, streaks, and achievements exist for motivation and engagement only. They have no monetary value, cannot be exchanged for cash, and may be adjusted or reset as we improve the Service.</p>
@@ -51,7 +51,7 @@ export default function TermsPage() {
       <p>The Service is offered "as is" and "as available". We may add, change, suspend, or discontinue features at any time, and we do not guarantee uninterrupted or error-free access.</p>
 
       <h2>11. Disclaimers and limitation of liability</h2>
-      <p>To the fullest extent permitted by law, Sloe is provided without warranties of any kind, and we are not liable for any indirect, incidental, or consequential damages, or for the outcomes of your internship applications.</p>
+      <p>To the fullest extent permitted by law, Sloe is provided without warranties of any kind, and we are not liable for any indirect, incidental, or consequential damages, or for the outcomes of your job applications.</p>
 
       <h2>12. Termination</h2>
       <p>You may delete your account at any time from Settings. We may suspend or terminate accounts that violate these Terms or misuse the Service.</p>

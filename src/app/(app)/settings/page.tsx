@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Icon } from "@/components/Icons"
+import { ThemeSelect } from "@/components/ThemeToggle"
 import { LogoutButton } from "@/components/LogoutButton"
 import { csx } from "@/lib/csx"
 
@@ -48,6 +49,14 @@ export default function SettingsPage() {
       <div className="iq-set-grid">
         <div>
           <div className="iq-card iq-card__pad iq-set-sec">
+            <div className="iq-set-head"><span className="iq-set-ic"><Icon name="ic-sun" className="ic ic-18" /></span><h3>Appearance</h3></div>
+            <div className="iq-set-row">
+              <div className="iq-set-row__t"><b>Theme</b><span>System follows your device setting</span></div>
+              <ThemeSelect />
+            </div>
+          </div>
+
+          <div className="iq-card iq-card__pad iq-set-sec">
             <div className="iq-set-head"><span className="iq-set-ic"><Icon name="ic-bell" className="ic ic-18" /></span><h3>Notifications</h3></div>
             {NOTIF.map((t) => (
               <div key={t.key} className="iq-set-row">
@@ -73,7 +82,7 @@ export default function SettingsPage() {
         <div>
           <div className="iq-card iq-card__pad iq-set-sec">
             <div className="iq-set-head"><span className="iq-set-ic"><Icon name="ic-star" className="ic ic-18" /></span><h3>About</h3></div>
-            <div className="iq-set-row"><div className="iq-set-row__t"><b className="iq-wordmark">Sloe</b><span>Your AI companion for internship hunting</span></div><span className="iq-chip iq-chip--blue">v1.0</span></div>
+            <div className="iq-set-row"><div className="iq-set-row__t"><b className="iq-wordmark">Sloe</b><span>Your AI companion for the job hunt</span></div><span className="iq-chip iq-chip--blue">v1.0</span></div>
           </div>
 
           <div className="iq-card iq-card__pad iq-set-sec">

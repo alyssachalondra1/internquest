@@ -76,7 +76,7 @@ export function computeBadges(input: {
     {
       key: "Offer Getter",
       title: "Offer Getter",
-      desc: "Land an internship offer",
+      desc: "Land a job offer",
       icon: "ic-trophy",
       bg: "var(--green-15)",
       fg: "var(--green-text)",

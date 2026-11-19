@@ -1147,3 +1147,83 @@ html,body{max-width:100%;overflow-x:hidden}
 /* #10 Make Google sign-in stand out to reduce email volume */
 .iq-authbtn--google{border-color:var(--blue-40);background:var(--blue-15);box-shadow:0 4px 14px rgba(47,107,255,.12)}
 .iq-authbtn--google:hover{background:var(--blue-15);border-color:var(--blue)}
+
+/* ============================================================
+   THEME LAYER — one source of truth for surfaces, text and the
+   dark theme. Sidebar, job cards and priority cards keep their
+   own palettes on purpose (protected design).
+   ============================================================ */
+:root{color-scheme:light}
+html{background:var(--canvas)}
+
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --canvas:#0F1420;
+  --surface:#171E2C;
+  --surface-2:#212B3D;
+  --ink:#E8EDF7; --ink-2:#B4BFD3; --ink-3:#8692A9;
+  --border:#27324A; --border-2:#38455F;
+  --blue:#5B8CFF; --blue-text:#93B2FF;
+  --blue-15:rgba(91,140,255,.16); --blue-40:rgba(91,140,255,.42);
+  --violet:#9C86FF; --violet-text:#B9A9FF;
+  --pink:#FF8FB8; --pink-text:#FFA9C8;
+  --pink-15:rgba(255,143,184,.14); --pink-50:rgba(255,143,184,.34);
+  --yellow:#FFD166; --yellow-text:#FFCE6B;
+  --yellow-15:rgba(255,209,102,.16); --yellow-50:rgba(255,209,102,.34);
+  --green:#4ED894; --green-text:#6FE7AC;
+  --green-15:rgba(78,216,148,.14); --green-40:rgba(78,216,148,.36);
+  --red:#FF8080; --red-text:#FF9C9C;
+  --red-15:rgba(255,128,128,.14); --red-40:rgba(255,128,128,.32);
+  --sh-1:0 1px 2px rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.28);
+  --sh-2:0 14px 36px rgba(0,0,0,.46);
+}
+
+/* --- Component rules that still carry literal light colors --- */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4{color:var(--ink)}
+:root[data-theme="dark"] .iq-topbar{background:rgba(23,30,44,.88)}
+:root[data-theme="dark"] .iq-card{border-color:var(--border)}
+:root[data-theme="dark"] .iq-ach-hero,
+:root[data-theme="dark"] .iq-pop,
+:root[data-theme="dark"] .iq-streakpop,
+:root[data-theme="dark"] .iq-lp__card,
+:root[data-theme="dark"] .iq-lp__step,
+:root[data-theme="dark"] .iq-auth__panel,
+:root[data-theme="dark"] .iq-peekcard,
+:root[data-theme="dark"] .iq-levelcard,
+:root[data-theme="dark"] .iq-modal,
+:root[data-theme="dark"] .iq-cal__d,
+:root[data-theme="dark"] .iq-calhead,
+:root[data-theme="dark"] .iq-seg button.on{background:var(--surface);border-color:var(--border)}
+:root[data-theme="dark"] .iq-authbtn{border-color:var(--border-2);background:var(--surface)}
+:root[data-theme="dark"] .iq-authbtn:hover{background:var(--surface-2);border-color:var(--border-2)}
+:root[data-theme="dark"] .iq-cal__d.is-muted{background:var(--surface-2);border-color:var(--border)}
+:root[data-theme="dark"] .iq-cal__d.is-today{background:var(--pink-15);border-color:var(--pink)}
+:root[data-theme="dark"] .iq-avatar-opt{background:var(--surface-2)}
+:root[data-theme="dark"] .iq-skel{background:var(--surface-2)}
+:root[data-theme="dark"] .iq-skel::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
+:root[data-theme="dark"] .iq-btn--ghost{background:var(--surface);border-color:var(--border-2)}
+:root[data-theme="dark"] .iq-btn--ghost:hover{background:var(--surface-2)}
+:root[data-theme="dark"] .iq-input,
+:root[data-theme="dark"] .iq-select,
+:root[data-theme="dark"] .iq-textarea{background:var(--surface-2);border-color:var(--border-2);color:var(--ink)}
+:root[data-theme="dark"] .iq-lp{background:var(--canvas)}
+:root[data-theme="dark"] .iq-lp__cta-band{box-shadow:0 20px 44px rgba(0,0,0,.4)}
+
+/* --- Login hero: soft gradient, defined per theme --- */
+.iq-auth__hero--soft{background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)}
+:root[data-theme="dark"] .iq-auth__hero--soft{background:linear-gradient(180deg,#1C2740 0%,#151D2E 55%,#111827 100%)}
+
+/* --- Theme toggle --- */
+.iq-iconbtn{width:42px;height:42px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;background:var(--surface);border:2px solid var(--border-2);color:var(--ink-2);flex:none;transition:background .12s,color .12s,border-color .12s}
+.iq-iconbtn:hover{background:var(--surface-2);color:var(--ink)}
+.iq-seg button{display:inline-flex;align-items:center;gap:6px}
+
+/* --- Star ratings as icons (testimonials) --- */
+.iq-stars-row{display:inline-flex;align-items:center;gap:2px;vertical-align:middle}
+.iq-stars-row .ic{color:var(--border-2);stroke-width:1.6}
+.iq-stars-row .ic--fill{color:var(--yellow-text)}
+.iq-star .ic{fill:none}
+.iq-star.on .ic{fill:currentColor}

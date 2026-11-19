@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { csx } from "@/lib/csx"
+import { Icon } from "@/components/Icons"
 import { sendFeedback } from "@/app/actions/feedback"
 
 export function ContactForm() {
@@ -33,7 +34,7 @@ export function ContactForm() {
           style={csx("background:var(--green-15);border-color:var(--green-40)")}
         >
           <div>
-            <b>Thanks for reaching out! 💌</b>
+            <b><Icon name="ic-mail" className="ic ic-18" /> Thanks for reaching out</b>
             <p className="mt-2">Your message has been sent. We&apos;ll get back to you soon.</p>
           </div>
         </div>

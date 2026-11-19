@@ -19,20 +19,26 @@ const FEATURES = [
   { icon: "ic-calendar", bg: "linear-gradient(135deg,#3B76FF,#7C5CFF)", t: "Deadline calendar", d: "Every registration window and start date in one place, so you never miss an opportunity." },
   { icon: "ic-trophy", bg: "linear-gradient(135deg,#FFC53D,#FF6FA5)", t: "Gamified progress", d: "Earn XP and gems, keep your daily streak, and unlock badges every time you move an application forward." },
   { icon: "ic-check", bg: "linear-gradient(135deg,#2FCB7E,#2FCB7E)", t: "Smart checklist", d: "Track the documents each application needs and check them off as you go." },
-  { icon: "ic-list", bg: "linear-gradient(135deg,#3B76FF,#2FCB7E)", t: "Application tracker", d: "Move every internship across a clear board, from To Do to Applied, Interview, and Offer, and see your whole pipeline at a glance." },
-  { icon: "ic-users", bg: "linear-gradient(135deg,#FF6FA5,#7C5CFF)", t: "Internship groups", d: "Find or start groups with classmates and friends who share your interests, then swap internship opportunities with each other." },
+  { icon: "ic-list", bg: "linear-gradient(135deg,#3B76FF,#2FCB7E)", t: "Application tracker", d: "Move every application across a clear board, from To Do to Applied, Interview, and Offer, and see your whole pipeline at a glance." },
+  { icon: "ic-users", bg: "linear-gradient(135deg,#FF6FA5,#7C5CFF)", t: "Peer groups", d: "Find or start groups with classmates and friends who share your interests, then swap job leads with each other." },
 ]
 
 const STEPS = [
   { t: "Create your account", d: "Sign up with email or Google and set up your student profile in a minute." },
-  { t: "Add internships", d: "Upload a poster, paste a link, or read a poster posted on Instagram. You can also fill it in manually." },
+  { t: "Add jobs", d: "Upload a poster, paste a link, or read a poster posted on Instagram. You can also fill it in manually." },
   { t: "Track everything", d: "Follow deadlines on the calendar and complete the checklist for each application." },
   { t: "Apply with AI", d: "Generate tailored letters and emails, then submit with confidence." },
 ]
 
-function stars(n: number) {
+function Stars({ n }: { n: number }) {
   const r = Math.max(0, Math.min(5, Math.round(n)))
-  return "★★★★★".slice(0, r) + "☆☆☆☆☆".slice(0, 5 - r)
+  return (
+    <span className="iq-stars-row" aria-label={r + " out of 5"}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Icon key={i} name="ic-star" className={"ic ic-16" + (i <= r ? " ic--fill" : "")} />
+      ))}
+    </span>
+  )
 }
 
 type Testimonial = { id: string; display_name: string; rating: number; body: string }
@@ -82,9 +88,9 @@ export default async function Landing() {
         <section className="iq-lp__hero">
           <div>
             <MascotLottie size={240} className="iq-lp__heromascot" fallback="/mascot-hero.png" />
-            <span className="iq-lp__badge iq-lp__badge--yellow">Your AI internship companion</span>
-            <h1 className="iq-lp__title">Turn your internship hunt into a <span className="iq-lp__grad">winning quest</span></h1>
-            <p className="iq-lp__sub">Sloe helps students find, track, and win internships. Save opportunities from posters and links, get AI help with your applications, share finds with internship groups, and stay motivated with a friendly gamified workspace.</p>
+            <span className="iq-lp__badge iq-lp__badge--yellow">Your companion for the job hunt</span>
+            <h1 className="iq-lp__title">Turn your job hunt into a <span className="iq-lp__grad">winning quest</span></h1>
+            <p className="iq-lp__sub">Sloe helps you find, track, and win jobs and roles. Save opportunities from posters and links, get AI help with your applications, share finds with your groups, and stay motivated with a friendly gamified workspace.</p>
             <div className="iq-lp__cta">
               <Link className="iq-btn iq-btn--primary" href="/login?mode=signup">Get started free <Icon name="ic-arrow-right" className="ic ic-18" /></Link>
               <Link className="iq-btn iq-btn--ghost" href="/dashboard">Open dashboard</Link>
@@ -131,11 +137,11 @@ export default async function Landing() {
 
         <section className="iq-lp__sec" id="reviews">
           <h2 className="iq-lp__h2">Loved by students</h2>
-          <p className="iq-lp__lead">Real reviews from students using Sloe on their internship hunt.</p>
+          <p className="iq-lp__lead">Real reviews from people using Sloe on their job hunt.</p>
           {list.length > 0 && (
             <div className="iq-tm__summary">
               <span className="iq-tm__avg">{avg.toFixed(1)}</span>
-              <span className="iq-tm__avgstars">{stars(avg)}</span>
+              <span className="iq-tm__avgstars"><Stars n={avg} /></span>
               <span className="muted">{list.length} review{list.length === 1 ? "" : "s"}</span>
             </div>
           )}
@@ -143,7 +149,7 @@ export default async function Landing() {
             <div className="iq-tm__grid">
               {list.map((t) => (
                 <div key={t.id} className="iq-tm__card">
-                  <div className="iq-tm__stars">{stars(t.rating)}</div>
+                  <div className="iq-tm__stars"><Stars n={t.rating} /></div>
                   <p className="iq-tm__body">{t.body}</p>
                   <div className="iq-tm__by">— {t.display_name}</div>
                 </div>

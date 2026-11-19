@@ -33,7 +33,7 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
 const REDIRECT_PATH = "/auth/callback?next=/dashboard"
 
 const TAGLINES = [
-  "Your AI companion for the internship hunt",
+  "Your AI companion for the job hunt",
   "Manage every application in one place",
   "Write a motivation letter in seconds",
   "Level up every time you apply",
@@ -224,9 +224,9 @@ export default function LoginPage() {
   return (
     <section className="iq-auth">
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={initGoogle} />
-      <div className="iq-auth__hero" style={csx("background:linear-gradient(180deg,#CFE6FF 0%,#E9F3FF 55%,#FFFFFF 100%)")}>
+      <div className="iq-auth__hero iq-auth__hero--soft">
         <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
-        <div key={"tag-" + slide} className="iq-auth__tag iq-slidein" style={csx("min-height:28px")}>{TAGLINES[slide]} 🦥</div>
+        <div key={"tag-" + slide} className="iq-auth__tag iq-slidein" style={csx("min-height:28px")}>{TAGLINES[slide]}</div>
         <HeroMascot key={"slide-" + slide} src={SLIDE_IMAGES[slide]} size={200} className="iq-auth__mascot iq-slidein" />
         <div className="iq-dots">
           {TAGLINES.map((_, i) => (
@@ -240,8 +240,8 @@ export default function LoginPage() {
             <div className="iq-auth__step is-active">
               <div className="iq-peek"><Momo size={120} /></div>
               <div className="iq-peekcard">
-                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome! 👋</h1>
-                <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for internships.</p>
+                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome</h1>
+                <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for jobs.</p>
                 {msg && <p style={csx("color:var(--red-text);margin-bottom:12px;font-size:13px;text-align:center")}>{msg}</p>}
                 {GOOGLE_CLIENT_ID ? (
                   <div className="iq-google" style={csx("position:relative")}>
@@ -311,7 +311,7 @@ export default function LoginPage() {
               <p className="muted mb-6">We will send a login link to your email.</p>
               {sent ? (
                 <div className="iq-callout" style={csx("background:var(--green-15);border-color:var(--green-40)")}>
-                  <div><b>Check your email! ✉️</b><p className="mt-2">A login link has been sent to {email}.</p></div>
+                  <div><b className="row" style={csx("gap:6px")}><Icon name="ic-mail" className="ic ic-18" /> Check your email</b><p className="mt-2">A login link has been sent to {email}.</p></div>
                 </div>
               ) : (
                 <>
@@ -335,7 +335,7 @@ export default function LoginPage() {
               <p className="muted mb-6">Enter your email and we will send you a link to reset your password.</p>
               {resetSent ? (
                 <div className="iq-callout" style={csx("background:var(--green-15);border-color:var(--green-40)")}>
-                  <div><b>Check your email! ✉️</b><p className="mt-2">We sent a password reset link to {email}.</p></div>
+                  <div><b className="row" style={csx("gap:6px")}><Icon name="ic-mail" className="ic ic-18" /> Check your email</b><p className="mt-2">We sent a password reset link to {email}.</p></div>
                 </div>
               ) : (
                 <>

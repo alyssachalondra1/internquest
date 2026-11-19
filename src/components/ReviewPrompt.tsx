@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { HeroMascot } from "@/components/HeroMascot"
+import { Icon } from "@/components/Icons"
 import { saveTestimonial } from "@/app/actions/testimonials"
 import { csx } from "@/lib/csx"
 
@@ -90,16 +91,16 @@ export function ReviewPrompt({ profileName }: { profileName: string | null }) {
           aria-label="Close"
           onClick={dismiss}
           style={csx(
-            "position:absolute;top:12px;right:14px;background:none;border:none;font-size:18px;color:var(--ink-3);cursor:pointer",
+            "position:absolute;top:12px;right:14px;background:none;border:none;color:var(--ink-3);cursor:pointer",
           )}
         >
-          ✕
+          <Icon name="ic-close" className="ic ic-18" />
         </button>
 
         {done ? (
           <div style={csx("text-align:center")}>
             <HeroMascot src="/mascot-success.png" size={130} className="iq-streakpop__mascot" />
-            <b>Thank you! 💜</b>
+            <b>Thank you</b>
             <p>Your review means a lot and helps other students discover Sloe.</p>
             <button className="iq-btn iq-btn--primary iq-btn--block mt-6" onClick={() => setShow(false)}>
               Close
@@ -111,7 +112,7 @@ export function ReviewPrompt({ profileName }: { profileName: string | null }) {
               <HeroMascot src="/mascot-hero.png" size={110} className="iq-streakpop__mascot" />
               <b>Enjoying Sloe?</b>
               <p style={csx("margin-bottom:10px")}>
-                Mind leaving a quick review? It helps other students find Sloe. 🦥
+                Mind leaving a quick review? It helps other people find Sloe.
               </p>
             </div>
 
@@ -128,11 +129,11 @@ export function ReviewPrompt({ profileName }: { profileName: string | null }) {
                   onMouseLeave={() => setHover(0)}
                   onClick={() => setRating(n)}
                   style={csx(
-                    "background:none;border:none;cursor:pointer;padding:2px;font-size:32px;line-height:1;color:" +
+                    "background:none;border:none;cursor:pointer;padding:2px;line-height:1;color:" +
                       (n <= shownRating ? "#FFB800" : "var(--border-2)"),
                   )}
                 >
-                  ★
+                  <Icon name="ic-star" className={"ic ic-22" + (n <= shownRating ? " ic--fill" : "")} />
                 </button>
               ))}
             </div>

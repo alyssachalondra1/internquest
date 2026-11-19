@@ -70,7 +70,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
       </div>
 
       {shown.length === 0 ? (
-        <div className="iq-card iq-card__pad muted">No internships in this category yet. Click "Add Internship" above to add one.</div>
+        <div className="iq-card iq-card__pad muted">No jobs in this category yet. Click "Add job" above to add one.</div>
       ) : (
         <div className="iq-grid iq-grid--3">
           {shown.map((it, idx) => {
@@ -86,7 +86,7 @@ export function InternshipsClient({ items, progress }: { items: Internship[]; pr
                 onClick={() => router.push("/internships/" + it.id)}
                 onMouseEnter={() => router.prefetch("/internships/" + it.id)}
               >
-                <button className="iq-card-del" title="Delete" onClick={(e) => remove(e, it)}>✕</button>
+                <button className="iq-card-del" title="Delete" onClick={(e) => remove(e, it)}><Icon name="ic-close" className="ic ic-16" /></button>
                 {chip && (
                   <span className="iq-timechip">
                     <Icon name="ic-clock" className="ic ic-16" /> {chip.label}

@@ -66,7 +66,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
               <div className="row">
                 <CompanyLogo domain={guessDomain(item.company_name)} name={item.company_name} large />
                 <div>
-                  <h2 style={csx("font-size:22px")}>{item.role || "Internship"}</h2>
+                  <h2 style={csx("font-size:22px")}>{item.role || "Role"}</h2>
                   <div className="muted">{item.company_name} · {item.location || "—"}</div>
                 </div>
               </div>
@@ -103,7 +103,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
         <div className="stack-6">
           <div className="iq-card iq-card__pad">
             <div className="row mb-4"><HeroMascot src="/mascot-ai.png" size={56} /><h3>AI Helper</h3></div>
-            <p className="muted mb-4" style={csx("font-size:13px")}>Draft a motivation letter, cover letter, or an email to HR — all tailored to this internship and your CV, in one place.</p>
+            <p className="muted mb-4" style={csx("font-size:13px")}>Draft a motivation letter, cover letter, or an email to HR — all tailored to this role and your CV, in one place.</p>
             <Link className="iq-btn iq-btn--primary iq-btn--block" href={"/ai?internship=" + item.id}>
               <Icon name="ic-ai" className="ic ic-18" /> Generate with AI
             </Link>
