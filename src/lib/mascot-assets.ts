@@ -70,6 +70,22 @@ export function mascotAspect(file: string): number {
 }
 
 export type Geometry = { left: number; top: number; width: number; height: number }
+
+/**
+ * Same maths as `mascotGeometry`, expressed in percentages of the slot.
+ * The slot is given the drawing's own aspect ratio, so "contain" fills it
+ * exactly and the art scales with its container instead of a fixed pixel size.
+ */
+export function mascotGeometryPercent(fileOrKey: string | undefined): Geometry {
+  const entry = mascotAsset(fileOrKey)
+  const [x, y, bw, bh] = entry.box
+  return {
+    left: (-x / bw) * 100,
+    top: (-y / bh) * 100,
+    width: (entry.w / bw) * 100,
+    height: (entry.h / bh) * 100,
+  }
+}
 export type Fit = "contain" | "cover"
 export type Align = "center" | "top" | "bottom" | "left" | "right"
 

@@ -17,12 +17,13 @@ function systemTheme(): "light" | "dark" {
 }
 
 function readChoice(): ThemeChoice {
-  if (typeof window === "undefined") return "system"
+  if (typeof window === "undefined") return "light"
   try {
     const v = localStorage.getItem(KEY)
-    if (v === "light" || v === "dark") return v
+    if (v === "light" || v === "dark" || v === "system") return v
   } catch {}
-  return "system"
+  // No stored choice: the light lavender theme is the default.
+  return "light"
 }
 
 const listeners = new Set<() => void>()
@@ -41,8 +42,7 @@ function subscribe(cb: () => void) {
 
 function setChoice(next: ThemeChoice) {
   try {
-    if (next === "system") localStorage.removeItem(KEY)
-    else localStorage.setItem(KEY, next)
+    localStorage.setItem(KEY, next)
   } catch {}
   const theme = next === "system" ? systemTheme() : next
   document.documentElement.dataset.theme = theme

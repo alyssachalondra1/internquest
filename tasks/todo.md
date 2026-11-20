@@ -85,6 +85,25 @@ Yang dilindungi: tata letak & palet sidebar, isi kartu daftar lowongan (hanya te
 - [x] Dark mode landing punya ramp kertas-gelap sendiri (bukan `--canvas`), kontras teks kecil dinaikkan.
 - [x] Verifikasi: `npm run build` hijau; render 1440/390 light+dark, 0 overflow horizontal, 0 teks "Internship".
 
+### P3b2 — Lavender pastel + elemen referensi Aeline (SELESAI)
+- [x] Light mode jadi lavender pastel (`#F5F1FE`), token global ikut (`#F5F2FC`); dark mode jadi plum gelap.
+- [x] Font: Plus Jakarta Sans → Bricolage Grotesque (display) + Instrument Sans (UI).
+- [x] Default tema = light lavender (bukan dark), masih bisa switch System/Light/Dark.
+- [x] Landing: 8 kartu pelangi → 3 fitur + strip 3 langkah; copy "quest"/tanda seru dibersihkan.
+- [x] Hero: scene peach + pratinjau produk + sticky note; rating proof row (angka asli dari testimoni).
+- [x] Stats strip 3 angka jujur (10 aksi AI, 2 grup, 3 langkah) — pola stat row dari referensi.
+- [x] Halaman `/pricing` 3 kolom (Free/Plus/Pro) + FAQ; tombol "See plans" di CTA band.
+- [x] Dashboard: header "This week" (bukan gradient quest), "Intern Hunter" → "Applicant".
+- [x] Verifikasi: build hijau (27 route), render 1440/390 light+dark, 0 overflow, 0 error konsol.
+
+### P3b3 — Hero berpanel + stat cards ala referensi Aeline (SELESAI)
+- [x] Hero dibungkus satu panel gradient ungu bersudut bulat + margin; nav di dalam panel.
+- [x] Headline/subhead/CTA di-center, satu kolom; ikon pin inline di dalam kalimat.
+- [x] Dua kartu mini melayang (Checklist kiri, CV match kanan) mengapit pratinjau; disembunyikan di mobile.
+- [x] Stats strip teks → 3 kartu: ungu gradient / putih berisi kutipan review asli / lavender tint, dengan pill.
+- [x] Dark mode: panel diberi border tipis + mini card punya permukaan sendiri supaya tidak menyatu.
+- [x] Verifikasi: build hijau, render 1440/390 light+dark, 0 overflow, 0 error konsol.
+
 ### P3c — Login — belum
 - [ ] Komposisi hero: adegan `welcomee.png` besar, satu maskot mengintip, tagline berhenti berputar.
 - [ ] Crossfade slide maskot (lewat renderer baru), ruang kosong diisi.

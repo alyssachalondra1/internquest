@@ -1,7 +1,15 @@
 "use client"
 
 import { useEffect, useState, type CSSProperties } from "react"
-import { MASCOT_FALLBACK, MOOD_FILE, mascotAsset, mascotGeometry, type Align, type Fit } from "@/lib/mascot-assets"
+import {
+  MASCOT_FALLBACK,
+  MOOD_FILE,
+  mascotAsset,
+  mascotGeometry,
+  mascotGeometryPercent,
+  type Align,
+  type Fit,
+} from "@/lib/mascot-assets"
 import type { Mood } from "@/lib/mascot"
 
 /* The single mascot renderer. Every spot in the app (hero, pops, avatars,
@@ -62,6 +70,7 @@ export function Mascot({
   position = "50% 50%",
   w,
   h,
+  fluid = false,
   priority = false,
   alt = "Momo the sloth",
 }: {
@@ -74,6 +83,8 @@ export function Mascot({
   position?: string
   w?: number
   h?: number
+  /** Fill the parent's width and keep the drawing's aspect ratio. */
+  fluid?: boolean
   priority?: boolean
   alt?: string
 }) {
@@ -115,7 +126,10 @@ export function Mascot({
   }, [layers])
 
   const layer = (file: string, state: "cur" | "prev") => {
-    const g = mascotGeometry(file, boxW, boxH, mode, align)
+    const g = fluid ? mascotGeometryPercent(file) : mascotGeometry(file, boxW, boxH, mode, align)
+    const size = fluid
+      ? { left: g.left + "%", top: g.top + "%", width: g.width + "%", height: g.height + "%" }
+      : { left: g.left, top: g.top, width: g.width, height: g.height }
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
@@ -132,10 +146,7 @@ export function Mascot({
         }}
         style={
           {
-            left: g.left,
-            top: g.top,
-            width: g.width,
-            height: g.height,
+            ...size,
             opacity: state === "cur" ? 1 : 0,
           } as CSSProperties
         }
@@ -146,7 +157,7 @@ export function Mascot({
   return (
     <div
       className={"iq-mascotbox" + (round ? " iq-mascotbox--round" : "") + (className ? " " + className : "")}
-      style={{ width: boxW, height: boxH }}
+      style={fluid ? { width: "100%", aspectRatio: contentAspect } : { width: boxW, height: boxH }}
     >
       {layers.prev ? layer(layers.prev, "prev") : null}
       {layer(layers.cur, "cur")}

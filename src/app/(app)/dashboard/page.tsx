@@ -64,16 +64,20 @@ export default async function DashboardPage() {
   const priority = items.filter((i) => i.deadline).slice(0, 3)
   const upcoming = items.filter((i) => i.deadline && (deadlineChip(i.deadline)?.label ?? "") !== "Passed").slice(0, 4)
   const applied = items.filter((i) => ["applied", "screening", "test", "interview", "offer"].includes(i.status)).length
+  const interviews = items.filter((i) => ["interview", "offer"].includes(i.status)).length
 
   return (
     <section className="iq-screen is-active">
       <div className="iq-hero mb-6">
-        <div style={csx("flex:1;color:#fff")}>
-          <div style={csx("font-weight:800;letter-spacing:.08em;font-size:11px;opacity:.85;text-transform:uppercase")}>Today's Quest</div>
-          <h1 style={csx("font-size:26px;margin-top:4px;color:#fff")}>Hi, {name}!</h1>
-          <p style={csx("opacity:.92;margin-top:4px")}>Here is your job hunt for today.</p>
+        <div className="iq-hero__text">
+          <p className="iq-hero__eyebrow">Hi, {name}</p>
+          <h1>This week</h1>
+          <p className="iq-hero__line">
+            {priority.length} deadline{priority.length === 1 ? "" : "s"}, {applied} in progress, {interviews} interview
+            {interviews === 1 ? "" : "s"}
+          </p>
         </div>
-        <MascotLottie size={180} className="iq-hero__mascot" fallback="/mascot-hero.png" />
+        <MascotLottie size={168} className="iq-hero__mascot" fallback="/mascot-hero.png" />
       </div>
 
       <div className="iq-callout mb-6">
@@ -138,7 +142,7 @@ export default async function DashboardPage() {
                 <MomoFace mood={moodOf(profile?.avatar_url)} size={104} />
               </div>
             )}
-            <h3 style={csx("font-size:19px")}>Level {level} · Intern Hunter</h3>
+            <h3 style={csx("font-size:19px")}>Level {level} · Applicant</h3>
             <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
             <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>
             <div className="iq-levelstats">
