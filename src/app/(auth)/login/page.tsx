@@ -3,8 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Script from "next/script"
-import { Momo } from "@/components/Momo"
-import { HeroMascot } from "@/components/HeroMascot"
 import { preloadMascots } from "@/components/Mascot"
 import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
@@ -36,7 +34,10 @@ const REDIRECT_PATH = "/auth/callback?next=/dashboard"
 // One line, one image. The rotating carousel made the panel feel like a
 // template and left a blank frame between slides.
 const TAGLINE = "Keep every application, deadline and draft in one place."
+// Maskot besar yang duduk di atas kartu login.
 const HERO_IMAGE = "/welcomee.png"
+// Sisi teks berganti maskot. Dekoratif, jadi dihormati prefers-reduced-motion.
+const ROTATION = ["/momoface1.png", "/momoface2.png", "/momoface3.png", "/momoface4.png"]
 
 export default function LoginPage() {
   const router = useRouter()
@@ -49,13 +50,22 @@ export default function LoginPage() {
   const [resetSent, setResetSent] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const gsiMountRef = useRef<HTMLDivElement>(null)
-  const gsiReadyRef = useRef(false)
+    const [rot, setRot] = useState(0)
+    const gsiMountRef = useRef<HTMLDivElement>(null)
+    const gsiReadyRef = useRef(false)
 
-  // Warm the two images used on this screen so neither pops in late.
-  useEffect(() => {
-    preloadMascots([HERO_IMAGE])
-  }, [])
+    // Warm the images used on this screen so neither pops in late.
+    useEffect(() => {
+      preloadMascots([HERO_IMAGE, ...ROTATION])
+    }, [])
+
+    // Maskot sisi teks berganti tiap 4 detik.
+    useEffect(() => {
+      if (typeof window === "undefined") return
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+      const id = window.setInterval(() => setRot((r) => (r + 1) % ROTATION.length), 4000)
+      return () => window.clearInterval(id)
+    }, [])
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -211,22 +221,31 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="iq-auth">
-      <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={initGoogle} />
-      <div className="iq-auth__hero iq-auth__hero--soft">
-        <div className="iq-auth__herotext">
-          <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
-          <div className="iq-auth__tag">{TAGLINE}</div>
-        </div>
-        <HeroMascot src={HERO_IMAGE} size={420} w={420} h={273} className="iq-auth__mascot" priority />
-      </div>
-      <div className="iq-auth__panel">
-        <div className="iq-auth__card">
-          {step === "welcome" && (
-            <div className="iq-auth__step is-active">
-              <div className="iq-peek"><Momo size={112} mood="sleepy" /></div>
-              <div className="iq-peekcard">
-                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome back</h1>
+      <>
+        <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={initGoogle} />
+        <main className="iq-lg">
+          <div className="iq-lg__brand">
+            <span className="iq-lg__wm">Sl<i>oe</i></span>
+            <p className="iq-lg__tag">{TAGLINE}</p>
+            <div className="iq-lg__rot" aria-hidden="true">
+              {ROTATION.map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={src} src={src} alt="" className={i === rot ? "on" : ""} />
+              ))}
+            </div>
+            <div className="iq-lg__dots" aria-hidden="true">
+              {ROTATION.map((src, i) => <i key={src} className={i === rot ? "on" : ""} />)}
+            </div>
+          </div>
+          <div className="iq-lg__panel">
+            <div className="iq-lg__col">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="iq-lg__peek" src={HERO_IMAGE} alt="" />
+              <div className="iq-lg__card">
+                {step === "welcome" && (
+                  <div className="iq-auth__step is-active">
+                    <div>
+                      <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome back</h1>
                 <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep your applications in one place.</p>
                 {msg && <p style={csx("color:var(--red-text);margin-bottom:12px;font-size:13px;text-align:center")}>{msg}</p>}
                 {GOOGLE_CLIENT_ID ? (
@@ -333,9 +352,11 @@ export default function LoginPage() {
                 </>
               )}
             </div>
-          )}
-        </div>
-      </div>
-    </section>
-  )
-}
+                      )}
+                          </div>
+                        </div>
+                      </div>
+                  </main>
+                </>
+              )
+            }

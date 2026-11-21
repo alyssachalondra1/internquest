@@ -1782,3 +1782,115 @@ html{background:var(--canvas)}
 @media(max-width:760px){
   .iq-lp__note{right:-12px;bottom:-26px}
 }
+
+/* ============================================================
+   REVISI v12 — login shell, dark sidebar, avatar picker,
+   profile card (tanpa ikon kecil), callout rapi, landing gap.
+   Satu blok, nama kelas baru untuk login agar tidak bertabrakan
+   dengan aturan .iq-auth lama yang sudah bertumpuk.
+   ============================================================ */
+
+/* --- 1. Sidebar ikut gelap di mode malam, tetap seimbang --- */
+:root[data-theme="dark"] .iq-sidebar{
+  background:linear-gradient(185deg,#1A1F2E 0%,#151A27 55%,#111520 100%);
+  border-right:1px solid #242A3A;
+  color:#C7D0E4;
+  box-shadow:none;
+}
+:root[data-theme="dark"] .iq-brand{color:#8FB4FF}
+:root[data-theme="dark"] .iq-brand i{color:#FF9BBF}
+:root[data-theme="dark"] .iq-nav__item{color:#A9B4CC}
+:root[data-theme="dark"] .iq-nav__item:hover{background:rgba(255,255,255,.07);color:#F2F5FF}
+:root[data-theme="dark"] .iq-nav__label{color:#78839E}
+:root[data-theme="dark"] .iq-usermini{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)}
+:root[data-theme="dark"] .iq-usermini__meta b{color:#F2F5FF}
+:root[data-theme="dark"] .iq-usermini__meta span{color:#9AA6C2}
+:root[data-theme="dark"] .iq-usermini__av{background:rgba(255,255,255,.10)}
+:root[data-theme="dark"] .iq-signout{color:#9AA6C2}
+:root[data-theme="dark"] .iq-signout:hover{background:rgba(255,255,255,.07);color:#fff}
+:root[data-theme="dark"] .iq-botnav{background:#151A27;box-shadow:0 -6px 20px rgba(0,0,0,.35)}
+:root[data-theme="dark"] .iq-botnav a{color:#9AA6C2}
+
+/* --- 2. Pemilih foto profil: transparan, mengikuti bentuk maskot --- */
+.iq-avatar-picker{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.iq-avatar-opt{
+  width:58px;height:58px;border:0;border-radius:0;background:transparent;
+  display:flex;align-items:center;justify-content:center;overflow:visible;padding:0;cursor:pointer;
+  transition:transform .14s ease,filter .14s ease;
+}
+.iq-avatar-opt:hover{transform:translateY(-2px)}
+.iq-avatar-opt img{width:100%;height:100%;object-fit:contain}
+.iq-avatar-opt.is-active{box-shadow:none;background:transparent}
+.iq-avatar-opt.is-active img{transform:translateY(-2px) scale(1.04);filter:drop-shadow(0 6px 10px rgba(47,107,255,.35))}
+:root[data-theme="dark"] .iq-avatar-opt{background:transparent}
+.iq-avatar-opt--upload{border:1px dashed var(--border-2);border-radius:16px;background:transparent;color:var(--ink-3)}
+.iq-avatar-opt--upload.is-active{border-style:solid;border-color:var(--blue)}
+
+/* --- 3. Callout "Keep going": maskot duduk rata atas, teks tidak terhimpit --- */
+.iq-sidebyside{display:flex;align-items:flex-start;gap:6px}
+.iq-sidebyside>.iq-mascot{flex:none;margin:0;position:relative;z-index:1;transform:rotate(-3deg)}
+.iq-sidebyside>.iq-card,.iq-sidebyside>.iq-callout{flex:1;min-width:0;padding-left:22px;margin-top:8px}
+.iq-callout--accent p{font-size:13px;line-height:1.55;color:var(--ink-2)}
+
+/* --- 4. Landing: hilangkan pita putih di atas panel --- */
+@media(min-width:861px){
+  .iq-lp__panel{margin-top:0;border-radius:0 0 28px 28px}
+}
+
+/* --- 5. Kartu profil: susunan + warna, tanpa lambang kecil --- */
+.iq-levelcard{text-align:center;padding:22px 24px 20px}
+.iq-levelcard .iq-avatar-lg--mascot svg{width:112px;height:112px}
+.iq-levelcard h2{font-size:19px;letter-spacing:-.01em;margin-bottom:2px}
+.iq-levelcard .iq-levelstats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:18px;
+  border-top:1px solid var(--border);padding-top:16px;
+}
+.iq-levelcard .iq-levelstats>div{padding:0 6px;position:relative}
+.iq-levelcard .iq-levelstats>div+div::before{
+  content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:var(--border);
+}
+.iq-levelcard .iq-levelstats .big-num{
+  display:block;font-family:var(--font-display);font-size:22px;font-weight:600;letter-spacing:-.02em;
+  color:var(--ink);line-height:1.1;
+}
+.iq-levelcard .iq-levelstats small{display:block;margin-top:4px;font-size:11.5px;font-weight:600;color:var(--ink-3)}
+
+/* --- 6. Login: maskot di atas kartu, sisi teks memutar maskot --- */
+.iq-lg{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;background:var(--canvas)}
+.iq-lg__brand{
+  position:relative;display:flex;flex-direction:column;justify-content:center;gap:16px;
+  padding:56px 48px;background:var(--surface);border-right:1px solid var(--border);overflow:hidden;
+}
+.iq-lg__brand::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;
+  background:radial-gradient(circle at 1px 1px,var(--border-2) 1px,transparent 0) 0 0/24px 24px;
+}
+.iq-lg__brand>*{position:relative;z-index:1}
+.iq-lg__wm{font-family:var(--font-display);font-size:30px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.iq-lg__wm i{font-style:normal;color:var(--pink-text)}
+.iq-lg__tag{font-size:17px;line-height:1.5;color:var(--ink-2);max-width:340px}
+.iq-lg__rot{position:relative;width:200px;height:130px;margin-top:6px}
+.iq-lg__rot img{position:absolute;inset:0;width:200px;height:130px;object-fit:contain;opacity:0;transition:opacity .5s ease}
+.iq-lg__rot img.on{opacity:1}
+.iq-lg__dots{display:flex;gap:6px;margin-top:2px}
+.iq-lg__dots i{width:6px;height:6px;border-radius:99px;background:var(--border-2)}
+.iq-lg__dots i.on{width:18px;background:var(--blue)}
+.iq-lg__panel{display:flex;align-items:center;justify-content:center;padding:44px 24px;background:var(--canvas)}
+.iq-lg__col{width:100%;max-width:404px}
+.iq-lg__peek{display:block;margin:0 auto -42px;position:relative;z-index:2;width:168px;height:auto;filter:drop-shadow(0 14px 18px rgba(20,27,46,.16))}
+.iq-lg__card{
+  position:relative;z-index:1;background:var(--surface);border:1px solid var(--border);
+  border-radius:26px;box-shadow:0 18px 44px rgba(20,27,46,.10);padding:54px 28px 26px;
+}
+:root[data-theme="dark"] .iq-lg__brand{background:var(--surface)}
+:root[data-theme="dark"] .iq-lg__card{box-shadow:0 18px 44px rgba(0,0,0,.45)}
+@media(max-width:860px){
+  .iq-lg{grid-template-columns:1fr}
+  .iq-lg__brand{padding:34px 22px 4px;border-right:0;align-items:center;text-align:center;gap:12px}
+  .iq-lg__tag{max-width:420px}
+  .iq-lg__rot{width:158px;height:104px;margin:0 auto}
+  .iq-lg__rot img{width:158px;height:104px}
+  .iq-lg__panel{padding:26px 18px 42px}
+  .iq-lg__card{padding:48px 22px 24px}
+  .iq-lg__peek{width:140px;margin-bottom:-36px}
+}

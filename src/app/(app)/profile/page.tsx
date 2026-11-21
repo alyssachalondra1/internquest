@@ -1,8 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Momo } from "@/components/Momo"
 import { MomoFace } from "@/components/MascotAvatar"
-import { Icon } from "@/components/Icons"
-import { StatIcon } from "@/components/StatIcon"
 import { isMascot, moodOf } from "@/lib/mascot"
 import { ProfileExtras } from "@/components/ProfileExtras"
 import { DeleteAccountButton } from "@/components/DeleteAccountButton"
@@ -84,13 +82,13 @@ export default async function ProfilePage() {
             <MomoFace mood={moodOf(profile?.avatar_url)} size={104} />
           </div>
         )}
-        <h2 style={csx("font-size:22px")}>Applicant, Level {level}</h2>
-        <div className="iq-progress mt-4 mb-4"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
+        <h2>Applicant, Level {level}</h2>
+        <div className="iq-progress mt-4 mb-3"><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
         <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP</div>
         <div className="iq-levelstats">
-          <div><div className="big-num"><StatIcon name="streak" size={22} /> {profile?.streak_count ?? 0}</div><small className="muted">Day Streak</small></div>
-          <div><div className="big-num"><StatIcon name="gems" size={22} /> {profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
-          <div><div className="big-num"><Icon name="ic-list" className="ic ic-18" /> {applied ?? 0}</div><small className="muted">Saved jobs</small></div>
+          <div><span className="big-num">{profile?.streak_count ?? 0}</span><small>Day Streak</small></div>
+          <div><span className="big-num">{profile?.gems ?? 0}</span><small>Gems</small></div>
+          <div><span className="big-num">{applied ?? 0}</span><small>Saved jobs</small></div>
         </div>
       </div>
       <div className="iq-grid iq-grid--dash">
