@@ -54,7 +54,7 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 ## T7 — UI
 - [ ] Meter "x/10 aksi AI bulan ini" (sekarang hanya di `/pricing`).
 - [x] CTA "See plans" saat 402 `needUpgrade` — `UpgradeNotice` dipakai di Groups + gate portfolio.
-- [ ] CTA "See plans" saat 402 `needUpgrade` di modal AI (API sudah kirim `needUpgrade`, modal belum memakainya).
+- [x] CTA "See plans" saat 402 `needUpgrade`: Groups, portfolio, dan hasil Asisten AI.
 - [x] Halaman harga 3 kolom; gate portfolio Free (T5).
 
 ## T9 — Perbaikan & pembersihan (22 Nov 2026)
