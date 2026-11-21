@@ -1,10 +1,13 @@
 import Link from "next/link"
+import { headers } from "next/headers"
 import { Mascot } from "@/components/Mascot"
 import { Icon } from "@/components/Icons"
 import { UpgradeButton } from "@/components/UpgradeButton"
+import { csx } from "@/lib/csx"
 import { createClient } from "@/lib/supabase/server"
 import { readQuota, planCredits } from "@/lib/quota"
 import { isConfigured } from "@/lib/midtrans"
+import { PLAN_PRICE_USD_TEXT } from "@/lib/plans"
 
 export const metadata = {
   title: "Plans · Sloe",
@@ -14,19 +17,22 @@ export const metadata = {
 
 type Plan = {
   name: string
-  price: string
+  idr: string
+  usd: string
   cadence: string
   blurb: string
   cta: string
   href: string
   featured?: boolean
   features: string[]
+  planId?: "plus" | "pro"
 }
 
 const PLANS: Plan[] = [
   {
     name: "Free",
-    price: "Rp0",
+    idr: "Rp0",
+    usd: "$0",
     cadence: "forever",
     blurb: "For the first handful of applications.",
     cta: "Start free",
@@ -41,7 +47,9 @@ const PLANS: Plan[] = [
   },
   {
     name: "Plus",
-    price: "Rp19.900",
+    idr: "Rp19.900",
+    usd: PLAN_PRICE_USD_TEXT.plus,
+    planId: "plus",
     cadence: "per month",
     blurb: "For the month you are applying seriously.",
     cta: "Choose Plus",
@@ -58,7 +66,9 @@ const PLANS: Plan[] = [
   },
   {
     name: "Pro",
-    price: "Rp39.900",
+    idr: "Rp39.900",
+    usd: PLAN_PRICE_USD_TEXT.pro,
+    planId: "pro",
     cadence: "per month",
     blurb: "For a full search across several tracks.",
     cta: "Choose Pro",
@@ -85,11 +95,28 @@ const QUESTIONS = [
   },
   {
     q: "How do I pay",
-    a: "Card and QRIS checkout is being connected. Start free now, and your account keeps your place when paid plans open.",
+    a: "In Indonesia, pay by QRIS or e-wallet (GoPay, ShopeePay). From outside Indonesia, pay in US dollars by card, Apple Pay or PayPal. Your plan starts as soon as the payment clears, and the month runs from that moment. You can also top up 10 extra AI actions without changing your plan.",
   },
 ]
 
-export default async function Pricing() {
+/* International checkout links. Empty until Lemon Squeezy products exist, so the
+   USD button degrades to "opens soon" instead of a dead link. */
+const LEMON_CHECKOUT: Record<string, string | undefined> = {
+  plus: process.env.LEMON_CHECKOUT_PLUS,
+  pro: process.env.LEMON_CHECKOUT_PRO,
+  topup: process.env.LEMON_CHECKOUT_TOPUP,
+}
+
+export default async function Pricing({ searchParams }: { searchParams: Promise<{ currency?: string }> }) {
+  const sp = await searchParams
+  const h = await headers()
+  // Vercel sets x-vercel-ip-country; ?currency= lets a VPN user override it.
+  const country = (h.get("x-vercel-ip-country") ?? h.get("cf-ipcountry") ?? "").toUpperCase()
+  const currency: "IDR" | "USD" =
+    sp.currency === "USD" ? "USD" : sp.currency === "IDR" ? "IDR" : country && country !== "ID" ? "USD" : "IDR"
+  const usd = currency === "USD"
+  const lemonLive = Boolean(LEMON_CHECKOUT.plus)
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -138,12 +165,32 @@ export default async function Pricing() {
               Every plan keeps the same tracker. What changes is how much AI work you can lean on while you apply, and
               how many groups you can run with classmates.
             </p>
-            <p className="iq-lp__fineprint">Prices in rupiah. Cancel whenever you like.</p>
+            <p className="iq-lp__fineprint">
+              {usd ? "Prices in US dollars. Cancel whenever you like." : "Prices in rupiah. Cancel whenever you like."}
+            </p>
+            <div className="row" style={csx("gap:8px;margin:10px 0 4px;align-items:center")}>
+              <span className="muted" style={csx("font-size:12px")}>Currency</span>
+              <Link
+                href="/pricing?currency=IDR"
+                className={"iq-btn iq-btn--sm " + (usd ? "iq-btn--ghost" : "iq-btn--primary")}
+                aria-current={usd ? undefined : "page"}
+              >
+                IDR · Midtrans
+              </Link>
+              <Link
+                href="/pricing?currency=USD"
+                className={"iq-btn iq-btn--sm " + (usd ? "iq-btn--primary" : "iq-btn--ghost")}
+                aria-current={usd ? "page" : undefined}
+              >
+                USD · card & PayPal
+              </Link>
+            </div>
             {quota && (
               <div className="iq-pr__meter">
                 <div className="iq-pr__meter-head">
                   <span className="iq-pr__meter-label">
-                    AI actions this month · {quota.plan === "free" ? "Free" : quota.plan === "plus" ? "Plus" : "Pro"}
+                    Gems left this month · {quota.plan === "free" ? "Free" : quota.plan === "plus" ? "Plus" : "Pro"} ·
+                    3 gems per AI action
                   </span>
                   <span className="iq-pr__meter-num">
                     {quota.credits} / {allowance}
@@ -168,16 +215,33 @@ export default async function Pricing() {
                 {p.featured && <span className="iq-pr__tag">Most picked</span>}
               </div>
               <div className="iq-pr__price">
-                <span className="iq-pr__amount">{p.price}</span>
+                <span className="iq-pr__amount">{usd ? p.usd : p.idr}</span>
                 <span className="iq-pr__cadence">{p.cadence}</span>
               </div>
               <p className="iq-pr__blurb">{p.blurb}</p>
-              {p.name === "Free" || !user || !checkoutLive ? (
+              {p.name === "Free" ? (
+                <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href={p.href}>
+                  {p.cta}
+                </Link>
+              ) : usd ? (
+                p.planId && lemonLive && LEMON_CHECKOUT[p.planId] ? (
+                  <a
+                    className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")}
+                    href={LEMON_CHECKOUT[p.planId]}
+                  >
+                    {p.cta}
+                  </a>
+                ) : (
+                  <span className="iq-btn iq-btn--ghost" aria-disabled="true">
+                    International checkout opens soon
+                  </span>
+                )
+              ) : !user || !checkoutLive ? (
                 <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href={p.href}>
                   {p.cta}
                 </Link>
               ) : (
-                <UpgradeButton plan={p.name === "Plus" ? "plus" : "pro"} label={p.cta} featured={p.featured} />
+                <UpgradeButton plan={p.planId ?? "plus"} label={p.cta} featured={p.featured} />
               )}
               <ul className="iq-pr__list">
                 {p.features.map((f) => (
@@ -191,10 +255,41 @@ export default async function Pricing() {
           ))}
         </section>
 
+        <section className="iq-card iq-card__pad mb-4" aria-label="Top-up">
+          <div className="row" style={csx("gap:12px;align-items:center;flex-wrap:wrap")}>
+            <div style={csx("flex:1;min-width:220px")}>
+              <h3 style={csx("margin:0")}>Need a few more actions this month?</h3>
+              <p className="muted" style={csx("margin:4px 0 0;font-size:13px")}>
+                Top up 10 AI actions for {usd ? PLAN_PRICE_USD_TEXT.topup : "Rp10.000"}. It adds 30 gems to your balance
+                and never changes your plan.
+              </p>
+            </div>
+            {usd ? (
+              lemonLive && LEMON_CHECKOUT.topup ? (
+                <a className="iq-btn iq-btn--ghost" href={LEMON_CHECKOUT.topup}>
+                  Top up 10 actions
+                </a>
+              ) : (
+                <span className="iq-btn iq-btn--ghost" aria-disabled="true">
+                  International checkout opens soon
+                </span>
+              )
+            ) : user && checkoutLive ? (
+              <UpgradeButton plan="topup" label="Top up 10 actions" />
+            ) : (
+              <Link className="iq-btn iq-btn--ghost" href="/login?mode=signup">
+                Start with Free
+              </Link>
+            )}
+          </div>
+        </section>
+
         <p className="iq-pr__note">
-          {checkoutLive
-            ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment."
-            : "Card and QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}
+          {usd
+            ? "International payments open soon: Visa, Mastercard, Apple Pay and PayPal. You can switch to rupiah at any time."
+            : checkoutLive
+              ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment."
+              : "Card and QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}
         </p>
 
         <section className="iq-lp__sec" id="questions">

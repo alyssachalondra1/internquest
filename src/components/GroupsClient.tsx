@@ -4,6 +4,7 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
+import { UpgradeNotice } from "@/components/UpgradeNotice"
 import { createGroup, joinGroup } from "@/app/actions/groups"
 
 type G = {
@@ -22,36 +23,42 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
   const [name, setName] = useState("")
   const [code, setCode] = useState("")
   const [err, setErr] = useState<string | null>(null)
+  const [upsell, setUpsell] = useState<string | null>(null)
+
+  function handle(res: Awaited<ReturnType<typeof createGroup>>, verb: string, onOk: () => void) {
+    if (res.ok) {
+      setUpsell(null)
+      onOk()
+      router.push("/groups/" + res.id)
+      return
+    }
+    setErr(res.error || `Could not ${verb} group`)
+    setUpsell(res.needsUpgrade ? res.error : null)
+  }
 
   function doCreate() {
     setErr(null)
+    setUpsell(null)
     const v = name.trim()
     if (!v) return
     start(async () => {
-      try {
-        const id = await createGroup(v)
+      handle(await createGroup(v), "create", () => {
         setName("")
         setMode("none")
-        router.push("/groups/" + id)
-      } catch (e: any) {
-        setErr(e?.message || "Could not create group")
-      }
+      })
     })
   }
 
   function doJoin() {
     setErr(null)
+    setUpsell(null)
     const v = code.trim()
     if (!v) return
     start(async () => {
-      try {
-        const id = await joinGroup(v)
+      handle(await joinGroup(v), "join", () => {
         setCode("")
         setMode("none")
-        router.push("/groups/" + id)
-      } catch (e: any) {
-        setErr(e?.message || "Could not join group")
-      }
+      })
     })
   }
 
@@ -108,7 +115,13 @@ export function GroupsClient({ groups, currentUserId }: { groups: G[]; currentUs
             <button className="iq-btn iq-btn--primary iq-btn--sm" onClick={doJoin} disabled={pending}>Join</button>
           </div>
         )}
-        {err && <p style={csx("color:var(--red-text);font-size:12px;margin-top:8px")}>{err}</p>}
+        {upsell ? (
+          <div className="mt-4">
+            <UpgradeNotice reason={upsell} />
+          </div>
+        ) : (
+          err && <p style={csx("color:var(--red-text);font-size:12px;margin-top:8px")}>{err}</p>
+        )}
       </div>
 
       {groups.length === 0 ? (

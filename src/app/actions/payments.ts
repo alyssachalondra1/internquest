@@ -23,7 +23,7 @@ export async function createCheckout(plan: PlanId): Promise<CheckoutResult> {
   if (!isConfigured()) {
     return { ok: false, error: "not_configured" }
   }
-  if (plan !== "plus" && plan !== "pro") {
+  if (plan !== "plus" && plan !== "pro" && plan !== "topup") {
     return { ok: false, error: "bad_plan" }
   }
 

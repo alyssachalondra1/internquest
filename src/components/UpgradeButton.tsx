@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { createCheckout } from "@/app/actions/payments"
+import type { PlanId } from "@/lib/plans"
 
 /* Starts a paid checkout. The server action returns a Midtrans redirect URL;
    we never mark anything as paid on the client. */
@@ -11,7 +12,7 @@ export function UpgradeButton({
   featured,
   className,
 }: {
-  plan: "plus" | "pro"
+  plan: PlanId
   label: string
   featured?: boolean
   className?: string

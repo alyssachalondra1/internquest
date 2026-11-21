@@ -1,7 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 
-// Plan → monthly AI action quota. Mirrors Pricing_Strategy.md.
-export const PLAN_CREDITS: Record<string, number> = { free: 10, plus: 100, pro: 300 }
+/* One AI action costs 3 gems — the number the Generate button shows. The monthly
+   allowance in `ai_credits` is already counted in gems; top-up gems bought with a
+   pass sit in `profiles.gems`. An action spends the monthly allowance first. */
+export const GEMS_PER_ACTION = 3
+export const PLAN_CREDITS: Record<string, number> = { free: 30, plus: 300, pro: 900 }
 export const FREE_SHOT_CREDITS = 5
 
 export type Quota = { plan: string; credits: number; shotCredits: number }
@@ -14,14 +17,15 @@ export function planCredits(plan: string | null | undefined): number {
 export async function readQuota(supabase: SupabaseClient, userId: string): Promise<Quota> {
   const { data } = await supabase
     .from("profiles")
-    .select("plan, ai_credits, ai_shot_credits, credits_reset_at")
+    .select("plan, ai_credits, ai_shot_credits, credits_reset_at, gems")
     .eq("id", userId)
     .single()
 
   const plan = (data?.plan as string | null) ?? "free"
   const resetAt = data?.credits_reset_at as string | null
   const resetDue = !resetAt || new Date(resetAt).getTime() <= Date.now()
-  const credits = resetDue ? planCredits(plan) : ((data?.ai_credits as number | null) ?? 0)
+  const monthly = resetDue ? planCredits(plan) : ((data?.ai_credits as number | null) ?? 0)
+  const credits = monthly + ((data?.gems as number | null) ?? 0)
   const shotCredits = resetDue
     ? plan === "free"
       ? FREE_SHOT_CREDITS
@@ -45,10 +49,10 @@ export function quotaBlocked(kind: "ai" | "shot", q: Quota): { error: string; ne
       needUpgrade: true,
     }
   }
-  if (q.credits <= 0) {
+  if (q.credits < GEMS_PER_ACTION) {
     return {
       error:
-        "You've used all your AI actions this month. Upgrade to Sloe Plus (100 actions) or Sloe Pro (300 actions) to keep going.",
+        "You've used all your AI actions this month. Top up 10 more for Rp10.000, or upgrade to Sloe Plus (100 actions) or Sloe Pro (300 actions).",
       needUpgrade: true,
     }
   }

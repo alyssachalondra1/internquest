@@ -44,13 +44,24 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [x] **Portfolio dikunci untuk Free**: UI Profile tampil terkunci + ajakan upgrade; server `savePortfolio` menolak bila paket Free. Upload CV tetap gratis.
 
 ## T6 — Billing Midtrans
-- [ ] Tabel `passes` (user_id, tier, starts_at, ends_at, channel, order_id, status).
-- [ ] `/api/midtrans/webhook` (verifikasi signature) + halaman harga QRIS/e-wallet.
+- [x] Tabel `passes` + `/api/midtrans/webhook` (verifikasi signature) + halaman harga (0005, P5).
+- [x] 0005 dijalankan di produksi (user, 22 Nov).
+- [ ] Env Vercel: `MIDTRANS_SERVER_KEY`, `MIDTRANS_IS_PRODUCTION`, `NEXT_PUBLIC_APP_URL` + notification URL Midtrans. (`SUPABASE_SERVICE_ROLE_KEY` sudah ada.)
+- [x] Katalog **top-up 10 aksi AI / Rp10.000** (`0006_gems.sql` + `PlanId` topup + kartu di `/pricing`).
+- [x] `enabled_payments` = qris/gopay/shopeepay (VA & kartu disembunyikan).
+- [ ] `0006_gems.sql` dijalankan di produksi (3 gems/aksi, top-up 30 gems, reset gems lama ke 30).
 
 ## T7 — UI
-- [ ] Meter "x/10 aksi AI bulan ini".
-- [ ] Modal upgrade di momen kena batas (bukan banner permanen).
-- [ ] Halaman harga 3 kolom; gate avatar premium.
+- [ ] Meter "x/10 aksi AI bulan ini" (sekarang hanya di `/pricing`).
+- [x] CTA "See plans" saat 402 `needUpgrade` — `UpgradeNotice` dipakai di Groups + gate portfolio.
+- [ ] CTA "See plans" saat 402 `needUpgrade` di modal AI (API sudah kirim `needUpgrade`, modal belum memakainya).
+- [x] Halaman harga 3 kolom; gate portfolio Free (T5).
+
+## T9 — Perbaikan & pembersihan (22 Nov 2026)
+- [ ] **A1/A2** Bug buat grup: `createGroup`/`joinGroup` lempar `Error` → di produksi Next mask jadi "Server Components render". Ubah ke hasil bertipe + pesan limit yang jelas + CTA upgrade.
+- [ ] **C1** `0007_gems_cap.sql`: reset gems user lama ke 30 (`where gems > 30`).
+- [ ] Verifikasi ulang: batas gratis (10 aksi, 5 screenshot, 2 grup/10 join) konsisten di server + UI.
+
 
 ## T8 — UI/UX Polish (unslop) + Dark Mode
 Arah desain: "meja belajar" (kertas, sticky note, pena koreksi) · karakter hangat/rapi/jenaka · aksen biru brand · detail khas = sticky note kuning.

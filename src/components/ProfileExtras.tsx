@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Icon } from "@/components/Icons"
+import { UpgradeNotice } from "@/components/UpgradeNotice"
 import { createClient } from "@/lib/supabase/client"
 import { saveCv, saveInterests, saveAvatar, savePortfolio } from "@/app/actions/profile"
 import { isMascot } from "@/lib/mascot"
@@ -166,9 +167,7 @@ export function ProfileExtras({
       <div className="iq-form-row">
         <label>Portfolio (PDF), also read by AI for more relevant results</label>
         {isFree ? (
-          <div className="iq-cvbox" style={csx("opacity:.75;cursor:not-allowed")}>
-            <Icon name="ic-lock" className="ic ic-18" /> Portfolio upload is a Plus/Pro feature — upgrade to unlock it.
-          </div>
+          <UpgradeNotice reason="Portfolio upload is a Plus/Pro feature. It reads your portfolio with AI so results match your real work." />
         ) : (
           <>
             <input ref={pfRef} type="file" accept="application/pdf" hidden onChange={onPickPortfolio} />

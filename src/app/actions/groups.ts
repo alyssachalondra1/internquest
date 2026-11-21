@@ -25,25 +25,47 @@ async function requireUser() {
   return { supabase, user }
 }
 
-export async function createGroup(name: string) {
-  const { supabase } = await requireUser()
-  const clean = name.trim()
-  if (!clean) throw new Error("Group name is required")
-  const { data, error } = await supabase.rpc("create_group", { p_name: clean })
-  if (error) throw new Error(error.message)
-  const row = Array.isArray(data) ? data[0] : data
-  revalidatePath("/groups")
-  return row?.id as string
+export type GroupResult =
+  | { ok: true; id: string }
+  | { ok: false; error: string; needsUpgrade?: boolean }
+
+/* Business rejections (plan limits) are RETURNED, never thrown: Next replaces any
+   error thrown out of a Server Action with a generic "Server Components render"
+   message in production, so a thrown limit is indistinguishable from a crash.
+   SQL raises GROUP_CREATE_LIMIT / GROUP_JOIN_LIMIT with the plan's allowance. */
+function planLimit(message: string): { error: string; needsUpgrade: true } | null {
+  const hit = message.match(/^GROUP_(CREATE|JOIN)_LIMIT: your plan allows (?:joining )?(\d+) groups/)
+  if (!hit) return null
+  const verb = hit[1] === "CREATE" ? "create" : "join"
+  return {
+    error: `Your current plan lets you ${verb} ${hit[2]} groups and you have used all of them. Delete a group you no longer need, or move to a paid plan.`,
+    needsUpgrade: true,
+  }
 }
 
-export async function joinGroup(code: string) {
+export async function createGroup(name: string): Promise<GroupResult> {
+  const { supabase } = await requireUser()
+  const clean = name.trim()
+  if (!clean) return { ok: false, error: "Give the group a name first." }
+  const { data, error } = await supabase.rpc("create_group", { p_name: clean })
+  if (error) return { ok: false, ...(planLimit(error.message) ?? { error: error.message }) }
+  const row = Array.isArray(data) ? data[0] : data
+  if (!row?.id) return { ok: false, error: "The group was not created. Please try again." }
+  revalidatePath("/groups")
+  return { ok: true, id: row.id as string }
+}
+
+export async function joinGroup(code: string): Promise<GroupResult> {
   const { supabase } = await requireUser()
   const clean = code.trim().toUpperCase()
-  if (!clean) throw new Error("Please enter a code")
+  if (!clean) return { ok: false, error: "Enter the code you were given." }
   const { data, error } = await supabase.rpc("join_group_by_code", { p_code: clean })
-  if (error) throw new Error(/not found/i.test(error.message) ? "No group found for that code" : error.message)
+  if (error) {
+    if (/not found/i.test(error.message)) return { ok: false, error: "No group found for that code." }
+    return { ok: false, ...(planLimit(error.message) ?? { error: error.message }) }
+  }
   revalidatePath("/groups")
-  return data as string
+  return { ok: true, id: data as string }
 }
 
 export async function leaveGroup(groupId: string) {

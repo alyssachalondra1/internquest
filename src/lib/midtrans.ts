@@ -1,4 +1,5 @@
 import crypto from "node:crypto"
+import { PLAN_LABEL, PLAN_PRICE, type PlanId } from "@/lib/plans"
 
 /* Midtrans scaffolding.
    Snap is used so the payment page (QRIS, e-wallet, bank transfer) is hosted by
@@ -6,10 +7,10 @@ import crypto from "node:crypto"
    MIDTRANS_SERVER_KEY is missing, isConfigured() is false and the checkout
    action refuses instead of pretending. */
 
-export type PlanId = "plus" | "pro"
-
-export const PLAN_PRICE: Record<PlanId, number> = { plus: 19900, pro: 39900 }
-export const PLAN_LABEL: Record<PlanId, string> = { plus: "Sloe Plus", pro: "Sloe Pro" }
+// Prices and labels live in @/lib/plans (shared with the upsell UI). Re-exported
+// so existing callers keep importing them from here.
+export { PLAN_LABEL, PLAN_PRICE }
+export type { PlanId }
 
 const SERVER_KEY = process.env.MIDTRANS_SERVER_KEY ?? ""
 const IS_PRODUCTION = process.env.MIDTRANS_IS_PRODUCTION === "true"
@@ -46,9 +47,11 @@ export async function createSnapTransaction(args: {
         id: args.plan,
         price: args.amount,
         quantity: 1,
-        name: `${PLAN_LABEL[args.plan]} — 1 month`,
+        name: args.plan === "topup" ? `${PLAN_LABEL.topup} (10 AI actions)` : `${PLAN_LABEL[args.plan]} — 1 month`,
       },
     ],
+    // Decision 16 Nov: QRIS and e-wallets only; virtual accounts and cards stay hidden.
+    enabled_payments: ["qris", "gopay", "shopeepay"],
     customer_details: {
       first_name: args.customer.name || "Sloe user",
       email: args.customer.email || undefined,

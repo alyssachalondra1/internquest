@@ -7,6 +7,7 @@ import { Icon } from "@/components/Icons"
 import { createClient } from "@/lib/supabase/client"
 import { saveGeneration } from "@/app/actions/ai"
 import { AiErrorState } from "@/components/AiErrorState"
+import { UpgradeNotice } from "@/components/UpgradeNotice"
 import { csx } from "@/lib/csx"
 
 const TYPES: Array<{ value: string; label: string }> = [
@@ -43,6 +44,7 @@ function AiInner() {
   const [saved, setSaved] = useState(false)
   const [formErr, setFormErr] = useState<string | null>(null)
   const [genError, setGenError] = useState<string | null>(null)
+  const [genUpsell, setGenUpsell] = useState(false)
   const [picked, setPicked] = useState(params.get("internship") || "")
   const [internships, setInternships] = useState<Array<{ id: string; company_name: string; role: string | null }>>([])
 
@@ -75,6 +77,7 @@ function AiInner() {
     }
     setFormErr(null)
     setGenError(null)
+    setGenUpsell(false)
     setLoading(true)
     setSaved(false)
     try {
@@ -89,6 +92,7 @@ function AiInner() {
         router.refresh() // refresh the gem balance shown in the top bar
       } else {
         setGenError(json.error || "We couldn't generate that just now. Please try again in a moment.")
+        setGenUpsell(Boolean(json.needUpgrade))
       }
     } catch {
       setGenError("We couldn't reach the AI service. Please check your connection and try again.")
@@ -155,7 +159,11 @@ function AiInner() {
           </button>
           <div className="iq-card iq-card__pad" style={csx("background:var(--surface-2);border-style:dashed;overflow-wrap:anywhere;word-break:break-word")}>
             {genError ? (
-              <AiErrorState message={genError} onRetry={generate} />
+              genUpsell ? (
+                <UpgradeNotice reason={genError} />
+              ) : (
+                <AiErrorState message={genError} onRetry={generate} />
+              )
             ) : output ? (
               <p style={csx("line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word")} className="iq-justify">{output}</p>
             ) : (
