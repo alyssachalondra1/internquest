@@ -1,7 +1,10 @@
 import Link from "next/link"
 import { Mascot } from "@/components/Mascot"
 import { Icon } from "@/components/Icons"
+import { UpgradeButton } from "@/components/UpgradeButton"
 import { createClient } from "@/lib/supabase/server"
+import { readQuota, planCredits } from "@/lib/quota"
+import { isConfigured } from "@/lib/midtrans"
 
 export const metadata = {
   title: "Plans · Sloe",
@@ -92,6 +95,11 @@ export default async function Pricing() {
     data: { user },
   } = await supabase.auth.getUser()
 
+  const quota = user ? await readQuota(supabase, user.id) : null
+  const allowance = quota ? planCredits(quota.plan) : 0
+  const usedPct = quota && allowance > 0 ? Math.min(100, Math.max(0, Math.round(((allowance - quota.credits) / allowance) * 100))) : 0
+  const checkoutLive = isConfigured()
+
   return (
     <main className="iq-lp iq-pr">
       <nav className="iq-lp__nav">
@@ -131,6 +139,21 @@ export default async function Pricing() {
               how many groups you can run with classmates.
             </p>
             <p className="iq-lp__fineprint">Prices in rupiah. Cancel whenever you like.</p>
+            {quota && (
+              <div className="iq-pr__meter">
+                <div className="iq-pr__meter-head">
+                  <span className="iq-pr__meter-label">
+                    AI actions this month · {quota.plan === "free" ? "Free" : quota.plan === "plus" ? "Plus" : "Pro"}
+                  </span>
+                  <span className="iq-pr__meter-num">
+                    {quota.credits} / {allowance}
+                  </span>
+                </div>
+                <div className="iq-pr__meter-bar">
+                  <i style={{ width: usedPct + "%" }} />
+                </div>
+              </div>
+            )}
           </div>
           <div className="iq-pr__heroart">
             <Mascot src="/welcomee.png" fluid priority className="iq-pr__heroimg" />
@@ -149,9 +172,13 @@ export default async function Pricing() {
                 <span className="iq-pr__cadence">{p.cadence}</span>
               </div>
               <p className="iq-pr__blurb">{p.blurb}</p>
-              <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href={p.href}>
-                {p.cta}
-              </Link>
+              {p.name === "Free" || !user || !checkoutLive ? (
+                <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href={p.href}>
+                  {p.cta}
+                </Link>
+              ) : (
+                <UpgradeButton plan={p.name === "Plus" ? "plus" : "pro"} label={p.cta} featured={p.featured} />
+              )}
               <ul className="iq-pr__list">
                 {p.features.map((f) => (
                   <li key={f}>
@@ -165,7 +192,9 @@ export default async function Pricing() {
         </section>
 
         <p className="iq-pr__note">
-          Card and QRIS checkout opens soon. Start on Free now and your account keeps your place when paid plans go live.
+          {checkoutLive
+            ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment."
+            : "Card and QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}
         </p>
 
         <section className="iq-lp__sec" id="questions">

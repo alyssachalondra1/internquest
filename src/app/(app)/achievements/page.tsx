@@ -46,7 +46,7 @@ export default async function AchievementsPage() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={profile.avatar_url} alt="Profile photo" className="iq-ach-hero__pic" />
         ) : (
-          <div className="iq-ach-hero__mascot"><Momo size={96} /></div>
+          <div className="iq-ach-hero__mascot"><Momo size={128} mood="love" /></div>
         )}
         <div style={csx("flex:1")}>
           <div className="row-between wrap" style={csx("gap:10px")}>
@@ -69,7 +69,7 @@ export default async function AchievementsPage() {
       <div className="iq-grid iq-grid--4">
         {badges.map((b) => (
           <div key={b.key} className={"iq-badge " + (b.on ? "is-unlocked" : "is-locked")}>
-            <div className="iq-badge__ic" style={csx(b.on ? "background:" + b.bg + ";color:" + b.fg : "")}><Icon name={b.icon} className="ic ic-22" /></div>
+            <div className="iq-badge__ic"><Icon name={b.icon} className="ic ic-22" /></div>
             <b>{b.title}</b><span>{b.on ? b.desc : "Locked"}</span>
           </div>
         ))}

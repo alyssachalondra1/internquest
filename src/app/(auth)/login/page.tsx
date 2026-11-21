@@ -33,21 +33,10 @@ declare global {
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
 const REDIRECT_PATH = "/auth/callback?next=/dashboard"
 
-const TAGLINES = [
-  "Your AI companion for the job hunt",
-  "Manage every application in one place",
-  "Write a motivation letter in seconds",
-  "Level up every time you apply",
-]
-
-// One custom illustration per slide (transparent PNG, square, ~512x512).
-// Order matches TAGLINES above.
-const SLIDE_IMAGES = [
-  "/mascot-auth-1.png",
-  "/mascot-auth-2.png",
-  "/mascot-auth-3.png",
-  "/mascot-auth-4.png",
-]
+// One line, one image. The rotating carousel made the panel feel like a
+// template and left a blank frame between slides.
+const TAGLINE = "Keep every application, deadline and draft in one place."
+const HERO_IMAGE = "/welcomee.png"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -60,18 +49,12 @@ export default function LoginPage() {
   const [resetSent, setResetSent] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [slide, setSlide] = useState(0)
   const gsiMountRef = useRef<HTMLDivElement>(null)
   const gsiReadyRef = useRef(false)
 
+  // Warm the two images used on this screen so neither pops in late.
   useEffect(() => {
-    const t = setInterval(() => setSlide((s) => (s + 1) % TAGLINES.length), 3000)
-    return () => clearInterval(t)
-  }, [])
-
-  // Warm all four slide images up front so a swap never shows a blank frame.
-  useEffect(() => {
-    preloadMascots(SLIDE_IMAGES)
+    preloadMascots([HERO_IMAGE])
   }, [])
 
   useEffect(() => {
@@ -231,23 +214,20 @@ export default function LoginPage() {
     <section className="iq-auth">
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={initGoogle} />
       <div className="iq-auth__hero iq-auth__hero--soft">
-        <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
-        <div key={"tag-" + slide} className="iq-auth__tag iq-slidein" style={csx("min-height:28px")}>{TAGLINES[slide]}</div>
-        <HeroMascot src={SLIDE_IMAGES[slide]} size={200} w={220} h={180} className="iq-auth__mascot" priority />
-        <div className="iq-dots">
-          {TAGLINES.map((_, i) => (
-            <i key={i} className={i === slide ? "on" : ""} />
-          ))}
+        <div className="iq-auth__herotext">
+          <span className="iq-wordmark" style={csx("font-size:28px")}>Sloe</span>
+          <div className="iq-auth__tag">{TAGLINE}</div>
         </div>
+        <HeroMascot src={HERO_IMAGE} size={420} w={420} h={273} className="iq-auth__mascot" priority />
       </div>
       <div className="iq-auth__panel">
         <div className="iq-auth__card">
           {step === "welcome" && (
             <div className="iq-auth__step is-active">
-              <div className="iq-peek"><Momo size={120} /></div>
+              <div className="iq-peek"><Momo size={112} mood="sleepy" /></div>
               <div className="iq-peekcard">
-                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome</h1>
-                <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep hunting for jobs.</p>
+                <h1 style={csx("font-size:26px;margin-bottom:6px;text-align:center")}>Welcome back</h1>
+                <p className="muted mb-6" style={csx("text-align:center")}>Sign in to keep your applications in one place.</p>
                 {msg && <p style={csx("color:var(--red-text);margin-bottom:12px;font-size:13px;text-align:center")}>{msg}</p>}
                 {GOOGLE_CLIENT_ID ? (
                   <div className="iq-google" style={csx("position:relative")}>

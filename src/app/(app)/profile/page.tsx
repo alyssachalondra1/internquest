@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { HeroMascot } from "@/components/HeroMascot"
+import { Momo } from "@/components/Momo"
 import { MomoFace } from "@/components/MascotAvatar"
 import { Icon } from "@/components/Icons"
 import { StatIcon } from "@/components/StatIcon"
@@ -108,15 +108,15 @@ export default async function ProfilePage() {
           </div>
           <div className="iq-card iq-card__pad">
             <h3 className="mb-4">Danger Zone</h3>
-            <p className="muted mb-4" style={csx("font-size:13px")}>Menghapus akun akan menghapus seluruh datamu (lowongan tersimpan, CV, progres, gems) secara permanen dan tidak bisa dikembalikan.</p>
+            <p className="muted mb-4" style={csx("font-size:13px")}>Deleting your account removes everything permanently: saved roles, CV, progress and gems. It cannot be undone.</p>
             <DeleteAccountButton />
           </div>
         </div>
         <div className="stack-6">
           <div className="iq-sidebyside">
-            <HeroMascot src="/mascot-hero.png" size={104} />
-            <div className="iq-callout" style={csx("background:var(--pink-15);border-color:var(--pink-50)")}>
-              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}!</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Open Sloe every day to keep your streak alive.</p></div>
+            <Momo size={96} mood="wink" />
+            <div className="iq-callout iq-callout--accent">
+              <div><b>Keep going, {(profile?.full_name || "").split(" ")[0] || "there"}</b><p className="mt-2 iq-justify">Just {Math.max(0, target - xp)} XP more to Level {level + 1}. Open Sloe every day to keep your streak alive.</p></div>
             </div>
           </div>
         </div>

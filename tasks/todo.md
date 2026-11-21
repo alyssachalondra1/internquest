@@ -104,18 +104,42 @@ Yang dilindungi: tata letak & palet sidebar, isi kartu daftar lowongan (hanya te
 - [x] Dark mode: panel diberi border tipis + mini card punya permukaan sendiri supaya tidak menyatu.
 - [x] Verifikasi: build hijau, render 1440/390 light+dark, 0 overflow, 0 error konsol.
 
-### P3c — Login — belum
-- [ ] Komposisi hero: adegan `welcomee.png` besar, satu maskot mengintip, tagline berhenti berputar.
-- [ ] Crossfade slide maskot (lewat renderer baru), ruang kosong diisi.
+### P3b4 — Revisi 5 poin dari screenshot (SELESAI)
+- [x] Landing + pricing jadi satu dunia ungu gelap tetap: kertas `#130E1E`, panel `#2F2154→#2A1E4A`. Tidak lagi lavender terang.
+- [x] Pricing: kartu maskot dihapus (`welcomee.png` langsung di atas latar), proporsional & sejajar; kartu plan tinggi seragam.
+- [x] Section "Get in touch" dihapus total beserta import `ContactForm`; footer & nav bersih.
+- [x] Maskot tanpa kartu di landing (div `.iq-lp__scene` dihapus); kartu melayang mengapit, pratinjau dapat ruang lebih.
+- [x] Semua kartu kuning diganti: sticky note `#FEE362` → chip kaca violet di landing, chip putih di CTA band. Nol elemen kuning tersisa (diverifikasi via computed style).
+- [x] Tombol: satu radius/tinggi (48px, sm 40px), primary gradient violet, ghost punya permukaan; tombol band tidak lagi transparan.
+- [x] Kontras naik: `--lp-ink-2` .82, `--lp-ink-3` .64, byline review .74, footer .66.
+- [x] Verifikasi: build hijau, render 1440/390 light+dark, 0 overflow horizontal, 0 error konsol, 0 "Internship", 0 kartu kuning.
 
-### P4 — Achievements & Profile — belum
-- [ ] Grid badge satu ramp + satu aksen, kartu terkunci tanpa ✨, baris angka mono, satu sistem maskot.
+### P3c — Login (SELESAI)
+- [x] Hero: satu panel ungu gelap dengan `welcomee.png` besar (520px, proporsional), wordmark solid putih.
+- [x] Rotasi 4 slide + dots dihapus; satu tagline tetap. Preload gambar sebelum dipakai.
+- [x] Satu maskot mengintip (`momoface4`, mood sleepy) di belakang kartu form; `z-index` diperbaiki.
+- [x] Kontras teks di panel putih dinaikkan; wordmark gradasi biru→pink diganti solid.
+- [x] Verifikasi: build hijau, render 1440/390 light+dark, 0 overflow, 0 error konsol.
 
-### P5 — Harga & Midtrans — belum
-- [ ] Halaman `/pricing` 3 kolom + meter kuota AI + modal upgrade saat kena batas.
-- [ ] Tabel `passes`, Server Action transaksi, webhook signature, UI QRIS/e-wallet.
+### P4 — Achievements & Profile (SELESAI, belum diverifikasi visual)
+- [x] Badge: 6 warna acak → satu ramp aksen; ✨ dihapus; sparkle dekorasi dimatikan.
+- [x] Maskot achievements dibesarkan (96 → 128, mood love); avatar profil tidak lagi menempel keluar kartu.
+- [x] Profil: dua sistem maskot → satu (`Momo`); callout pink → callout aksen; "!" dihapus; copy Indonesia → Inggris.
+- [x] Baris angka pakai mono.
+- [ ] **Belum dicek visual** — halaman ini butuh login; baru terbukti lewat build.
+
+### P5 — Harga & Midtrans (SELESAI scaffolding)
+- [x] `/pricing`: meter kuota AI (`readQuota` + `planCredits`) muncul saat login.
+- [x] Migrasi `0005_passes.sql`: tabel `passes`, RLS (tanpa policy insert), fungsi `apply_paid_pass` idempoten.
+- [x] `src/lib/midtrans.ts`: Snap client, `isConfigured()`, verifikasi signature SHA-512, deteksi status.
+- [x] `src/app/actions/payments.ts`: `createCheckout` — buat order lalu Snap; gagal rapi tanpa key.
+- [x] `src/app/api/midtrans/webhook/route.ts`: verifikasi signature → tandai `paid` → `apply_paid_pass`.
+- [x] `UpgradeButton` client component; tombol Plus/Pro hanya aktif kalau key ada.
+- [x] `docs/payments/midtrans-setup.md`: env var + langkah migrasi.
+- [ ] Belum diuji end-to-end — butuh sandbox key + migrasi dijalankan.
 
 ### P6 — QA — belum
-- [ ] Cek tiap halaman (light & dark), `npm run lint` (masih merah pra-ada: `any` di `src/lib/ai.ts` & `sound.ts`).
+- [ ] Cek dashboard, calendar, groups, settings, profile, achievements (butuh login).
+- [ ] `npm run lint` masih merah pra-ada (`any` di `src/lib/ai.ts` & `sound.ts`).
 
 > Dark mode: **tidak diubah** — tetap ada, bisa switch System/Light/Dark dari topbar & Settings.

@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { Mascot } from "@/components/Mascot"
 import { Icon } from "@/components/Icons"
-import { ContactForm } from "@/components/ContactForm"
 import { TestimonialForm } from "@/components/TestimonialForm"
 import { createClient } from "@/lib/supabase/server"
 import { csx } from "@/lib/csx"
@@ -146,9 +145,7 @@ export default async function Landing() {
           </div>
 
           <div className="iq-lp__desk">
-            <div className="iq-lp__scene">
-              <Mascot src="/mascot-hero.png" fluid priority className="iq-lp__sceneimg" />
-            </div>
+            <Mascot src="/mascot-hero.png" fluid priority className="iq-lp__sceneimg" />
             <div className="iq-lp__mini iq-lp__mini--l">
               <div className="iq-lp__mini-head">
                 <Icon name="ic-check" className="ic ic-16" />
@@ -324,50 +321,6 @@ export default async function Landing() {
           <div className="iq-lp__note iq-lp__note--band">
             <span className="iq-lp__note-num">10</span>
             <span className="iq-lp__note-label">AI actions a month, free</span>
-          </div>
-        </section>
-
-        <section className="iq-lp__sec" id="contact">
-          <div className="iq-lp__sechead">
-            <h2 className="iq-lp__h2">Get in touch</h2>
-            <p className="iq-lp__lead">Have feedback or a suggestion? Send it straight to us and we will read it.</p>
-          </div>
-          <div className="iq-contact">
-            <div className="iq-contact__info">
-              <div className="iq-contact__item">
-                <div className="iq-contact__ic">
-                  <Icon name="ic-doc" className="ic ic-18" />
-                </div>
-                <div>
-                  <div className="iq-contact__label">Email</div>
-                  <div className="iq-contact__val">alyssachalondra@gmail.com</div>
-                </div>
-              </div>
-              <div className="iq-contact__item">
-                <div className="iq-contact__ic">
-                  <Icon name="ic-pin" className="ic ic-18" />
-                </div>
-                <div>
-                  <div className="iq-contact__label">Location</div>
-                  <div className="iq-contact__val">Surakarta, Central Java, Indonesia</div>
-                </div>
-              </div>
-              <a
-                className="iq-contact__item"
-                href="https://linkedin.com/in/alyssachalondra"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className="iq-contact__ic">
-                  <Icon name="ic-link" className="ic ic-18" />
-                </div>
-                <div>
-                  <div className="iq-contact__label">LinkedIn</div>
-                  <div className="iq-contact__val">linkedin.com/in/alyssachalondra</div>
-                </div>
-              </a>
-            </div>
-            <ContactForm />
           </div>
         </section>
 
