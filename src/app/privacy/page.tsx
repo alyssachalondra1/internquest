@@ -42,36 +42,44 @@ export default function PrivacyPage() {
         <li><b>Google Gemini API</b> - generates AI text from the prompt and CV content you submit.</li>
         <li><b>Vercel</b> - application hosting and delivery.</li>
         <li><b>Resend</b> - sending account-related emails (such as sign-in confirmations).</li>
+        <li><b>Paddle</b> - merchant of record for orders paid in US dollars (cards, Apple Pay, PayPal). Paddle collects and stores the payment details and the billing information needed for tax; those details never reach our servers.</li>
+        <li><b>Payment gateway (Indonesia)</b> - processes orders paid in Indonesian rupiah by QRIS or e-wallet. We only receive the order result, never your payment credentials.</li>
       </ul>
 
-      <h2>5. Data sharing</h2>
+      <h2>5. Payments and billing data</h2>
+      <p>When you buy a paid plan or a top-up, the payment provider handles your payment details. For international orders, Paddle acts as merchant of record and is the party you buy from, so it also handles tax and refunds. We store only what we need to give you access: which plan was bought, the order reference, the amount, and the status of the payment.</p>
+
+      <h2>6. Data sharing</h2>
       <p>We do not sell your personal information. We share data only with the providers above, when required by law, or to protect the rights and safety of our users and the Service. Content you post into a group is visible to other members of that group.</p>
 
-      <h2>6. Data retention and deletion</h2>
+      <h2>7. Data retention and deletion</h2>
       <p>We keep your data while your account is active. You can delete your account at any time from Settings; this permanently removes your profile, saved jobs, uploads, AI history, and related data, except where we must retain limited records to meet legal obligations.</p>
 
-      <h2>7. Security</h2>
+      <h2>8. Security</h2>
       <p>We use reputable infrastructure providers and reasonable technical measures to protect your data, including encrypted connections and access controls. No method of transmission or storage is completely secure, so we cannot guarantee absolute security.</p>
 
-      <h2>8. Children's privacy</h2>
+      <h2>9. Children's privacy</h2>
       <p>Sloe is intended for students who are old enough to consent to use online services in their country. It is not directed to children under 13, and we do not knowingly collect their data. If you believe a child has provided us data, please contact us so we can remove it.</p>
 
-      <h2>9. Your rights</h2>
+      <h2>10. Your rights</h2>
       <p>Depending on where you live, you may have the right to access, correct, export, or delete your personal data. You can manage most of this directly in the app, or contact us for help.</p>
 
-      <h2>10. International transfers</h2>
+      <h2>11. International transfers</h2>
       <p>Our providers may process and store data in countries other than yours. Where required, we rely on appropriate safeguards for such transfers.</p>
 
-      <h2>11. Cookies</h2>
+      <h2>12. Cookies</h2>
       <p>We use only essential cookies required to keep you signed in. We do not use advertising or third-party tracking cookies.</p>
 
-      <h2>12. Changes to this policy</h2>
+      <h2>13. Changes to this policy</h2>
       <p>We may update this policy from time to time. We will revise the "Last updated" date above, and significant changes may be highlighted in the app.</p>
 
-      <h2>13. Contact</h2>
+      <h2>14. Contact</h2>
       <p>Questions about this policy? Email <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>.</p>
 
-      <p style={csx("margin-top:32px")}><Link href="/terms">Read our Terms of Service</Link></p>
+      <p style={csx("margin-top:32px")}>
+        <Link href="/terms">Read our Terms of Service</Link> · <Link href="/refund">Refund &amp; Cancellation Policy</Link> ·{" "}
+        <Link href="/pricing">Pricing</Link>
+      </p>
     </main>
   )
 }

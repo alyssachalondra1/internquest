@@ -287,10 +287,14 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
 
         <p className="iq-pr__note">
           {usd
-            ? "International payments open soon: Visa, Mastercard, Apple Pay and PayPal. You can switch to rupiah at any time."
+            ? "Orders in US dollars are processed by Paddle as Merchant of Record, including any applicable tax, receipts and refunds. Cards, Apple Pay and PayPal accepted. Billing questions or refund requests: support@sloe.my.id."
             : checkoutLive
-              ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment."
+              ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment. Billing questions or refund requests: support@sloe.my.id."
               : "QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}
+        </p>
+        <p className="iq-lp__fineprint">
+          Prepaid access, no auto-renew ·{" "}
+          <Link href="/refund">Refund &amp; Cancellation Policy</Link> · <Link href="/terms">Terms of Service</Link>
         </p>
 
         <section className="iq-lp__sec" id="questions">
@@ -308,8 +312,9 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
         </section>
 
         <div className="iq-lp__foot">
-          Sloe · <Link href="/">Home</Link> · <Link href="/pricing">Pricing</Link> · <a href="/privacy">Privacy</a> ·{" "}
-          <a href="/terms">Terms</a>
+          Sloe · <Link href="/">Home</Link> · <Link href="/pricing">Pricing</Link> · <Link href="/terms">Terms</Link> ·{" "}
+          <Link href="/privacy">Privacy</Link> · <Link href="/refund">Refund Policy</Link> ·{" "}
+          <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>
         </div>
       </div>
     </main>

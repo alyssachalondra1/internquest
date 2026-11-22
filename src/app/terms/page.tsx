@@ -8,7 +8,7 @@ export default function TermsPage() {
     <main style={csx("max-width:780px;margin:0 auto;padding:48px 20px;line-height:1.7")}>
       <p><Link href="/">Back to Sloe</Link></p>
       <h1>Terms of Service</h1>
-      <p className="muted">Last updated: July 15, 2026</p>
+      <p className="muted">Last updated: November 22, 2026</p>
 
       <p>Welcome to Sloe. These Terms of Service ("Terms") govern your use of the Sloe website and app (the "Service"). By creating an account or using the Service, you agree to these Terms. If you do not agree, please do not use the Service.</p>
 
@@ -59,10 +59,22 @@ export default function TermsPage() {
       <h2>13. Changes to these Terms</h2>
       <p>We may update these Terms from time to time. We will revise the "Last updated" date above, and continued use after changes means you accept the updated Terms.</p>
 
-      <h2>14. Contact</h2>
-      <p>Questions? Email <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>.</p>
+      <h2>14. Paid plans, payments and merchant of record</h2>
+      <p>Paid plans (Plus and Pro) are prepaid access passes for one month, and they do not renew automatically. Top-up packs add AI actions to your balance without changing your plan.</p>
+      <ul>
+        <li>Orders paid in Indonesian rupiah are processed by our payment gateway in Indonesia. We are the seller for those orders.</li>
+        <li>Orders paid in US dollars are processed by <b>Paddle</b>, who acts as the <b>Merchant of Record</b>. For those orders Paddle is the seller of record: Paddle calculates and collects any applicable sales tax or VAT, issues the receipt, and handles refunds and chargebacks. Our agreement for those orders is with Paddle as seller, alongside these Terms.</li>
+        <li>Prices are shown in the currency of the checkout page. International prices may be stated tax-inclusive, and the tax shown on the Paddle receipt depends on your country.</li>
+      </ul>
+      <p>Refunds and cancellation are described in our <Link href="/refund">Refund &amp; Cancellation Policy</Link>.</p>
 
-      <p style={csx("margin-top:32px")}><Link href="/privacy">Read our Privacy Policy</Link></p>
+      <h2>15. Contact</h2>
+      <p>Questions about these Terms, an order, or a refund? Email <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>. We answer within 2 business days.</p>
+
+      <p style={csx("margin-top:32px")}>
+        <Link href="/privacy">Read our Privacy Policy</Link> · <Link href="/refund">Refund &amp; Cancellation Policy</Link> ·{" "}
+        <Link href="/pricing">Pricing</Link>
+      </p>
     </main>
   )
 }

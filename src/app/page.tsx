@@ -325,8 +325,9 @@ export default async function Landing() {
         </section>
 
         <div className="iq-lp__foot">
-          Sloe · Built for students · <Link href="/pricing">Pricing</Link> · <a href="/privacy">Privacy</a> ·{" "}
-          <a href="/terms">Terms</a>
+          Sloe · Built for students · <Link href="/pricing">Pricing</Link> · <Link href="/terms">Terms</Link> ·{" "}
+          <Link href="/privacy">Privacy</Link> · <Link href="/refund">Refund Policy</Link> ·{" "}
+          <a href="mailto:support@sloe.my.id">support@sloe.my.id</a>
         </div>
       </div>
     </main>
