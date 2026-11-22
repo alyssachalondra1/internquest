@@ -1894,3 +1894,36 @@ html{background:var(--canvas)}
   .iq-lg__card{padding:48px 22px 24px}
   .iq-lg__peek{width:140px;margin-bottom:-36px}
 }
+
+/* ============================================================================
+   v10 — kartu top-up di halaman harga, tombol lebih lembut, kartu upsell limit
+   ============================================================================ */
+
+/* Kartu top-up dulu memakai .iq-card (putih) sehingga tidak terbaca di latar
+   ungu gelap halaman harga. Sekarang memakai permukaan dunia pricing. */
+.iq-pr__topup{background:var(--lp-card);border:1px solid var(--lp-line);border-radius:18px;padding:22px}
+.iq-pr__topup h3{color:var(--lp-ink);font-family:var(--font-display);font-size:18px;font-weight:600;line-height:1.25}
+.iq-pr__topup p{color:var(--lp-ink-2)}
+.iq-pr__topup .iq-btn--ghost{background:transparent;color:#F6F2FF;border-color:rgba(255,255,255,.28)}
+.iq-pr__topup .iq-btn--ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.46)}
+.iq-pr__topup .iq-btn--primary{background:linear-gradient(135deg,#7B5CFF 0%,#5B3BEA 100%);color:#fff}
+
+/* Bayangan tombol: sebelumnya blok keras `0 4px 0` yang terlihat nabrak di
+   permukaan gelap. Sekarang blur lembut, berlaku ke semua tombol. */
+.iq-btn{box-shadow:0 2px 8px rgba(9,6,20,.18),0 1px 2px rgba(9,6,20,.12)}
+.iq-btn:active{transform:translateY(1px);box-shadow:0 1px 3px rgba(9,6,20,.16)}
+.iq-btn--sm{box-shadow:0 2px 6px rgba(9,6,20,.16)}
+.iq-btn--sm:active{box-shadow:0 1px 2px rgba(9,6,20,.14)}
+.iq-lp .iq-btn--primary,.iq-lp__panel .iq-btn--primary{box-shadow:0 8px 20px rgba(91,59,234,.26)}
+.iq-lp .iq-btn--primary:active,.iq-lp__panel .iq-btn--primary:active{box-shadow:0 3px 10px rgba(91,59,234,.22)}
+.iq-lp .iq-btn--ghost{box-shadow:0 2px 8px rgba(9,6,20,.22)}
+.iq-prio__btn,.iq-apply-btn,.iq-open-btn{box-shadow:0 2px 6px rgba(20,27,46,.16)}
+.iq-prio__btn:active,.iq-apply-btn:active{box-shadow:0 1px 2px rgba(20,27,46,.16)}
+
+/* Kartu "kamu kena batas": satu bentuk untuk Groups, Profil, dan Asisten AI. */
+.iq-upsell{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;margin-top:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px}
+.iq-upsell__ic{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:none;border-radius:10px;background:var(--blue-15);color:var(--blue-text)}
+.iq-upsell__copy{flex:1;min-width:200px}
+.iq-upsell__reason{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.45}
+.iq-upsell__price{margin:4px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-2)}
+.iq-upsell .iq-btn{flex:none}

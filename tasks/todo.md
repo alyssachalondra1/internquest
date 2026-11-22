@@ -49,7 +49,9 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [ ] Env Vercel: `MIDTRANS_SERVER_KEY`, `MIDTRANS_IS_PRODUCTION`, `NEXT_PUBLIC_APP_URL` + notification URL Midtrans. (`SUPABASE_SERVICE_ROLE_KEY` sudah ada.)
 - [x] Katalog **top-up 10 aksi AI / Rp10.000** (`0006_gems.sql` + `PlanId` topup + kartu di `/pricing`).
 - [x] `enabled_payments` = qris/gopay/shopeepay (VA & kartu disembunyikan).
-- [ ] `0006_gems.sql` dijalankan di produksi (3 gems/aksi, top-up 30 gems, reset gems lama ke 30).
+- [x] `0006_gems.sql` dijalankan di produksi (user, 22 Nov) — 3 gems/aksi, top-up 30 gems, gems lama dipangkas ke 30.
+- [x] Jalur internasional: **Paddle** (bukan Lemon Squeezy — LS tutup 31 Mar 2027). Harga USD dikunci: Plus $4.99 / Pro $9.99 / top-up $2.99.
+- [ ] Paddle: buat 3 produk + client token + webhook `/api/paddle/webhook`, lalu isi env di Vercel (lihat `docs/payments/paddle-setup.md`).
 
 ## T7 — UI
 - [ ] Meter "x/10 aksi AI bulan ini" (sekarang hanya di `/pricing`).

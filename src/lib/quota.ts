@@ -7,7 +7,7 @@ export const GEMS_PER_ACTION = 3
 export const PLAN_CREDITS: Record<string, number> = { free: 30, plus: 300, pro: 900 }
 export const FREE_SHOT_CREDITS = 5
 
-export type Quota = { plan: string; credits: number; shotCredits: number }
+export type Quota = { plan: string; credits: number; topup: number; shotCredits: number }
 
 export function planCredits(plan: string | null | undefined): number {
   return PLAN_CREDITS[plan ?? "free"] ?? PLAN_CREDITS.free
@@ -25,14 +25,15 @@ export async function readQuota(supabase: SupabaseClient, userId: string): Promi
   const resetAt = data?.credits_reset_at as string | null
   const resetDue = !resetAt || new Date(resetAt).getTime() <= Date.now()
   const monthly = resetDue ? planCredits(plan) : ((data?.ai_credits as number | null) ?? 0)
-  const credits = monthly + ((data?.gems as number | null) ?? 0)
+  const topup = (data?.gems as number | null) ?? 0
+  const credits = monthly + topup
   const shotCredits = resetDue
     ? plan === "free"
       ? FREE_SHOT_CREDITS
       : -1
     : ((data?.ai_shot_credits as number | null) ?? (plan === "free" ? 0 : -1))
 
-  return { plan, credits, shotCredits }
+  return { plan, credits, topup, shotCredits }
 }
 
 // Atomic debit via RPC. Call AFTER a successful AI action. Returns false on failure.

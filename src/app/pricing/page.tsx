@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase/server"
 import { readQuota, planCredits } from "@/lib/quota"
 import { isConfigured } from "@/lib/midtrans"
 import { PLAN_PRICE_USD_TEXT } from "@/lib/plans"
+import { paddleConfigured } from "@/lib/paddle"
+import { PaddleCheckoutButton } from "@/components/PaddleCheckoutButton"
 
 export const metadata = {
   title: "Plans · Sloe",
@@ -99,14 +101,6 @@ const QUESTIONS = [
   },
 ]
 
-/* International checkout links. Empty until Lemon Squeezy products exist, so the
-   USD button degrades to "opens soon" instead of a dead link. */
-const LEMON_CHECKOUT: Record<string, string | undefined> = {
-  plus: process.env.LEMON_CHECKOUT_PLUS,
-  pro: process.env.LEMON_CHECKOUT_PRO,
-  topup: process.env.LEMON_CHECKOUT_TOPUP,
-}
-
 export default async function Pricing({ searchParams }: { searchParams: Promise<{ currency?: string }> }) {
   const sp = await searchParams
   const h = await headers()
@@ -115,7 +109,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
   const currency: "IDR" | "USD" =
     sp.currency === "USD" ? "USD" : sp.currency === "IDR" ? "IDR" : country && country !== "ID" ? "USD" : "IDR"
   const usd = currency === "USD"
-  const lemonLive = Boolean(LEMON_CHECKOUT.plus)
+  const paddleLive = paddleConfigured()
 
   const supabase = await createClient()
   const {
@@ -124,7 +118,11 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
 
   const quota = user ? await readQuota(supabase, user.id) : null
   const allowance = quota ? planCredits(quota.plan) : 0
-  const usedPct = quota && allowance > 0 ? Math.min(100, Math.max(0, Math.round(((allowance - quota.credits) / allowance) * 100))) : 0
+  const totalAllowance = allowance + (quota?.topup ?? 0)
+  const usedPct =
+    quota && totalAllowance > 0
+      ? Math.min(100, Math.max(0, Math.round(((totalAllowance - quota.credits) / totalAllowance) * 100)))
+      : 0
   const checkoutLive = isConfigured()
 
   return (
@@ -175,14 +173,14 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
                 className={"iq-btn iq-btn--sm " + (usd ? "iq-btn--ghost" : "iq-btn--primary")}
                 aria-current={usd ? undefined : "page"}
               >
-                IDR · Midtrans
+                IDR
               </Link>
               <Link
                 href="/pricing?currency=USD"
                 className={"iq-btn iq-btn--sm " + (usd ? "iq-btn--primary" : "iq-btn--ghost")}
                 aria-current={usd ? "page" : undefined}
               >
-                USD · card & PayPal
+                USD
               </Link>
             </div>
             {quota && (
@@ -193,7 +191,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
                     3 gems per AI action
                   </span>
                   <span className="iq-pr__meter-num">
-                    {quota.credits} / {allowance}
+                    {quota.credits} / {totalAllowance}
                   </span>
                 </div>
                 <div className="iq-pr__meter-bar">
@@ -224,17 +222,12 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
                   {p.cta}
                 </Link>
               ) : usd ? (
-                p.planId && lemonLive && LEMON_CHECKOUT[p.planId] ? (
-                  <a
-                    className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")}
-                    href={LEMON_CHECKOUT[p.planId]}
-                  >
-                    {p.cta}
-                  </a>
+                p.planId && paddleLive && user ? (
+                  <PaddleCheckoutButton plan={p.planId} label={p.cta} userId={user.id} featured={p.featured} />
                 ) : (
-                  <span className="iq-btn iq-btn--ghost" aria-disabled="true">
-                    International checkout opens soon
-                  </span>
+                  <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href="/login?mode=signup">
+                    Sign up to pay by card
+                  </Link>
                 )
               ) : !user || !checkoutLive ? (
                 <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href={p.href}>
@@ -255,7 +248,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
           ))}
         </section>
 
-        <section className="iq-card iq-card__pad mb-4" aria-label="Top-up">
+        <section className="iq-pr__topup mb-4" aria-label="Top-up">
           <div className="row" style={csx("gap:12px;align-items:center;flex-wrap:wrap")}>
             <div style={csx("flex:1;min-width:220px")}>
               <h3 style={csx("margin:0")}>Need a few more actions this month?</h3>
@@ -265,14 +258,12 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
               </p>
             </div>
             {usd ? (
-              lemonLive && LEMON_CHECKOUT.topup ? (
-                <a className="iq-btn iq-btn--ghost" href={LEMON_CHECKOUT.topup}>
-                  Top up 10 actions
-                </a>
+              paddleLive && user ? (
+                <PaddleCheckoutButton plan="topup" label="Top up 10 actions" userId={user.id} />
               ) : (
-                <span className="iq-btn iq-btn--ghost" aria-disabled="true">
-                  International checkout opens soon
-                </span>
+                <Link className="iq-btn iq-btn--ghost" href="/login?mode=signup">
+                  Sign up to pay by card
+                </Link>
               )
             ) : user && checkoutLive ? (
               <UpgradeButton plan="topup" label="Top up 10 actions" />

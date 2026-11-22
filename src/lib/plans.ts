@@ -13,9 +13,9 @@ export const PLAN_LABEL: Record<PlanId, string> = {
   topup: "30 AI actions top-up",
 }
 
-/* USD list prices for international buyers. DRAFT — waiting on the user's
-   approval before these are locked. Chosen so a 5% + $0.50 merchant-of-record
-   fee and tax-inclusive VAT still leave ~69-81% margin. */
+/* USD list prices for international buyers. LOCKED 22 Nov 2026: with Paddle's
+   5% + $0.50 merchant-of-record fee and tax-inclusive VAT they keep a 62-81%
+   margin, so they are now the final prices. */
 export const PLAN_PRICE_USD: Record<PlanId, number> = { plus: 499, pro: 999, topup: 299 }
 export const PLAN_PRICE_USD_TEXT: Record<PlanId, string> = { plus: "$4.99", pro: "$9.99", topup: "$2.99" }
 

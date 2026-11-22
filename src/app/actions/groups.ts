@@ -38,7 +38,7 @@ function planLimit(message: string): { error: string; needsUpgrade: true } | nul
   if (!hit) return null
   const verb = hit[1] === "CREATE" ? "create" : "join"
   return {
-    error: `Your current plan lets you ${verb} ${hit[2]} groups and you have used all of them. Delete a group you no longer need, or move to a paid plan.`,
+    error: `Your current plan lets you ${verb} ${hit[2]} groups and you have used all of them. Move to a paid plan.`,
     needsUpgrade: true,
   }
 }
