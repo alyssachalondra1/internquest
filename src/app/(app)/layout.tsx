@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { AppShell, type ProfileStats } from "@/components/AppShell"
 import { getUnseenAchievements } from "@/app/actions/gamification"
+import { readQuota } from "@/lib/quota"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -23,11 +24,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   const newAchievements = await getUnseenAchievements()
 
+  // The pill shows the AI balance that actually gets spent: this month's
+  // allowance plus any top-up gems. `profiles.gems` alone is only the top-up side.
+  const quota = await readQuota(supabase, user.id)
+
   const stats: ProfileStats = {
     full_name: profile?.full_name ?? user.email ?? "there",
     level: profile?.level ?? 1,
     xp: profile?.xp ?? 0,
-    gems: profile?.gems ?? 0,
+    gems: quota.credits,
     streak_count: profile?.streak_count ?? 0,
     avatar_url: profile?.avatar_url ?? null,
   }

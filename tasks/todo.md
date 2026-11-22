@@ -54,7 +54,7 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [ ] Paddle: buat 3 produk + client token + webhook `/api/paddle/webhook`, lalu isi env di Vercel (lihat `docs/payments/paddle-setup.md`).
 
 ## T7 — UI
-- [ ] Meter "x/10 aksi AI bulan ini" (sekarang hanya di `/pricing`).
+- [x] Meter kuota: saldo "AI Gems" tampil di topbar, dashboard, profil, achievements, dan meter `/pricing`.
 - [x] CTA "See plans" saat 402 `needUpgrade` — `UpgradeNotice` dipakai di Groups + gate portfolio.
 - [x] CTA "See plans" saat 402 `needUpgrade`: Groups, portfolio, dan hasil Asisten AI.
 - [x] Halaman harga 3 kolom; gate portfolio Free (T5).

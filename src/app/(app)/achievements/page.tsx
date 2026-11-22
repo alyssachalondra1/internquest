@@ -6,6 +6,7 @@ import { csx } from "@/lib/csx"
 import type { Internship } from "@/lib/helpers"
 import { computeBadges } from "@/lib/achievements"
 import { markAchievementsSeen } from "@/app/actions/gamification"
+import { readQuota } from "@/lib/quota"
 
 export const dynamic = "force-dynamic"
 
@@ -20,6 +21,8 @@ export default async function AchievementsPage() {
     .from("internships").select("status").eq("user_id", user!.id)
   const { count: genCount } = await supabase
     .from("ai_generations").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
+  // AI balance actually available: monthly allowance + top-up gems.
+  const quota = await readQuota(supabase, user!.id)
 
   const items = (internships || []) as Pick<Internship, "status">[]
   const level = profile?.level ?? 1
@@ -60,7 +63,7 @@ export default async function AchievementsPage() {
           <div className="muted mt-2" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>
           <div className="row mt-4 wrap" style={csx("gap:28px")}>
             <div className="center"><div className="big-num">{profile?.streak_count ?? 0}</div><small className="muted">Day streak</small></div>
-            <div className="center"><div className="big-num">{profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
+            <div className="center"><div className="big-num">{quota.credits}</div><small className="muted">AI Gems</small></div>
             <div className="center"><div className="big-num">{xp}</div><small className="muted">Total XP</small></div>
           </div>
         </div>

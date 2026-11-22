@@ -7,6 +7,7 @@ import { DeleteAccountButton } from "@/components/DeleteAccountButton"
 import { LogoutButton } from "@/components/LogoutButton"
 import { StreakCelebration } from "@/components/StreakCelebration"
 import { csx } from "@/lib/csx"
+import { readQuota } from "@/lib/quota"
 
 export const dynamic = "force-dynamic"
 
@@ -34,6 +35,8 @@ export default async function ProfilePage() {
     .select("full_name, email, level, xp, gems, streak_count, avatar_url")
     .eq("id", user!.id)
     .single()
+  // AI balance actually available: monthly allowance + top-up gems.
+  const quota = await readQuota(supabase, user!.id)
   const { count: applied } = await supabase
     .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
 
@@ -87,7 +90,7 @@ export default async function ProfilePage() {
         <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP</div>
         <div className="iq-levelstats">
           <div><span className="big-num">{profile?.streak_count ?? 0}</span><small>Day Streak</small></div>
-          <div><span className="big-num">{profile?.gems ?? 0}</span><small>Gems</small></div>
+          <div><span className="big-num">{quota.credits}</span><small>AI Gems</small></div>
           <div><span className="big-num">{applied ?? 0}</span><small>Saved jobs</small></div>
         </div>
       </div>

@@ -16,6 +16,7 @@ import {
   type Internship,
 } from "@/lib/helpers"
 import { touchStreak, syncAchievementGems } from "@/app/actions/gamification"
+import { readQuota } from "@/lib/quota"
 
 export const dynamic = "force-dynamic"
 
@@ -35,6 +36,9 @@ export default async function DashboardPage() {
     .select("full_name, level, xp, gems, streak_count, avatar_url")
     .eq("id", user!.id)
     .single()
+
+  // AI balance actually available: monthly allowance + top-up gems.
+  const quota = await readQuota(supabase, user!.id)
 
   const { data: internships } = await supabase
     .from("internships")
@@ -147,7 +151,7 @@ export default async function DashboardPage() {
             <div className="muted" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>
             <div className="iq-levelstats">
               <div><div className="big-num">{profile?.streak_count ?? 0}</div><small className="muted">Day Streak</small></div>
-              <div><div className="big-num">{profile?.gems ?? 0}</div><small className="muted">Gems</small></div>
+              <div><div className="big-num">{quota.credits}</div><small className="muted">AI Gems</small></div>
               <div><div className="big-num">{applied}</div><small className="muted">Applied</small></div>
             </div>
           </div>
