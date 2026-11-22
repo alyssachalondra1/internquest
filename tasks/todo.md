@@ -51,7 +51,8 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [x] `enabled_payments` = qris/gopay/shopeepay (VA & kartu disembunyikan).
 - [x] `0006_gems.sql` dijalankan di produksi (user, 22 Nov) — 3 gems/aksi, top-up 30 gems, gems lama dipangkas ke 30.
 - [x] Jalur internasional: **Paddle** (bukan Lemon Squeezy — LS tutup 31 Mar 2027). Harga USD dikunci: Plus $4.99 / Pro $9.99 / top-up $2.99.
-- [ ] Paddle: buat 3 produk + client token + webhook `/api/paddle/webhook`, lalu isi env di Vercel (lihat `docs/payments/paddle-setup.md`).
+- [x] Paddle: 3 produk + client token + webhook secret sudah diisi di Vercel (user, 22 Nov). Kunci live terverifikasi ada di bundle produksi (3 Price ID `pri_…`, token `live_…`, env `production`).
+- [ ] Paddle: kirim satu notifikasi uji dari dashboard dan pastikan balasannya 200 (bukan 401/400).
 
 ## T7 — UI
 - [x] Meter kuota: saldo "AI Gems" tampil di topbar, dashboard, profil, achievements, dan meter `/pricing`.

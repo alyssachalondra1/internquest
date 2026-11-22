@@ -65,11 +65,13 @@ Karena variabel `NEXT_PUBLIC_*` ditanam saat build, **redeploy** setelah menguba
 
 ## 5. Uji sebelum produksi
 
-1. `NEXT_PUBLIC_PADDLE_ENV=sandbox`, pakai token sandbox + Price ID sandbox dan
-   webhook sandbox.
-2. Bayar dengan kartu tes Paddle (`4242 4242 4242 4242`), cek baris `passes` berstatus
-   `paid` dengan `payment_type = 'paddle'`, lalu cek `profiles.plan` naik atau
-   `gems` bertambah 30 untuk top-up.
+Kunci live sudah terpasang di Vercel (3 Price ID + client token + `NEXT_PUBLIC_PADDLE_ENV=production`).
+Yang masih perlu dibuktikan: satu notifikasi Paddle benar-benar diterima.
+
+1. Di dashboard Paddle, kirim satu notifikasi uji ke destination webhook dan pastikan
+   balasannya **200**, bukan 401 (tanda tangan salah) atau 400 (transaksi tak dikenal).
+2. Bayar satu paket sungguhan dengan nilai terkecil, lalu cek: baris `passes` berstatus `paid`
+   dengan `payment_type = 'paddle'`, dan `profiles.plan` naik atau `gems` bertambah 30 (top-up).
 3. Ulangi dengan `?currency=USD` untuk melihat halaman versi USD, dan tanpa parameter
    untuk memastikan deteksi negara berjalan.
 
