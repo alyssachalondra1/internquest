@@ -164,7 +164,9 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
               how many groups you can run with classmates.
             </p>
             <p className="iq-lp__fineprint">
-              {usd ? "Prices in US dollars. Cancel whenever you like." : "Prices in rupiah. Cancel whenever you like."}
+              {usd
+                ? "Prices in US dollars. One month at a time, no auto-renew."
+                : "Prices in rupiah. One month at a time, no auto-renew."}
             </p>
             <div className="row" style={csx("gap:8px;margin:10px 0 4px;align-items:center")}>
               <span className="muted" style={csx("font-size:12px")}>Currency</span>
@@ -224,6 +226,10 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
               ) : usd ? (
                 p.planId && paddleLive && user ? (
                   <PaddleCheckoutButton plan={p.planId} label={p.cta} userId={user.id} featured={p.featured} />
+                ) : user ? (
+                  <span className="iq-btn iq-btn--ghost" aria-disabled="true">
+                    Card payment opens soon
+                  </span>
                 ) : (
                   <Link className={"iq-btn " + (p.featured ? "iq-btn--primary" : "iq-btn--ghost")} href="/login?mode=signup">
                     Sign up to pay by card
@@ -260,6 +266,10 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
             {usd ? (
               paddleLive && user ? (
                 <PaddleCheckoutButton plan="topup" label="Top up 10 actions" userId={user.id} />
+              ) : user ? (
+                <span className="iq-btn iq-btn--ghost" aria-disabled="true">
+                  Card payment opens soon
+                </span>
               ) : (
                 <Link className="iq-btn iq-btn--ghost" href="/login?mode=signup">
                   Sign up to pay by card
@@ -280,7 +290,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
             ? "International payments open soon: Visa, Mastercard, Apple Pay and PayPal. You can switch to rupiah at any time."
             : checkoutLive
               ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment."
-              : "Card and QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}
+              : "QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}
         </p>
 
         <section className="iq-lp__sec" id="questions">
