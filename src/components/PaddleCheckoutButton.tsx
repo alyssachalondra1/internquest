@@ -27,6 +27,7 @@ export function PaddleCheckoutButton({
 }) {
   const [ready, setReady] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState("")
 
   useEffect(() => {
     if (window.Paddle) {
@@ -44,6 +45,16 @@ export function PaddleCheckoutButton({
         // Paddle Retain expects the Paddle customer id (ctm_...), never our own
         // user id or the email. Omitted until a purchase tells us the id.
         ...(paddleCustomerId ? { pwCustomer: { id: paddleCustomerId } } : {}),
+        // Paddle's own overlay error is generic ("Something went wrong"). Keep the
+        // real code in the console, and say something honest to the buyer.
+        eventCallback: (event: any) => {
+          const name = String(event?.name ?? "")
+          if (name !== "checkout.error" && name !== "checkout.failed") return
+          console.error("[paddle] checkout error", event?.data ?? event)
+          setMsg(
+            "Paddle could not start the checkout. Nothing was charged. Please try again, or email support@sloe.my.id and we will help.",
+          )
+        },
       })
       setReady(true)
     }
@@ -63,13 +74,20 @@ export function PaddleCheckoutButton({
   }
 
   return (
-    <button
-      type="button"
-      onClick={open}
-      disabled={!ready || busy}
-      className={"iq-btn " + (featured ? "iq-btn--primary" : "iq-btn--ghost")}
-    >
-      {busy ? "Opening…" : label}
-    </button>
+    <div>
+      <button
+        type="button"
+        onClick={open}
+        disabled={!ready || busy}
+        className={"iq-btn " + (featured ? "iq-btn--primary" : "iq-btn--ghost")}
+      >
+        {busy ? "Opening…" : label}
+      </button>
+      {msg && (
+        <p className="muted" style={{ fontSize: 12, lineHeight: 1.5, marginTop: 8 }} role="status">
+          {msg}
+        </p>
+      )}
+    </div>
   )
 }
