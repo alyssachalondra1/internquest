@@ -52,7 +52,10 @@ Urutan dikunci. Jangan acak. AGENTS.md = mutlak; plan-before-building + approval
 - [x] `0006_gems.sql` dijalankan di produksi (user, 22 Nov) — 3 gems/aksi, top-up 30 gems, gems lama dipangkas ke 30.
 - [x] Jalur internasional: **Paddle** (bukan Lemon Squeezy — LS tutup 31 Mar 2027). Harga USD dikunci: Plus $4.99 / Pro $9.99 / top-up $2.99.
 - [x] Paddle: 3 produk + client token + webhook secret sudah diisi di Vercel (user, 22 Nov). Kunci live terverifikasi ada di bundle produksi (3 Price ID `pri_…`, token `live_…`, env `production`).
-- [ ] Paddle: kirim satu notifikasi uji dari dashboard dan pastikan balasannya 200 (bukan 401/400).
+- [x] Paddle Retain: `pwCustomer` dikirim hanya bila `profiles.paddle_customer_id` sudah terisi (migrasi `0007_paddle_customer.sql` — **belum dijalankan**).
+- [x] Allowlist IP webhook Paddle: diambil dari `api.paddle.com/ips`, cache 1 jam, bukan hard-code.
+- [ ] **Wajib:** jalankan `0007_paddle_customer.sql` di Supabase.
+- [ ] Kirim satu notifikasi uji dari dashboard Paddle dan pastikan balasannya 200 (dari IP Paddle; dari IP lain route sengaja menjawab 403).
 
 ## T7 — UI
 - [x] Meter kuota: saldo "AI Gems" tampil di topbar, dashboard, profil, achievements, dan meter `/pricing`.

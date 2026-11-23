@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { PADDLE_CLIENT_TOKEN, PADDLE_ENV, PADDLE_PRICE_ID } from "@/lib/paddle"
+import { PADDLE_CLIENT_TOKEN, PADDLE_IS_SANDBOX, PADDLE_PRICE_ID } from "@/lib/paddle"
 
 declare global {
   interface Window {
@@ -16,11 +16,13 @@ export function PaddleCheckoutButton({
   plan,
   label,
   userId,
+  paddleCustomerId,
   featured,
 }: {
   plan: "plus" | "pro" | "topup"
   label: string
   userId: string
+  paddleCustomerId?: string | null
   featured?: boolean
 }) {
   const [ready, setReady] = useState(false)
@@ -35,8 +37,14 @@ export function PaddleCheckoutButton({
     script.src = "https://cdn.paddle.com/paddle/v2/paddle.js"
     script.async = true
     script.onload = () => {
-      window.Paddle.Environment.set(PADDLE_ENV)
-      window.Paddle.Initialize({ token: PADDLE_CLIENT_TOKEN })
+      // Production is Paddle's default environment; only switch when testing.
+      if (PADDLE_IS_SANDBOX) window.Paddle.Environment.set("sandbox")
+      window.Paddle.Initialize({
+        token: PADDLE_CLIENT_TOKEN,
+        // Paddle Retain expects the Paddle customer id (ctm_...), never our own
+        // user id or the email. Omitted until a purchase tells us the id.
+        ...(paddleCustomerId ? { pwCustomer: { id: paddleCustomerId } } : {}),
+      })
       setReady(true)
     }
     document.head.appendChild(script)

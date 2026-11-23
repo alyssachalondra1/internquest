@@ -6,6 +6,7 @@
    Setup steps: docs/payments/paddle-setup.md */
 
 export const PADDLE_ENV = process.env.NEXT_PUBLIC_PADDLE_ENV === "production" ? "production" : "sandbox"
+export const PADDLE_IS_SANDBOX = PADDLE_ENV !== "production"
 export const PADDLE_CLIENT_TOKEN = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN ?? ""
 export const PADDLE_PRICE_ID: Record<"plus" | "pro" | "topup", string> = {
   plus: process.env.NEXT_PUBLIC_PADDLE_PRICE_PLUS ?? "",

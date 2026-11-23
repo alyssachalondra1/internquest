@@ -117,6 +117,12 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
   } = await supabase.auth.getUser()
 
   const quota = user ? await readQuota(supabase, user.id) : null
+  // Paddle Retain needs the Paddle customer id. Missing until this user has
+  // bought something, and the column itself appears with 0007.
+  const { data: paddleProfile } = user
+    ? await supabase.from("profiles").select("paddle_customer_id").eq("id", user.id).single()
+    : { data: null }
+  const paddleCustomerId = (paddleProfile?.paddle_customer_id as string | null) ?? null
   const allowance = quota ? planCredits(quota.plan) : 0
   const totalAllowance = allowance + (quota?.topup ?? 0)
   const usedPct =
@@ -225,7 +231,13 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
                 </Link>
               ) : usd ? (
                 p.planId && paddleLive && user ? (
-                  <PaddleCheckoutButton plan={p.planId} label={p.cta} userId={user.id} featured={p.featured} />
+                  <PaddleCheckoutButton
+                    plan={p.planId}
+                    label={p.cta}
+                    userId={user.id}
+                    paddleCustomerId={paddleCustomerId}
+                    featured={p.featured}
+                  />
                 ) : user ? (
                   <span className="iq-btn iq-btn--ghost" aria-disabled="true">
                     Card payment opens soon
@@ -265,7 +277,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
             </div>
             {usd ? (
               paddleLive && user ? (
-                <PaddleCheckoutButton plan="topup" label="Top up 10 actions" userId={user.id} />
+                <PaddleCheckoutButton plan="topup" label="Top up 10 actions" userId={user.id} paddleCustomerId={paddleCustomerId} />
               ) : user ? (
                 <span className="iq-btn iq-btn--ghost" aria-disabled="true">
                   Card payment opens soon

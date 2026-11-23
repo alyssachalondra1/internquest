@@ -75,7 +75,23 @@ Yang masih perlu dibuktikan: satu notifikasi Paddle benar-benar diterima.
 3. Ulangi dengan `?currency=USD` untuk melihat halaman versi USD, dan tanpa parameter
    untuk memastikan deteksi negara berjalan.
 
-## 6. Yang belum ada
+## 6. Keamanan webhook
+
+Selain tanda tangan, route menolak pengirim di luar IP Paddle. Daftarnya tidak
+di-hard-code: route mengambil sendiri dari `https://api.paddle.com/ips` dan
+menyimpannya satu jam. Kalau daftar itu gagal diambil, route tetap mengandalkan
+pemeriksaan tanda tangan — lebih baik begitu daripada menolak laporan pembayaran
+yang sah.
+
+## 7. Paddle Retain (`pwCustomer`)
+
+Frontend hanya mengirim `pwCustomer` kalau kita sudah tahu Paddle customer id
+pengguna itu (`ctm_...`). Id tersebut diisi webhook dari transaksi pertama, ke
+kolom `profiles.paddle_customer_id` (migrasi `0007_paddle_customer.sql`). Jangan
+pernah mengisi kolom itu dengan id internal kita atau email — Paddle tidak akan
+mengenali pelanggannya.
+
+## 8. Yang belum ada
 
 - Refund/chargeback: status `refunded` ada di tabel tapi belum ditangani webhook.
 - Email tanda terima dan pengingat H-3 perpanjangan.
