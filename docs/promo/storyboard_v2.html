@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Sloe — Visual Storyboard v2</title>
+<style>
+  :root{ --ink:#141821; --paper:#F7F5F0; --line:#D9D3C7; --accent:#3B76FF; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; padding:34px 38px 50px; background:var(--paper); color:var(--ink);
+        font-family:"Segoe UI",system-ui,-apple-system,sans-serif; }
+  header{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
+          border-bottom:2px solid var(--ink); padding-bottom:12px; margin-bottom:24px; }
+  h1{ font-size:29px; margin:0; letter-spacing:-.02em; }
+  header p{ margin:4px 0 0; font-size:13.5px; color:#5b5648; }
+  .specs{ display:flex; gap:20px; font-size:12px; text-align:right; color:#5b5648; }
+  .specs b{ display:block; color:var(--ink); font-size:14px; }
+  .grid{ display:grid; grid-template-columns:repeat(3,556px); gap:24px 22px; }
+  figure{ margin:0; }
+  .cap{ display:flex; align-items:baseline; gap:8px; font-size:12.5px; margin-bottom:5px; }
+  .num{ display:inline-flex; width:21px; height:21px; border-radius:6px; background:var(--ink); color:#fff;
+        font-size:11.5px; font-weight:700; align-items:center; justify-content:center; }
+  .tc{ font-variant-numeric:tabular-nums; color:#7a7466; font-size:11.5px; }
+  .shot{ font-weight:700; }
+  .frame{ position:relative; width:556px; height:989px; border:1px solid var(--line); border-radius:5px;
+          overflow:hidden; background:#0b0f1a; }
+  .frame img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .tag{ position:absolute; left:10px; top:10px; background:rgba(8,10,16,.72); color:#F7F5F0;
+        font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; padding:4px 8px; border-radius:4px; }
+  .frame svg{ display:block; width:100%; height:100%; }
+  .vo{ margin-top:7px; font-size:12.5px; line-height:1.45; color:#3d3a32; }
+  .vo b{ color:var(--ink); }
+  .dir{ margin-top:3px; font-size:11.5px; color:#7a7466; line-height:1.4; }
+  text{ font-family:"Segoe UI",system-ui,sans-serif; }
+  footer{ margin-top:30px; border-top:1px solid var(--line); padding-top:12px; font-size:12px; color:#5b5648;
+          display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  footer b{ color:var(--ink); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Sloe — Visual Storyboard v2</h1>
+    <p>Panel 1, 2, 3, 9 adalah still Blender sungguhan dari scene yang akan dipakai. Panel 4–8 masih mockup UI.</p>
+  </div>
+  <div class="specs">
+    <div><b>58 s</b>durasi</div>
+    <div><b>1080×1920</b>portrait</div>
+    <div><b>3 gems</b>/aksi</div>
+    <div><b>9</b>adegan</div>
+  </div>
+</header>
+
+<div class="grid">
+
+<!-- 1 -->
+<figure>
+  <div class="cap"><span class="num">1</span><span class="tc">0:00–0:06</span><span class="shot">Kamar malam</span></div>
+  <div class="frame"><img src="stills/shot_a.jpg" alt="Kamar malam, karakter di meja"><span class="tag">Blender still · 40mm</span></div>
+  <div class="vo"><b>VO:</b> “Cari kerja itu nggak seharusnya jadi kerjaan kedua.”</div>
+  <div class="dir">Satu lampu meja jadi sumber hangat, jendela memberi rim dingin. Tirai bergoyang 4 detik loop, kamera push-in 5%.</div>
+</figure>
+
+<!-- 2 -->
+<figure>
+  <div class="cap"><span class="num">2</span><span class="tc">0:06–0:13</span><span class="shot">Kekacauan</span></div>
+  <div class="frame"><img src="stills/shot_b.jpg" alt="Close-up karakter lelah"><span class="tag">Blender still · 58mm</span></div>
+  <div class="vo"><b>VO:</b> “Screenshot di galeri. Link di DM. Semua disalin ke spreadsheet, dan tetap nggak kelihatan mana yang harus dikejar dulu.”</div>
+  <div class="dir">Di atas close-up ini menempel tiga potongan 0,9 detik: galeri penuh poster, DM berisi link mentah, spreadsheet 9 pt dengan #REF!. Mata menyipit di potongan terakhir.</div>
+</figure>
+
+<!-- 3 -->
+<figure>
+  <div class="cap"><span class="num">3</span><span class="tc">0:13–0:18</span><span class="shot">Notif teman</span></div>
+  <div class="frame"><img src="stills/shot_c.jpg" alt="HP di meja dengan layar menyala"><span class="tag">Blender still · 68mm</span></div>
+  <div class="vo"><b>VO:</b> “Sampai temanmu kirim satu link.”</div>
+  <div class="dir">Notif “coba sloe.my.id” masuk 0,4 detik setelah cut. Layar HP satu-satunya sumber cahaya dingin di frame.</div>
+</figure>
+
+<!-- 4 -->
+<figure>
+  <div class="cap"><span class="num">4</span><span class="tc">0:18–0:27</span><span class="shot">Scan poster</span></div>
+  <div class="frame">
+  <svg viewBox="0 0 556 989">
+    <rect width="556" height="989" fill="#0B0F1A"/>
+    <rect x="26" y="26" width="504" height="937" rx="18" fill="#141A2C"/>
+    <text x="54" y="74" fill="#F2EDFC" font-size="19" font-weight="700">Add a job</text>
+    <text x="54" y="98" fill="#8E97AD" font-size="12">Upload poster · paste link · type it</text>
+    <rect x="54" y="124" width="284" height="358" rx="10" fill="#F4F1EA"/>
+    <rect x="74" y="148" width="120" height="10" rx="3" fill="#C9C2B2"/>
+    <rect x="74" y="174" width="220" height="16" rx="4" fill="#3B3652"/>
+    <rect x="74" y="202" width="170" height="12" rx="4" fill="#8A8296"/>
+    <rect x="74" y="236" width="244" height="86" rx="6" fill="#DCD6C6"/>
+    <rect x="74" y="342" width="200" height="9" rx="3" fill="#C9C2B2"/>
+    <rect x="74" y="360" width="230" height="9" rx="3" fill="#C9C2B2"/>
+    <rect x="54" y="266" width="284" height="44" fill="#3B76FF" opacity=".22"/>
+    <rect x="54" y="308" width="284" height="3" fill="#3B76FF"/>
+    <g font-size="13">
+      <text x="360" y="148" fill="#8E97AD">Company</text>
+      <rect x="360" y="156" width="144" height="30" rx="6" fill="#1E2740" stroke="#2E3A52"/>
+      <text x="370" y="176" fill="#F2EDFC">Lumino Studio</text>
+      <text x="360" y="210" fill="#8E97AD">Role</text>
+      <rect x="360" y="218" width="144" height="30" rx="6" fill="#1E2740" stroke="#2E3A52"/>
+      <text x="370" y="238" fill="#F2EDFC">Social Media</text>
+      <text x="360" y="272" fill="#8E97AD">Location</text>
+      <rect x="360" y="280" width="144" height="30" rx="6" fill="#1E2740" stroke="#2E3A52"/>
+      <text x="370" y="300" fill="#F2EDFC">Jakarta · Hybrid</text>
+      <text x="360" y="334" fill="#8E97AD">Deadline</text>
+      <rect x="360" y="342" width="144" height="30" rx="6" fill="#1E2740" stroke="#2E3A52"/>
+      <text x="370" y="362" fill="#F2EDFC">12 Dec 2026</text>
+    </g>
+    <text x="360" y="396" fill="#6C7A98" font-size="11">dibaca dari poster</text>
+    <rect x="54" y="510" width="448" height="8" rx="4" fill="#1E2740"/>
+    <rect x="54" y="510" width="300" height="8" rx="4" fill="#3B76FF"/>
+    <text x="54" y="546" fill="#8E97AD" font-size="12">Reading the poster… 3 of 4 fields</text>
+    <rect x="54" y="858" width="448" height="56" rx="28" fill="#3B76FF"/>
+    <text x="238" y="893" fill="#fff" font-size="16" font-weight="700">Save job</text>
+    <text x="54" y="938" fill="#5C6884" font-size="11">1 poster = 0 typing</text>
+  </svg></div>
+  <div class="vo"><b>VO:</b> “Upload posternya. Sloe baca sendiri: perusahaan, posisi, lokasi, deadline.”</div>
+  <div class="dir">Layar mengambil alih frame (tanpa bubble). Garis scan 0,8 s, field terisi berurutan 0,25 s.</div>
+</figure>
+
+<!-- 5 -->
+<figure>
+  <div class="cap"><span class="num">5</span><span class="tc">0:27–0:33</span><span class="shot">Kacau jadi jelas</span></div>
+  <div class="frame">
+  <svg viewBox="0 0 556 989">
+    <rect width="556" height="989" fill="#0B0F1A"/>
+    <rect x="26" y="26" width="504" height="937" rx="18" fill="#141A2C"/>
+    <text x="54" y="74" fill="#F2EDFC" font-size="19" font-weight="700">Jobs</text>
+    <text x="54" y="98" fill="#8E97AD" font-size="12">5 saved · 2 this week</text>
+    <rect x="54" y="122" width="448" height="124" rx="12" fill="#18325C" stroke="#3B76FF"/>
+    <circle cx="90" cy="162" r="16" fill="#7C5CFF"/>
+    <text x="116" y="156" fill="#fff" font-size="15" font-weight="700">Lumino Studio</text>
+    <text x="116" y="178" fill="#A9C2F0" font-size="12">Social Media Intern · Jakarta</text>
+    <rect x="116" y="196" width="92" height="24" rx="12" fill="#3B76FF"/>
+    <text x="128" y="213" fill="#fff" font-size="11">Applied</text>
+    <text x="402" y="158" fill="#FFD79A" font-size="12">12 Dec</text>
+    <rect x="54" y="260" width="448" height="124" rx="12" fill="#3A2E12" stroke="#E0A93C"/>
+    <circle cx="90" cy="300" r="16" fill="#E0A93C"/>
+    <text x="116" y="294" fill="#fff" font-size="15" font-weight="700">Kopi Senja</text>
+    <text x="116" y="316" fill="#E8D6A8" font-size="12">Community Intern · Bandung</text>
+    <rect x="116" y="334" width="104" height="24" rx="12" fill="#E0A93C"/>
+    <text x="128" y="351" fill="#241A02" font-size="11">Interview</text>
+    <text x="402" y="296" fill="#FFD79A" font-size="12">30 Dec</text>
+    <rect x="54" y="398" width="448" height="124" rx="12" fill="#12301F" stroke="#4FBF7B"/>
+    <circle cx="90" cy="438" r="16" fill="#4FBF7B"/>
+    <text x="116" y="432" fill="#fff" font-size="15" font-weight="700">PT Nusakarsa Data</text>
+    <text x="116" y="454" fill="#B9E8CC" font-size="12">Data Analyst Intern · Remote</text>
+    <rect x="116" y="472" width="98" height="24" rx="12" fill="#4FBF7B"/>
+    <text x="128" y="489" fill="#052012" font-size="11">To apply</text>
+    <text x="402" y="434" fill="#FFD79A" font-size="12">5 Jan</text>
+    <rect x="54" y="536" width="448" height="124" rx="12" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="74" y="578" fill="#8E97AD" font-size="15" font-weight="700">Bumi Retail</text>
+    <text x="74" y="600" fill="#6C7A98" font-size="12">Supply Chain Intern · Jakarta</text>
+    <rect x="54" y="674" width="448" height="124" rx="12" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="74" y="716" fill="#8E97AD" font-size="15" font-weight="700">Rasa Raya</text>
+    <text x="74" y="738" fill="#6C7A98" font-size="12">Marketing Intern · Yogyakarta</text>
+    <rect x="54" y="848" width="196" height="44" rx="22" fill="#7C5CFF"/>
+    <text x="80" y="876" fill="#fff" font-size="14" font-weight="700">+ Add job</text>
+    <text x="54" y="932" fill="#5C6884" font-size="11">satu papan, bukan tujuh tab</text>
+  </svg></div>
+  <div class="vo"><b>VO:</b> “Satu tempat, rapi. Dan kelihatan mana yang harus dikejar dulu.”</div>
+  <div class="dir">Grid spreadsheet dari adegan 2 memudar ke kartu warna; kartu masuk stagger 6 frame.</div>
+</figure>
+
+<!-- 6 -->
+<figure>
+  <div class="cap"><span class="num">6</span><span class="tc">0:33–0:40</span><span class="shot">Match score</span></div>
+  <div class="frame">
+  <svg viewBox="0 0 556 989">
+    <rect width="556" height="989" fill="#0B0F1A"/>
+    <rect x="26" y="26" width="504" height="937" rx="18" fill="#141A2C"/>
+    <text x="54" y="70" fill="#F2EDFC" font-size="18" font-weight="700">Lumino Studio</text>
+    <text x="54" y="94" fill="#8E97AD" font-size="12">Social Media Intern · Jakarta</text>
+    <circle cx="278" cy="326" r="130" fill="none" stroke="#22304C" stroke-width="26"/>
+    <circle cx="278" cy="326" r="130" fill="none" stroke="#4FBF7B" stroke-width="26" stroke-linecap="round"
+            stroke-dasharray="630 817" transform="rotate(-90 278 326)"/>
+    <text x="278" y="326" fill="#F2EDFC" font-size="74" font-weight="800" text-anchor="middle">87<tspan font-size="36">%</tspan></text>
+    <text x="278" y="364" fill="#8E97AD" font-size="13" text-anchor="middle">match with your CV</text>
+    <circle cx="74" cy="508" r="5" fill="#4FBF7B"/>
+    <text x="92" y="513" fill="#C7CEE0" font-size="13">Portfolio cocok: 3 proyek sosial media</text>
+    <circle cx="74" cy="546" r="5" fill="#4FBF7B"/>
+    <text x="92" y="551" fill="#C7CEE0" font-size="13">Pengalaman organisasi sejalan</text>
+    <circle cx="74" cy="584" r="5" fill="#E0A93C"/>
+    <text x="92" y="589" fill="#C7CEE0" font-size="13">Tool yang diminta belum ada di CV</text>
+    <rect x="54" y="634" width="448" height="186" rx="12" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="72" y="666" fill="#F2EDFC" font-size="14" font-weight="700">What to improve</text>
+    <text x="72" y="696" fill="#A9B4CC" font-size="12.5">1. Tambahkan Canva &amp; Meta Business Suite</text>
+    <text x="72" y="724" fill="#A9B4CC" font-size="12.5">2. Sebut angka: engagement +18%</text>
+    <text x="72" y="752" fill="#A9B4CC" font-size="12.5">3. Kirim sebelum 8 Des (ramai pelamar)</text>
+    <rect x="72" y="776" width="150" height="30" rx="15" fill="#22304C"/>
+    <text x="86" y="796" fill="#8E97AD" font-size="11">3 saran konkret</text>
+    <rect x="54" y="856" width="448" height="52" rx="26" fill="#3B76FF"/>
+    <text x="230" y="890" fill="#fff" font-size="15" font-weight="700">Write the email</text>
+  </svg></div>
+  <div class="vo"><b>VO:</b> “Cek dulu cocok atau nggak. Delapan puluh tujuh persen — plus tiga hal yang bisa kamu perbaiki.”</div>
+  <div class="dir">Cincin mengisi 0,9 s. Tiap alasan muncul 8 frame setelahnya.</div>
+</figure>
+
+<!-- 7 -->
+<figure>
+  <div class="cap"><span class="num">7</span><span class="tc">0:40–0:47</span><span class="shot">Email ke HR</span></div>
+  <div class="frame">
+  <svg viewBox="0 0 556 989">
+    <rect width="556" height="989" fill="#0B0F1A"/>
+    <rect x="26" y="26" width="504" height="937" rx="18" fill="#141A2C"/>
+    <text x="54" y="70" fill="#F2EDFC" font-size="18" font-weight="700">Write with AI</text>
+    <text x="54" y="94" fill="#8E97AD" font-size="12">Email to HR · from your CV and portfolio</text>
+    <rect x="54" y="118" width="146" height="34" rx="17" fill="#22304C"/>
+    <text x="72" y="140" fill="#C7CEE0" font-size="12">Email to HR</text>
+    <rect x="210" y="118" width="128" height="34" rx="17" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="228" y="140" fill="#8E97AD" font-size="12">Professional</text>
+    <rect x="348" y="118" width="90" height="34" rx="17" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="366" y="140" fill="#8E97AD" font-size="12">Medium</text>
+    <rect x="54" y="172" width="448" height="466" rx="12" fill="#101728" stroke="#2E3A52"/>
+    <g fill="#A9B4CC" font-size="13">
+      <text x="74" y="208">Subject: Application — Social Media Intern</text>
+      <text x="74" y="248">Dear Hiring Team at Lumino Studio,</text>
+      <text x="74" y="280">Saya Alyssa, mahasiswa tingkat akhir yang</text>
+      <text x="74" y="304">sudah mengelola akun kampus 12 ribu</text>
+      <text x="74" y="328">pengikut dan menaikkan engagement 18%.</text>
+      <text x="74" y="364">Dari portofolio saya, kampanye “Senja di</text>
+      <text x="74" y="388">Kampus” mencapai 240 ribu tayangan…</text>
+    </g>
+    <rect x="74" y="416" width="14" height="18" fill="#3B76FF"/>
+    <rect x="74" y="550" width="132" height="26" rx="13" fill="#1E3A2A"/>
+    <text x="86" y="567" fill="#7FD6A1" font-size="11">✓ from your CV</text>
+    <rect x="216" y="550" width="168" height="26" rx="13" fill="#1E3A2A"/>
+    <text x="228" y="567" fill="#7FD6A1" font-size="11">✓ from your portfolio</text>
+    <text x="74" y="606" fill="#6C7A98" font-size="11">2 fakta dipakai, 0 dikarang</text>
+    <rect x="54" y="668" width="448" height="52" rx="26" fill="#4FBF7B"/>
+    <text x="226" y="702" fill="#062012" font-size="15" font-weight="700">Send to HR</text>
+    <rect x="54" y="736" width="448" height="62" rx="12" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="74" y="762" fill="#8E97AD" font-size="12">Also uses: cover letter, follow-up,</text>
+    <text x="74" y="782" fill="#8E97AD" font-size="12">thank-you email, LinkedIn bio</text>
+    <text x="54" y="852" fill="#5C6884" font-size="11">3 gems per AI action · free plan 10 a month</text>
+  </svg></div>
+  <div class="vo"><b>VO:</b> “Surat yang benar-benar nyambung sama CV dan portofoliomu. Tinggal kirim.”</div>
+  <div class="dir">Teks mengetik 22–28 karakter/detik; chip hijau muncul saat kalimat yang memakai fakta CV selesai.</div>
+</figure>
+
+<!-- 8 -->
+<figure>
+  <div class="cap"><span class="num">8</span><span class="tc">0:47–0:53</span><span class="shot">Grup</span></div>
+  <div class="frame">
+  <svg viewBox="0 0 556 989">
+    <rect width="556" height="989" fill="#0B0F1A"/>
+    <rect x="26" y="26" width="504" height="937" rx="18" fill="#141A2C"/>
+    <text x="54" y="70" fill="#F2EDFC" font-size="18" font-weight="700">Groups</text>
+    <text x="54" y="94" fill="#8E97AD" font-size="12">Share the list, not your CV</text>
+    <rect x="54" y="118" width="448" height="96" rx="12" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="74" y="154" fill="#F2EDFC" font-size="14" font-weight="700">Finance Interns 2026</text>
+    <text x="74" y="178" fill="#8E97AD" font-size="12">Created · you are the owner</text>
+    <rect x="334" y="148" width="148" height="40" rx="8" fill="#22304C"/>
+    <text x="354" y="174" fill="#FFD79A" font-size="19" font-weight="800" letter-spacing="3">F1N26A</text>
+    <rect x="54" y="238" width="448" height="148" rx="12" fill="#18325C" stroke="#3B76FF"/>
+    <text x="74" y="274" fill="#fff" font-size="15" font-weight="700">Finance Interns 2026</text>
+    <text x="74" y="298" fill="#A9C2F0" font-size="12">Code F1N26A · 4 members · 11 jobs</text>
+    <text x="74" y="328" fill="#A9C2F0" font-size="12">Lumino Studio · Kopi Senja · Nusakarsa</text>
+    <text x="74" y="352" fill="#A9C2F0" font-size="12">Bumi Retail · Rasa Raya · +6</text>
+    <circle cx="98" cy="448" r="24" fill="#7C5CFF"/><text x="98" y="454" fill="#fff" font-size="12" text-anchor="middle">NA</text>
+    <circle cx="162" cy="448" r="24" fill="#3B76FF"/><text x="162" y="454" fill="#fff" font-size="12" text-anchor="middle">RA</text>
+    <circle cx="226" cy="448" r="24" fill="#4FBF7B"/><text x="226" y="454" fill="#052012" font-size="12" text-anchor="middle">DI</text>
+    <circle cx="290" cy="448" r="24" fill="#E0A93C"/><text x="290" y="454" fill="#241A02" font-size="12" text-anchor="middle">SA</text>
+    <circle cx="354" cy="448" r="24" fill="#22304C"/><text x="354" y="454" fill="#8E97AD" font-size="12" text-anchor="middle">+3</text>
+    <rect x="54" y="506" width="448" height="118" rx="12" fill="#1B2234" stroke="#2E3A52"/>
+    <text x="74" y="542" fill="#8E97AD" font-size="12">“ada yang mau apply Nusakarsa?”</text>
+    <text x="74" y="570" fill="#8E97AD" font-size="12">“deadline-nya 5 Jan, aku udah kirim”</text>
+    <text x="74" y="598" fill="#6C7A98" font-size="11">obrolan grup · 3 pesan baru</text>
+    <rect x="54" y="668" width="212" height="46" rx="23" fill="#22304C"/>
+    <text x="80" y="696" fill="#C7CEE0" font-size="13">Join with code</text>
+    <rect x="282" y="668" width="220" height="46" rx="23" fill="#7C5CFF"/>
+    <text x="310" y="696" fill="#fff" font-size="13" font-weight="700">Create group</text>
+    <text x="54" y="780" fill="#5C6884" font-size="12">Free: 2 groups · 10 joins</text>
+    <text x="54" y="806" fill="#5C6884" font-size="12">Plus: 10 · 30   Pro: unlimited</text>
+  </svg></div>
+  <div class="vo"><b>VO:</b> “Dan kalau lowonganmu banyak, bagi ke grup. Satu kode, seisi kelas dapat.”</div>
+  <div class="dir">Kode muncul dengan scramble 300 ms, lalu avatar teman pop satu per satu.</div>
+</figure>
+
+<!-- 9 -->
+<figure>
+  <div class="cap"><span class="num">9</span><span class="tc">0:53–0:58</span><span class="shot">Penutup</span></div>
+  <div class="frame"><img src="stills/shot_d.jpg" alt="Penutup, karakter bersandar"><span class="tag">Blender still · 40mm</span></div>
+  <div class="vo"><b>VO:</b> “Sloe. Biar kamu fokus melamar, bukan merapikan.”</div>
+  <div class="dir">Lampu naik sedikit, tirai masih bergoyang. Kartu logo masuk 12 frame terakhir: sloe.my.id · free to start.</div>
+</figure>
+
+</div>
+
+<footer>
+  <div><b>Gaya (dari referensi)</b><br>3D low-poly, kepala ±1,5× lebar bahu, rambut bongkahan shade-flat, wajah minimal + blush, material matte roughness 0,8.</div>
+  <div><b>Lampu</b><br>Key hangat 3200K dari jendela (rim), practical lampu meja di kiri depan, spill layar dingin di sisi lain. Rasio 1:8, world hampir hitam.</div>
+  <div><b>Kamera</b><br>40–68 mm, f/1.5–2.4, fokus di mata, sedikit low-angle. Gerak hanya push-in 5% dan pull-back 8%.</div>
+  <div><b>VO Indonesia</b><br>Perempuan 24–30, ±145 kata/menit. Lelah di 1–2, heran di 3, lega di 4–5, yakin di 6–7, hangat di 8, tenang di 9.</div>
+</footer>
+
+</body>
+</html>
