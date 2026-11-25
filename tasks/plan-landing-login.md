@@ -14,41 +14,41 @@ Mengembalikan Landing Page (`/`, `src/app/page.tsx`) dan halaman Login (`/login`
 ## Task List
 
 ### Phase 1: Tema & tipografi
-- [ ] **T1 — Latar soft gradient + light mode landing** (S)
+- [x] **T1 — Latar soft gradient + light mode landing** (S)
   Terima kriteria: `.iq-lp` berlatar putih dengan tiga pendaran gradien (biru kiri atas, kuning kanan atas, pink bawah); `.iq-lp__panel` tidak lagi memakai gradien ungu gelap (baris 659 dan override baris 1547 dihapus/diganti); judul hero, nav, eyebrow, dan teks panel memakai tinta gelap dan tetap terbaca (kontras ≥ 4.5:1 pada teks kecil).
   Verifikasi: build lolos; screenshot landing desktop + mobile.
   Files: `src/app/globals.css`.
-- [ ] **T2 — Font seragam landing + login** (S)
+- [x] **T2 — Font seragam landing + login** (S)
   Terima kriteria: satu family font bulat (acuan Gambar 3) terpasang lewat `@import` Google Fonts yang sudah ada; `--font-display` dan `--font` di dalam `.iq-lp` dan `.iq-lg` menunjuk ke family itu; wordmark "Sloe" dan tombol memakai gaya yang sama di dua halaman.
   Verifikasi: screenshot, bandingkan dengan Gambar 3.
   Files: `src/app/globals.css`.
-- [ ] **T3 — Latar soft gradient halaman Login** (S)
+- [x] **T3 — Latar soft gradient halaman Login** (S)
   Terima kriteria: `.iq-lg`, `.iq-lg__brand`, dan `.iq-lg__panel` memakai gradien yang sama dengan landing; kartu login tetap putih dan terbaca.
   Verifikasi: screenshot `/login` desktop + mobile.
   Files: `src/app/globals.css`.
 
 ### Checkpoint A (setelah T1–T3)
-- [ ] Build lolos (`npx next build --webpack`).
-- [ ] Screenshot terang di dua tema (`light` dan `dark`) — landing harus tetap terang di keduanya.
-- [ ] Review manusia sebelum lanjut ke kartu.
+- [x] Build lolos (`npx next build --webpack`).
+- [x] Screenshot terang di dua tema (`light` dan `dark`) — landing harus tetap terang di keduanya.
+- [x] Review manusia sebelum lanjut ke kartu.
 
 ### Phase 2: Kartu asli dengan data dummy
-- [ ] **T4 — Card Signature Sloe (Gambar 4)** (S)
+- [x] **T4 — Card Signature Sloe (Gambar 4)** (S)
   Terima kriteria: kartu pink memakai `iq-icard iq-icard--pink` dengan label waktu, logo/ikon, nama perusahaan dummy, posisi, lokasi · durasi, progress bar, "Checklist n/4", chip status, tombol Apply; tidak ada satu pun nama perusahaan asli dari tangkapan layar (PT SMART Tbk, DHL Group, Samsung Electronics Latinoamerica SELA Panama).
   Verifikasi: grep nama terlarang di `src/app/page.tsx` → nol hasil.
   Files: `src/app/page.tsx`, `src/app/globals.css` (penempatan kartu).
-- [ ] **T5 — Kartu Upcoming Deadlines (Gambar 5) dan CV & Company Match (Gambar 6)** (M)
+- [x] **T5 — Kartu Upcoming Deadlines (Gambar 5) dan CV & Company Match (Gambar 6)** (M)
   Terima kriteria: kartu putih memakai markup `iq-dl__*` dan `iq-match__*`; titik biru, label "x days", dan tombol "Calendar" dipertahankan; skor persen + progress bar + paragraf analisis + tombol Recalculate dipertahankan, teks analisis menyebut perusahaan dummy; ketiga kartu menggantikan kartu mini gelap dan tabel "This week" yang sekarang mengambang di hero.
   Verifikasi: screenshot bandingkan dengan Gambar 5 & 6.
   Files: `src/app/page.tsx`, `src/app/globals.css`.
-- [ ] **T6 — Data dummy terpusat** (XS)
+- [x] **T6 — Data dummy terpusat** (XS)
   Terima kriteria: seluruh teks dummy (perusahaan, posisi, lokasi, tenggat, paragraf CV) berada di satu konstanta di `src/app/page.tsx` sehingga mudah diganti.
   Verifikasi: satu blok `const DUMMY = {...}` di file itu.
 
 ### Checkpoint B (selesai)
-- [ ] Checklist verifikasi di halaman 5 PDF terpenuhi satu per satu.
-- [ ] Build lolos, push ke `main` + `ai-development`, deployment hijau.
-- [ ] Halaman `/`, `/login`, `/pricing` merespons 200 setelah deploy.
+- [x] Checklist verifikasi di halaman 5 PDF terpenuhi satu per satu.
+- [x] Build lolos, push ke `main` + `ai-development`, deployment hijau.
+- [x] Halaman `/`, `/login`, `/pricing` merespons 200 setelah deploy.
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
