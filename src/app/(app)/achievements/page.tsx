@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Momo } from "@/components/Momo"
 import { isMascot } from "@/lib/mascot"
@@ -15,14 +16,15 @@ export default async function AchievementsPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  if (!user) redirect("/login")
   const { data: profile } = await supabase
-    .from("profiles").select("level, xp, gems, streak_count, avatar_url").eq("id", user!.id).single()
+    .from("profiles").select("level, xp, gems, streak_count, avatar_url").eq("id", user.id).single()
   const { data: internships } = await supabase
-    .from("internships").select("status").eq("user_id", user!.id)
+    .from("internships").select("status").eq("user_id", user.id)
   const { count: genCount } = await supabase
-    .from("ai_generations").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
+    .from("ai_generations").select("id", { count: "exact", head: true }).eq("user_id", user.id)
   // AI balance actually available: monthly allowance + top-up gems.
-  const quota = await readQuota(supabase, user!.id)
+  const quota = await readQuota(supabase, user.id)
 
   const items = (internships || []) as Pick<Internship, "status">[]
   const level = profile?.level ?? 1

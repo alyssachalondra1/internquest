@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 import { NextResponse } from "next/server"
-import { isPaidStatus, isDeadStatus, verifySignature } from "@/lib/midtrans"
+import { isPaidStatus, isDeadStatus, verifySignature, signatureKeyCount, keyFingerprint } from "@/lib/midtrans"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -37,8 +37,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "missing fields" }, { status: 400 })
   }
 
+  if (signatureKeyCount() === 0) {
+    console.error("[midtrans] no server key configured — every notification will fail")
+    return NextResponse.json({ error: "key not configured" }, { status: 503 })
+  }
+
   if (!verifySignature({ order_id: orderId, status_code: statusCode, gross_amount: grossAmount, signature_key: signature })) {
-    return NextResponse.json({ error: "bad signature" }, { status: 401 })
+    // Say which order failed and how many keys are in play; never log the keys.
+    console.error("[midtrans] bad signature", { orderId, statusCode, grossAmount, keys: signatureKeyCount() })
+    return NextResponse.json({ error: "bad signature", keys: signatureKeyCount() }, { status: 401 })
   }
 
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY

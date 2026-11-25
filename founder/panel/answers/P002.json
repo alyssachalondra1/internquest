@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Aku sudah punya sheet sendiri yang rapi dan aku yang bikin, jadi pindah ke Sloe artinya mulai dari nol lagi di tempat yang belum tentu lebih enak dipakai. Versi gratisnya 10 aksi AI sebulan sudah lebih dari cukup buat volume lamaranku, jadi belum ada alasan keluar Rp19.900.",
+  "objection": "Aku capek update sheet-ku, tapi bukan berarti aku mau bayar langganan tiap bulan selagi belum ada penghasilan tetap — nanti malah nambah satu hal lagi yang harus diurus dan diingat.",
+  "would_change_my_mind": "Kalau ada impor sekali klik dari Google Sheets-ku yang sudah jalan plus trial Plus sebulan gratis, biar aku bisa bandingkan tanpa risiko uang.",
+  "price_too_cheap": 4000,
+  "price_cheap": 12000,
+  "price_expensive": 25000,
+  "price_too_expensive": 50000
+}

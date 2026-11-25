@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "price",
+  "reason": "Saya bakal coba gratis dulu, terus pas 10 aksi habis di minggu pertama saya top up Rp10.000 sekali daripada langganan bulanan. Rp19.900 sebulan itu masih mikir, belum ada penghasilan tetap.",
+  "objection": "Kenapa saya harus bayar bulanan untuk nyatet lamaran, padahal Notion plus tab browser udah bisa? Dan 10 aksi gratis habis dalam 3 lamaran, itu kecepatan banget.",
+  "would_change_my_mind": "Kalau ada bukti lamaran saya yang sudah senyap kebaca lebih cepat, atau harga bulanan turun ke sekitar Rp10.000, saya langsung langganan.",
+  "price_too_cheap": 5000,
+  "price_cheap": 10000,
+  "price_expensive": 25000,
+  "price_too_expensive": 50000
+}

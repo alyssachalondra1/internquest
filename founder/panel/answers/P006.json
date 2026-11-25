@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "Gue nggak pernah ngejar-ngejar info lowongan, gue cuma nglamar yang di-forward ke grup WA, jadi sebulan paling 5-8 lamaran. Gratisnya udah 10 aksi AI, dan buat surat lamaran ChatGPT gratis juga jalan. Nggak ada alasan buat bayar.",
+  "objection": "Daftar lamaran yang rapi itu enak, tapi gue udah bisa catat di Notes HP. Yang bikin gue ragu bayar: apa bedanya sama ChatGPT gratis plus Google Sheet, kalau gue nggak pernah kehabisan kuota?",
+  "would_change_my_mind": "Kalau gue mulai nembak 20-30 lowongan sebulan dan beneran kelewat deadline gara-gara lupa mana yang udah ditutup, baru gue naik ke Plus.",
+  "price_too_cheap": 5000,
+  "price_cheap": 10000,
+  "price_expensive": 35000,
+  "price_too_expensive": 60000
+}

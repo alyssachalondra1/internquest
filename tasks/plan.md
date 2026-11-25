@@ -143,3 +143,55 @@ A1 memperbaiki #1 supaya penyebab #2 (atau apa pun yang lain) terbaca. Setelah A
 - Top-up menambah `ai_credits` (bukan gems) — benar?
 - Siapa yang menjalankan SQL 0005/0006/0007: user paste di SQL Editor, atau aku lewat `npx supabase login` + `db push`?
 - Key Midtrans sandbox akun sudah tersedia?
+
+---
+
+# Plan — Dev lokal + guard auth + capture video (23 Nov 2026)
+
+Sumber: instruksi user 23 Nov 2026 (izinkan perbaikan permanen dev lokal + bereskan kendala
+halaman dashboard + buat tangkapan layar tiap adegan demo). Status: **A + B dikerjakan (approved),
+C jalan, D menunggu keputusan.**
+
+## Temuan (read-only, 23 Nov 2026)
+
+| Cek | Hasil |
+|---|---|
+| `npm run dev` | **Gagal.** Turbopack butuh native binding; `@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node` di disk 16.866.751 byte padahal seharusnya 136.870.912 → dlopen `ERR_DLOPEN_FAILED`. Next jatuh ke WASM, Turbopack menolak. |
+| `/dashboard` | Error `invalid type: unit value, expected usize` — berasal dari jalur WASM itu, bukan dari kode app. Setelah binding diperbaiki, error ini hilang. |
+| Guard auth halaman `(app)` | `layout.tsx` sudah `if (!user) redirect("/login")`, tapi layout & page dirender **paralel**, jadi 6 halaman tetap jalan dan meledak di `user!.id`: `dashboard`, `internships`, `internships/[id]`, `calendar`, `achievements`, `profile`. `groups/*` sudah benar (punya guard sendiri). |
+| Biaya generate AI di UI | `ai/page.tsx:158` masih menampilkan `"Generate · 3 gems"`, padahal biaya 3 gems sudah dihapus di T3 dan diganti kuota aksi AI (`consume_ai_credit`, 402 `needUpgrade`). Label ini akan ikut terekam di video. |
+
+## Task List
+
+### T10-A — Perbaikan permanen dev lokal (SELESAI)
+- [x] Ganti `node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node` dengan tarball resmi `@next/swc-win32-x64-msvc@16.2.10` (136.870.912 byte). Tarball dari registry, bukan dari cache npm (cache-nya juga terpotong).
+- [x] Verifikasi: dlopen OK; `npm run dev` → Turbopack `Ready in 6.0s`; `/` 200, `/login` 200, `/pricing` 200, `/dashboard` 307.
+- Catatan: **tidak ada file project yang diubah** (hanya `node_modules`). Script `dev` tetap `next dev` dan sekarang benar.
+
+### T10-B — Guard auth di halaman `(app)` (SELESAI)
+- [x] Tambah `if (!user) redirect("/login")` + import `redirect` di 6 halaman (`dashboard`, `internships`, `internships/[id]`, `calendar`, `achievements`, `profile`), mengikuti pola `groups/page.tsx`.
+- [x] Buang semua non-null assertion `user!.id` → `user.id` (0 sisa di `src/`).
+- [ ] Verifikasi: `npm run build` hijau + `npm run lint` (lint sudah merah pra-ada di `ai.ts`/`sound.ts`).
+- [ ] Verifikasi runtime: akses `/dashboard` tanpa login harus 307 **tanpa** TypeError di log server.
+
+### T10-C — Tangkapan layar tiap adegan demo (JALAN)
+- [x] Playwright 1.65.1 + chromium di `C:\Edit AI Video` (folder video, bukan repo Sloe).
+- [x] `scripts/capture.mjs`: login email+password, lalu tangkap landing/pricing/login, board, modal Add job (+ alur Upload Poster bila `--poster` diberikan), AI writer, match, dashboard, calendar. Tulis `INDEX.md`.
+- [ ] Butuh `DEMO_EMAIL` + `DEMO_PASSWORD` (akun demo di Sloe) — **kredensial, bukan kode**.
+- [ ] Adegan poster reader dengan hasil ekstraksi AI butuh 1 poster palsu + 1 aksi AI dari kuota akun itu.
+
+### T10-D — Label biaya generate (DITUTUP: bukan bug)
+- [x] Dikoreksi setelah membaca `src/lib/quota.ts`: `GEMS_PER_ACTION = 3` dan `PLAN_CREDITS = { free: 30, plus: 300, pro: 900 }` — kuota memang dihitung dalam gems, jadi label `"Generate · 3 gems"` **akurat** (Free 10 aksi = 30 gems). Klaim awal saya bahwa label itu basi **salah**; tidak ada perubahan kode yang diperlukan.
+
+## Risks and Mitigations
+| Risk | Impact | Mitigation |
+|---|---|---|
+| OneDrive memotong ulang binary besar di `node_modules` | High — dev lokal mati lagi | Kalau terulang: `node_modules` sebaiknya dikecualikan dari sync OneDrive |
+| Akun demo dipakai untuk menulis data (1 lamaran + 1 aksi AI) | Low — data di akun uji, bukan produksi user nyata | Pakai akun demo khusus; jangan pakai akun pribadi |
+| Tangkapan layar jadi klaim palsu kalau UI berubah setelah capture | Med — video menyesatkan | Rekam ulang setelah setiap perubahan UI; jangan pakai screenshot lama |
+
+## Open Questions
+- `DEMO_EMAIL` + `DEMO_PASSWORD` untuk akun demo (login email+password, bukan Google).
+- Boleh akun demo itu diisi data uji (1 lamaran) dan dipakai 1 aksi AI untuk demo poster reader?
+- Label `"Generate · 3 gems"` diperbaiki sekarang atau nanti?
+

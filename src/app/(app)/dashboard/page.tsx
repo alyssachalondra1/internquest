@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { HeroMascot } from "@/components/HeroMascot"
 import { MascotLottie } from "@/components/MascotLottie"
@@ -25,6 +26,8 @@ export default async function DashboardPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  // Layout and page render in parallel, so this page must guard too, not rely on AppLayout's redirect.
+  if (!user) redirect("/login")
 
   // Daily login streak + achievement gems (moved here from the app layout so
   // they run once when the dashboard loads instead of on every navigation).
@@ -34,16 +37,16 @@ export default async function DashboardPage() {
   const { data: profile } = await supabase
     .from("profiles")
     .select("full_name, level, xp, gems, streak_count, avatar_url")
-    .eq("id", user!.id)
+    .eq("id", user.id)
     .single()
 
   // AI balance actually available: monthly allowance + top-up gems.
-  const quota = await readQuota(supabase, user!.id)
+  const quota = await readQuota(supabase, user.id)
 
   const { data: internships } = await supabase
     .from("internships")
     .select("*")
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
     .neq("status", "archived")
     .neq("status", "rejected")
     .order("deadline", { ascending: true })
@@ -52,7 +55,7 @@ export default async function DashboardPage() {
   const { data: checks } = await supabase
     .from("checklist_items")
     .select("internship_id, is_done")
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
   const progressOf = (id: string) => {
     const rows = (checks || []).filter((c) => c.internship_id === id)
     const done = rows.filter((c) => c.is_done).length

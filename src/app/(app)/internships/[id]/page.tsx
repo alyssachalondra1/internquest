@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyLogo } from "@/components/CompanyLogo"
@@ -31,12 +31,13 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  if (!user) redirect("/login")
 
   // Fetch the internship, profile CV flag, and checklist in parallel so opening
   // the detail page is fast instead of waiting for three sequential round-trips.
   const [itRes, profRes, checklistRes] = await Promise.all([
-    supabase.from("internships").select("*").eq("id", id).eq("user_id", user!.id).single(),
-    supabase.from("profiles").select("cv_text").eq("id", user!.id).single(),
+    supabase.from("internships").select("*").eq("id", id).eq("user_id", user.id).single(),
+    supabase.from("profiles").select("cv_text").eq("id", user.id).single(),
     supabase.from("checklist_items").select("id, label, is_done").eq("internship_id", id).order("created_at", { ascending: true }),
   ])
   const it = itRes.data

@@ -160,3 +160,14 @@ Yang dilindungi: tata letak & palet sidebar, isi kartu daftar lowongan (hanya te
 - [ ] `npm run lint` masih merah pra-ada (`any` di `src/lib/ai.ts` & `sound.ts`).
 
 > Dark mode: **tidak diubah** — tetap ada, bisa switch System/Light/Dark dari topbar & Settings.
+
+## T10 — Dev lokal + guard auth + capture video (23 Nov 2026)
+- [x] **T10-A** Perbaikan permanen `npm run dev`: binary `@next/swc-win32-x64-msvc` di disk terpotong (16,8 MB dari 136,9 MB) → dlopen gagal → Next jatuh ke WASM → Turbopack mati + `/dashboard` error `invalid type: unit value, expected usize`. Diganti dari tarball registry. Verifikasi: dlopen OK, Turbopack `Ready in 6.0s`, `/` `/login` `/pricing` 200, `/dashboard` 307. Tanpa perubahan file project.
+- [x] **T10-B** Guard auth di 6 halaman `(app)` yang memakai `user!.id` (`dashboard`, `internships`, `internships/[id]`, `calendar`, `achievements`, `profile`) — pola sama dengan `groups/page.tsx`. Semua `user!` dibuang (0 sisa).
+- [x] **T10-B verifikasi** `npm run build` hijau (19 route, TypeScript 48s, tanpa error). Keenam halaman tanpa login → `307` bersih, tanpa TypeError baru di log dev. `npm run lint` 90 masalah (86 error, 4 warning) — **semuanya pra-ada** di `src/lib/ai.ts`, `src/lib/sound.ts`, dll; nol di 6 file yang diubah (dicek lewat grep atas output lint).
+- [x] **T10-C** Playwright + `C:\Edit AI Video\scripts\capture.mjs` (capture per adegan demo brief).
+- [x] **T10-C kredensial** akun diterima & dipakai; login email+password berhasil.
+- [x] **T10-C capture** 12 tangkapan layar di `C:\Edit AI Video\renders\captures\2026-11-25\` (landing, pricing, login, board, modal Add job, hasil ekstraksi poster, AI writer, match, dashboard, calendar) + `INDEX.md`.
+- [ ] **T10-C catatan** ekstraksi poster dijalankan TANPA menyimpan (tombol Save tidak diklik) — nol lamaran tertulis; terpakai 3 gems (1 aksi AI) dari kuota akun.
+- [ ] **T10-C temuan** logo perusahaan tidak tampil: `CompanyLogo.tsx` memakai `logo.clearbit.com`, dan DNS mesin ini menyinkronkan domain itu (`ERR_NAME_NOT_RESOLVED`).
+- [x] **T10-D — DITUTUP, bukan bug.** Label `ai/page.tsx:158` `"Generate · 3 gems"` **benar**: `GEMS_PER_ACTION = 3` di `src/lib/quota.ts` dan kuota bulanan memang dihitung dalam gems (Free 10 aksi = 30 gems). T3 hanya menghapus potongan gems terpisah di `/api/generate`, lalu diganti `consume_ai_credit` yang juga bernilai 3 gems. Klaim awal saya ("label basi") salah — dikoreksi setelah membaca `quota.ts`. Bukti empiris: satu aksi extract menurunkan angka topbar 17 → 14.

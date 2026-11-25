@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { InternshipsClient } from "@/components/InternshipsClient"
 import type { Internship } from "@/lib/helpers"
@@ -9,17 +10,18 @@ export default async function InternshipsPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  if (!user) redirect("/login")
 
   const { data: internships } = await supabase
     .from("internships")
     .select("*")
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false })
 
   const { data: checks } = await supabase
     .from("checklist_items")
     .select("internship_id, is_done")
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
 
   const progress: Record<string, { done: number; total: number; pct: number }> = {}
   for (const it of (internships || []) as Internship[]) {

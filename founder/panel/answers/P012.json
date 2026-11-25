@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "Masalahnya nyata, tab saya memang berantakan dan saya pernah kelewat tanggal tutup. Tapi Rp19.900 itu uang makan dua hari buat saya yang belum punya penghasilan tetap, jadi saya pakai yang gratis dulu.",
+  "objection": "Saya belum dapat kerja, kok malah bayar langganan buat cari kerja. Yang gratis 10 aksi AI sebulan kayaknya cukup buat 5-6 lamaran, kalau habis ya sudah screenshot manual lagi.",
+  "would_change_my_mind": "Kalau ada yang cerita di grup WA bahwa dia dapat magang gara-gara ini, atau ada paket mahasiswa setahun yang harganya di bawah Rp50.000, saya langsung bayar.",
+  "price_too_cheap": 2000,
+  "price_cheap": 5000,
+  "price_expensive": 19900,
+  "price_too_expensive": 39900
+}

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Icon } from "@/components/Icons"
 import { csx } from "@/lib/csx"
@@ -20,10 +21,11 @@ export default async function CalendarPage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  if (!user) redirect("/login")
   const { data: internships } = await supabase
     .from("internships")
     .select("*")
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
   const items = (internships || []) as Internship[]
 
   // Which month are we viewing? Defaults to the real current month, but the

@@ -13,6 +13,16 @@ export { PLAN_LABEL, PLAN_PRICE }
 export type { PlanId }
 
 const SERVER_KEY = process.env.MIDTRANS_SERVER_KEY ?? ""
+/* Midtrans signs every notification with the server key of the environment it
+   came from: sandbox notifications use the sandbox key, live ones the live key.
+   While the account is still being reviewed we accept both, but only when the
+   operator turns this on — every extra key is another thing that can sign a
+   notification. Turn it off once the live key is the only one in use. */
+const SANDBOX_SIGN_KEY =
+  process.env.MIDTRANS_ALLOW_SANDBOX_WEBHOOK === "true"
+    ? process.env.MIDTRANS_SANDBOX_SERVER_KEY ?? ""
+    : ""
+const SIGN_KEYS = [SERVER_KEY, SANDBOX_SIGN_KEY].filter((k) => k.length > 0)
 const IS_PRODUCTION = process.env.MIDTRANS_IS_PRODUCTION === "true"
 const SNAP_BASE = IS_PRODUCTION
   ? "https://app.midtrans.com/snap/v1/transactions"
@@ -92,14 +102,19 @@ export function verifySignature(input: {
   gross_amount: string
   signature_key: string
 }): boolean {
-  if (!isConfigured()) return false
-  const expected = crypto
-    .createHash("sha512")
-    .update(`${input.order_id}${input.status_code}${input.gross_amount}${SERVER_KEY}`)
-    .digest("hex")
+  if (SIGN_KEYS.length === 0) return false
   const given = (input.signature_key || "").toLowerCase()
-  if (given.length !== expected.length) return false
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(given))
+  const payload = `${input.order_id}${input.status_code}${input.gross_amount}`
+  return SIGN_KEYS.some((key) => {
+    const expected = crypto.createHash("sha512").update(payload + key).digest("hex")
+    if (given.length !== expected.length) return false
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(given))
+  })
+}
+
+/** How many server keys can currently sign a notification. Used for diagnostics. */
+export function signatureKeyCount(): number {
+  return SIGN_KEYS.length
 }
 
 /** Midtrans statuses that mean the money arrived. */

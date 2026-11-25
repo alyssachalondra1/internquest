@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Leah",
+  "age": 21,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 6160000,
+  "behaviour": "Tab chaos",
+  "behaviour_how": "Keeps 20 open tabs and screenshots in the gallery; has missed a closing date at least once.",
+  "objection": "Data CV dan transkrip saya disimpan di mana, aman nggak",
+  "habit": "you share postings with a friend and argue about which ones are real"
+ },
+ {
+  "id": "P002",
+  "name": "Daniel",
+  "age": 23,
+  "segment": "Job hunter aktif, 1-4 tahun pengalaman",
+  "income": 86530000,
+  "behaviour": "Spreadsheet rapi",
+  "behaviour_how": "Already tracks applications in Google Sheets with columns; proud of the sheet, tired of updating it.",
+  "objection": "Rp19.900 sebulan itu masih mikir, belum ada penghasilan tetap",
+  "habit": "you have one CV file named final_final_v3.pdf"
+ },
+ {
+  "id": "P003",
+  "name": "Sienna",
+  "age": 21,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 21682000,
+  "behaviour": "Spray and pray",
+  "behaviour_how": "Applies to anything that looks close enough, rarely rereads the posting, forgets which company replied.",
+  "objection": "Belum pernah dengar aplikasi ini, takut zonk atau mati layanannya",
+  "habit": "you have one CV file named final_final_v3.pdf"
+ },
+ {
+  "id": "P004",
+  "name": "Felix",
+  "age": 24,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 46763000,
+  "behaviour": "Nunggu info dari grup kampus atau WA",
+  "behaviour_how": "Mostly applies to what a friend or a group chat forwards; finds out about deadlines late.",
+  "objection": "Data CV dan transkrip saya disimpan di mana, aman nggak",
+  "habit": "you share postings with a friend and argue about which ones are real"
+ },
+ {
+  "id": "P005",
+  "name": "Julian",
+  "age": 23,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 38535000,
+  "behaviour": "Tab chaos",
+  "behaviour_how": "Keeps 20 open tabs and screenshots in the gallery; has missed a closing date at least once.",
+  "objection": "Belum pernah dengar aplikasi ini, takut zonk atau mati layanannya",
+  "habit": "you have a folder of screenshots of postings you never applied to"
+ },
+ {
+  "id": "P006",
+  "name": "Oscar",
+  "age": 24,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 59768000,
+  "behaviour": "Nunggu info dari grup kampus atau WA",
+  "behaviour_how": "Mostly applies to what a friend or a group chat forwards; finds out about deadlines late.",
+  "objection": "ChatGPT gratis juga bisa bikin cover letter",
+  "habit": "you are in three job-hunting WhatsApp groups that are mostly forwards"
+ },
+ {
+  "id": "P007",
+  "name": "Tomas",
+  "age": 20,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 15289000,
+  "behaviour": "Notes app / chat sendiri",
+  "behaviour_how": "Writes deadlines as a WhatsApp message to themselves and scrolls back to find them.",
+  "objection": "ChatGPT gratis juga bisa bikin cover letter",
+  "habit": "you are in three job-hunting WhatsApp groups that are mostly forwards"
+ },
+ {
+  "id": "P008",
+  "name": "Yusuf",
+  "age": 21,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 47280000,
+  "behaviour": "Scroll LinkedIn / Jobstreet tiap hari",
+  "behaviour_how": "Checks new postings every morning, saves the ones that look real, applies to two or three a week.",
+  "objection": "Rp19.900 sebulan itu masih mikir, belum ada penghasilan tetap",
+  "habit": "you share postings with a friend and argue about which ones are real"
+ },
+ {
+  "id": "P009",
+  "name": "Emil",
+  "age": 23,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 41166000,
+  "behaviour": "Pakai jasa bikin CV / cover letter",
+  "behaviour_how": "Paid someone on a marketplace for a CV rewrite and now copy-pastes the same letter everywhere.",
+  "objection": "Kan bisa dicatat gratis di Google Sheets atau Notes",
+  "habit": "you are in three job-hunting WhatsApp groups that are mostly forwards"
+ },
+ {
+  "id": "P010",
+  "name": "Mason",
+  "age": 21,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 53569000,
+  "behaviour": "Scroll LinkedIn / Jobstreet tiap hari",
+  "behaviour_how": "Checks new postings every morning, saves the ones that look real, applies to two or three a week.",
+  "objection": "ChatGPT gratis juga bisa bikin cover letter",
+  "habit": "you have a folder of screenshots of postings you never applied to"
+ },
+ {
+  "id": "P011",
+  "name": "Nico",
+  "age": 24,
+  "segment": "Job hunter aktif, 1-4 tahun pengalaman",
+  "income": 78888000,
+  "behaviour": "Spray and pray",
+  "behaviour_how": "Applies to anything that looks close enough, rarely rereads the posting, forgets which company replied.",
+  "objection": "Saya cuma apply 5-10 lowongan, kayaknya belum perlu aplikasi",
+  "habit": "you share postings with a friend and argue about which ones are real"
+ },
+ {
+  "id": "P012",
+  "name": "Tariq",
+  "age": 22,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 18458000,
+  "behaviour": "Tab chaos",
+  "behaviour_how": "Keeps 20 open tabs and screenshots in the gallery; has missed a closing date at least once.",
+  "objection": "Rp19.900 sebulan itu masih mikir, belum ada penghasilan tetap",
+  "habit": "you are in three job-hunting WhatsApp groups that are mostly forwards"
+ },
+ {
+  "id": "P013",
+  "name": "Lena",
+  "age": 21,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 20280000,
+  "behaviour": "Spray and pray",
+  "behaviour_how": "Applies to anything that looks close enough, rarely rereads the posting, forgets which company replied.",
+  "objection": "Takut cover letter hasil AI ketahuan HR dan malah gugur",
+  "habit": "you share postings with a friend and argue about which ones are real"
+ },
+ {
+  "id": "P014",
+  "name": "Dev",
+  "age": 24,
+  "segment": "Job hunter aktif, 1-4 tahun pengalaman",
+  "income": 100419000,
+  "behaviour": "Pakai jasa bikin CV / cover letter",
+  "behaviour_how": "Paid someone on a marketplace for a CV rewrite and now copy-pastes the same letter everywhere.",
+  "objection": "Saya cuma apply 5-10 lowongan, kayaknya belum perlu aplikasi",
+  "habit": "you apply at night after class or after work, from a phone in bed"
+ },
+ {
+  "id": "P015",
+  "name": "Farah",
+  "age": 21,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 13267000,
+  "behaviour": "Notes app / chat sendiri",
+  "behaviour_how": "Writes deadlines as a WhatsApp message to themselves and scrolls back to find them.",
+  "objection": "ChatGPT gratis juga bisa bikin cover letter",
+  "habit": "you are in three job-hunting WhatsApp groups that are mostly forwards"
+ },
+ {
+  "id": "P016",
+  "name": "Rafael",
+  "age": 25,
+  "segment": "Job hunter aktif, 1-4 tahun pengalaman",
+  "income": 106659000,
+  "behaviour": "Spreadsheet rapi",
+  "behaviour_how": "Already tracks applications in Google Sheets with columns; proud of the sheet, tired of updating it.",
+  "objection": "Rp19.900 sebulan itu masih mikir, belum ada penghasilan tetap",
+  "habit": "you check email mostly for interview invites and miss the rest"
+ },
+ {
+  "id": "P017",
+  "name": "Aisha",
+  "age": 20,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 16337000,
+  "behaviour": "Scroll LinkedIn / Jobstreet tiap hari",
+  "behaviour_how": "Checks new postings every morning, saves the ones that look real, applies to two or three a week.",
+  "objection": "Saya cuma apply 5-10 lowongan, kayaknya belum perlu aplikasi",
+  "habit": "you share postings with a friend and argue about which ones are real"
+ },
+ {
+  "id": "P018",
+  "name": "Dana",
+  "age": 27,
+  "segment": "Job hunter aktif, 1-4 tahun pengalaman",
+  "income": 65905000,
+  "behaviour": "Notes app / chat sendiri",
+  "behaviour_how": "Writes deadlines as a WhatsApp message to themselves and scrolls back to find them.",
+  "objection": "ChatGPT gratis juga bisa bikin cover letter",
+  "habit": "you have one CV file named final_final_v3.pdf"
+ },
+ {
+  "id": "P019",
+  "name": "Mateo",
+  "age": 24,
+  "segment": "Fresh graduate cari kerja pertama",
+  "income": 42893000,
+  "behaviour": "Spray and pray",
+  "behaviour_how": "Applies to anything that looks close enough, rarely rereads the posting, forgets which company replied.",
+  "objection": "Data CV dan transkrip saya disimpan di mana, aman nggak",
+  "habit": "you apply at night after class or after work, from a phone in bed"
+ },
+ {
+  "id": "P020",
+  "name": "Zoe",
+  "age": 23,
+  "segment": "Mahasiswa tingkat akhir cari magang",
+  "income": 23951000,
+  "behaviour": "Tab chaos",
+  "behaviour_how": "Keeps 20 open tabs and screenshots in the gallery; has missed a closing date at least once.",
+  "objection": "Saya cuma apply 5-10 lowongan, kayaknya belum perlu aplikasi",
+  "habit": "you have a folder of screenshots of postings you never applied to"
+ }
+]

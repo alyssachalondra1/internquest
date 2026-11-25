@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Saya sudah punya cara yang jalan: satu CV dari jasa marketplace, satu surat lamaran yang saya copy-paste ke semua lowongan, dan catatan di Google Sheets. Sloe menjawab masalah yang belum saya rasakan.",
+  "objection": "Jujur, isi saya cuma 10-15 lamaran per bulan dan suratnya sama semua. Yang gratis (10 aksi AI per bulan) sudah lebih dari cukup buat saya, jadi kenapa harus bayar?",
+  "would_change_my_mind": "Kalau saya mulai kalah di tahap screening dan ada bukti skor kecocokan CV benar-benar bikin saya dipanggil interview — atau kalau saya sudah keterima kerja dan punya gaji tetap.",
+  "price_too_cheap": 3000,
+  "price_cheap": 15000,
+  "price_expensive": 25000,
+  "price_too_expensive": 45000
+}

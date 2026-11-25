@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Momo } from "@/components/Momo"
 import { MomoFace } from "@/components/MascotAvatar"
@@ -30,21 +31,22 @@ export default async function ProfilePage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  if (!user) redirect("/login")
   const { data: profile } = await supabase
     .from("profiles")
     .select("full_name, email, level, xp, gems, streak_count, avatar_url")
-    .eq("id", user!.id)
+    .eq("id", user.id)
     .single()
   // AI balance actually available: monthly allowance + top-up gems.
-  const quota = await readQuota(supabase, user!.id)
+  const quota = await readQuota(supabase, user.id)
   const { count: applied } = await supabase
-    .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user!.id)
+    .from("internships").select("id", { count: "exact", head: true }).eq("user_id", user.id)
 
   // CV & interests fetched separately so the page still works if a column is missing.
   let extra: { cv_url: string | null; cv_text: string | null; interests: string | null } | null = null
   try {
     const { data } = await supabase
-      .from("profiles").select("cv_url, cv_text, interests").eq("id", user!.id).single()
+      .from("profiles").select("cv_url, cv_text, interests").eq("id", user.id).single()
     extra = (data as any) ?? null
   } catch {}
 
@@ -52,14 +54,14 @@ export default async function ProfilePage() {
   let portfolio: { portfolio_url: string | null; portfolio_text: string | null } | null = null
   try {
     const { data } = await supabase
-      .from("profiles").select("portfolio_url, portfolio_text").eq("id", user!.id).single()
+      .from("profiles").select("portfolio_url, portfolio_text").eq("id", user.id).single()
     portfolio = (data as any) ?? null
   } catch {}
 
   // Plan is read separately so the page still renders if the column is missing.
   let plan = "free"
   try {
-    const { data } = await supabase.from("profiles").select("plan").eq("id", user!.id).single()
+    const { data } = await supabase.from("profiles").select("plan").eq("id", user.id).single()
     plan = ((data as any)?.plan as string) || "free"
   } catch {}
 

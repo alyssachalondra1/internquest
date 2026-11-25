@@ -1,0 +1,38 @@
+{
+  "business": "Sloe — job-hunt tracker + AI application assistant (Next.js web app, Indonesian pricing in rupiah, international pricing in USD)",
+  "target": "Indonesian job seekers in their first five years of applying: a final-year student hunting an internship, a fresh graduate hunting a first full-time role, and an active job hunter sending many applications at once",
+  "where": "Indonesia — Jakarta, Bandung, Surabaya, Yogyakarta, plus remote-first searchers",
+  "age": [20, 27],
+  "currency": "Rp",
+  "segments": [
+    {"name": "Mahasiswa tingkat akhir cari magang", "share": 0.40, "income": [6000000, 24000000], "age": [20, 23]},
+    {"name": "Fresh graduate cari kerja pertama", "share": 0.35, "income": [36000000, 72000000], "age": [21, 24]},
+    {"name": "Job hunter aktif, 1-4 tahun pengalaman", "share": 0.25, "income": [60000000, 144000000], "age": [23, 27]}
+  ],
+  "behaviours": [
+    {"name": "Spray and pray", "share": 0.18, "how": "Applies to anything that looks close enough, rarely rereads the posting, forgets which company replied."},
+    {"name": "Tab chaos", "share": 0.17, "how": "Keeps 20 open tabs and screenshots in the gallery; has missed a closing date at least once."},
+    {"name": "Notes app / chat sendiri", "share": 0.14, "how": "Writes deadlines as a WhatsApp message to themselves and scrolls back to find them."},
+    {"name": "Spreadsheet rapi", "share": 0.12, "how": "Already tracks applications in Google Sheets with columns; proud of the sheet, tired of updating it."},
+    {"name": "Scroll LinkedIn / Jobstreet tiap hari", "share": 0.16, "how": "Checks new postings every morning, saves the ones that look real, applies to two or three a week."},
+    {"name": "Nunggu info dari grup kampus atau WA", "share": 0.12, "how": "Mostly applies to what a friend or a group chat forwards; finds out about deadlines late."},
+    {"name": "Pakai jasa bikin CV / cover letter", "share": 0.11, "how": "Paid someone on a marketplace for a CV rewrite and now copy-pastes the same letter everywhere."}
+  ],
+  "objections": [
+    "Kan bisa dicatat gratis di Google Sheets atau Notes",
+    "Rp19.900 sebulan itu masih mikir, belum ada penghasilan tetap",
+    "Takut cover letter hasil AI ketahuan HR dan malah gugur",
+    "Saya cuma apply 5-10 lowongan, kayaknya belum perlu aplikasi",
+    "ChatGPT gratis juga bisa bikin cover letter",
+    "Data CV dan transkrip saya disimpan di mana, aman nggak",
+    "Belum pernah dengar aplikasi ini, takut zonk atau mati layanannya"
+  ],
+  "habits": [
+    "you apply at night after class or after work, from a phone in bed",
+    "you share postings with a friend and argue about which ones are real",
+    "you have one CV file named final_final_v3.pdf",
+    "you check email mostly for interview invites and miss the rest",
+    "you are in three job-hunting WhatsApp groups that are mostly forwards",
+    "you have a folder of screenshots of postings you never applied to"
+  ]
+}
