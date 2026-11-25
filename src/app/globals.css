@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Instrument+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Instrument+Sans:wght@400;500;600&family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
 
 /* ============================================================
    Sloe — Design Tokens (solid, no gradients)
@@ -1927,3 +1927,171 @@ html{background:var(--canvas)}
 .iq-upsell__reason{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.45}
 .iq-upsell__price{margin:4px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-2)}
 .iq-upsell .iq-btn{flex:none}
+
+/* ============================================================================
+   v11 — Brief revisi 25 Nov 2026: Landing Page & Login kembali terang
+   (soft ambient gradient), font acuan Gambar 3, kartu asli dengan data dummy.
+   Blok ini sengaja di akhir file dan dicekoki `:root .iq-lp` / `:root .iq-lg`
+   supaya menang atas blok `[data-theme="dark"]` di atas — brief meminta kedua
+   halaman ini selalu terang, terlepas dari tema aplikasi.
+   ============================================================================ */
+:root .iq-lp,
+:root .iq-lg{
+  color-scheme:light;
+  /* Palet terang dipasang ulang di scope ini karena kartu iq-icard / iq-match /
+     iq-dl mengambil warnanya dari variabel tema yang sama. */
+  --canvas:#FFFFFF; --surface:#FFFFFF; --surface-2:#F6F4FB;
+  --ink:#211B33; --ink-2:#5C5473; --ink-3:#8B84A1;
+  --border:#E9E4F4; --border-2:#DAD2EE;
+  --blue:#2F6BFF; --blue-text:#2456D6; --blue-15:rgba(47,107,255,.12); --blue-40:rgba(47,107,255,.32);
+  --violet:#7C5CFF; --violet-text:#5B3FE0;
+  --pink:#FF6FA5; --pink-text:#E24C86; --pink-15:rgba(255,111,165,.14); --pink-50:rgba(255,111,165,.42);
+  --yellow:#FFC53D; --yellow-text:#A96F00; --yellow-15:rgba(255,197,61,.18); --yellow-50:rgba(255,197,61,.5);
+  --green:#2FCB7E; --green-text:#1E9E60; --green-15:rgba(47,203,126,.14); --green-40:rgba(47,203,126,.34);
+  --red:#FF6B6B; --red-text:#D64545; --red-15:rgba(255,107,107,.14); --red-40:rgba(255,107,107,.3);
+  /* Tipografi Gambar 3: judul bulat (Baloo 2), teks isi Poppins. */
+  --font:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-display:'Baloo 2','Poppins',system-ui,sans-serif;
+}
+
+/* Latar: putih bersih + biru lembut kiri atas, kuning lembut kanan atas,
+   sapuan pink dari bawah. */
+:root .iq-lp,
+:root .iq-lg{
+  background-color:#fff;
+  background-image:
+    radial-gradient(900px 540px at 6% -6%,rgba(174,206,255,.60),transparent 70%),
+    radial-gradient(780px 480px at 94% -4%,rgba(255,235,163,.66),transparent 70%),
+    radial-gradient(1200px 680px at 50% 110%,rgba(255,192,219,.58),transparent 72%);
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+}
+
+/* --- Landing: panel atas jadi kaca putih, bukan gradien ungu --- */
+:root .iq-lp .iq-lp__panel{
+  background:rgba(255,255,255,.58);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 24px 60px rgba(96,74,150,.10);
+  backdrop-filter:blur(14px);
+}
+:root .iq-lp .iq-lp__panel::after{background:none}
+:root .iq-lp .iq-lp__wordmark{color:var(--lp-ink);font-family:var(--font-display);font-weight:700}
+:root .iq-lp .iq-lp__navlinks a{color:var(--lp-ink-2)}
+:root .iq-lp .iq-lp__navlinks a:hover{color:var(--lp-ink)}
+:root .iq-lp .iq-lp__login{color:var(--lp-ink)}
+:root .iq-lp .iq-lp__panel .iq-btn--primary{background:linear-gradient(135deg,#7B5CFF 0%,#5B3BEA 100%);color:#fff;box-shadow:0 6px 16px rgba(91,59,234,.26)}
+:root .iq-lp .iq-lp__panel .iq-btn--primary:hover{background:linear-gradient(135deg,#6B4BF5 0%,#4B2CD6 100%)}
+:root .iq-lp .iq-lp__panel .iq-btn--ghost{color:var(--lp-ink);border-color:rgba(33,27,51,.22)}
+:root .iq-lp .iq-lp__panel .iq-btn--ghost:hover{background:rgba(33,27,51,.05)}
+:root .iq-lp .iq-lp__eyebrow{color:var(--lp-ink-2);background:rgba(255,255,255,.72);border-color:rgba(33,27,51,.10)}
+:root .iq-lp .iq-lp__eyebrow::before{background:var(--pink)}
+:root .iq-lp .iq-lp__title{color:var(--lp-ink)}
+:root .iq-lp .iq-lp__inline .ic{background:#fff;color:var(--lp-accent-ink);box-shadow:0 3px 10px rgba(33,27,51,.10)}
+:root .iq-lp .iq-lp__sub{color:var(--lp-ink-2)}
+:root .iq-lp .iq-lp__scene{background:none;box-shadow:none;border-radius:0;padding:0}
+/* CTA band gelap → kartu kaca putih */
+:root .iq-lp .iq-lp__cta-band{background:rgba(255,255,255,.70);border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 44px rgba(96,74,150,.10);color:var(--lp-ink)}
+:root .iq-lp .iq-lp__cta-band h2{color:var(--lp-ink)}
+:root .iq-lp .iq-lp__cta-band p{color:var(--lp-ink-2)}
+:root .iq-lp .iq-lp__bandghost{color:var(--lp-ink);border-color:rgba(33,27,51,.22)}
+
+/* Bukti sosial: angka pengguna asli, bukan bintang ulasan. */
+:root .iq-lp .iq-lp__usercount{display:inline-flex;align-items:center;gap:9px;margin-top:10px;font-size:14px;color:var(--lp-ink-2)}
+:root .iq-lp .iq-lp__usercount b{font-family:var(--font-display);font-size:23px;font-weight:700;line-height:1;color:var(--lp-ink);font-variant-numeric:tabular-nums}
+:root .iq-lp .iq-lp__livedot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px var(--green-15);flex:none}
+
+/* --- Tiga kartu resmi Sloe di hero (Gambar 4, 5, 6) --- */
+.iq-lp__cards{display:grid;grid-template-columns:1.08fr 1fr 1fr;gap:20px;align-items:start;
+  max-width:1060px;margin:34px auto 0;text-align:left}
+.iq-lp__cardslot{min-width:0}
+.iq-lp__cardlabel{display:flex;align-items:center;gap:7px;margin-bottom:10px;font-size:11.5px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--lp-ink-3)}
+.iq-lp__cardlabel .ic{color:var(--lp-accent)}
+/* Pratinjau: bentuk dan warna kartu tidak diubah, hanya reaksi klik yang mati. */
+.iq-lp__cardslot .iq-icard{cursor:default;height:100%}
+.iq-lp__cardslot .iq-icard:hover{transform:none;box-shadow:var(--sh-1)}
+.iq-lp__cardslot .iq-card{height:100%}
+.iq-lp__cardslot .iq-icard__title,
+.iq-lp__cardslot .iq-apply-btn,
+.iq-lp__cardslot .iq-btn{pointer-events:none}
+:root .iq-lp .iq-lp__stat--live{background:linear-gradient(160deg,#FFFFFF 0%,#E8F0FF 100%);border:1px solid rgba(47,107,255,.18)}
+
+/* --- Login: latar gradien yang sama, kartu tetap putih --- */
+:root .iq-lg .iq-lg__brand{background:transparent;border-right-color:rgba(33,27,51,.08)}
+:root .iq-lg .iq-lg__brand::after{opacity:.35}
+:root .iq-lg .iq-lg__panel{background:transparent}
+:root .iq-lg .iq-lg__wm{font-family:var(--font-display);font-weight:700}
+:root .iq-lg .iq-lg__card{background:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 22px 50px rgba(96,74,150,.12);backdrop-filter:blur(12px)}
+
+@media(max-width:980px){
+  .iq-lp__cards{grid-template-columns:1fr;max-width:520px;margin-top:26px}
+  :root .iq-lp .iq-lp__panel{backdrop-filter:blur(10px)}
+}
+
+/* v11b — pengunci tema. Blok tema gelap di atas lebih spesifik (mis.
+   `:root[data-theme="dark"] .iq-lp` = 0,3,0 vs `.iq-lp__panel` = 0,1,0), jadi
+   token dan warna dikunci ulang di sini dengan !important. Brief meminta
+   Landing Page dan Login selalu terang, apa pun tema aplikasinya. */
+:root .iq-lp,
+:root .iq-lg{font-family:var(--font)}
+:root .iq-lp{
+  --lp-paper:#FFFFFF !important;
+  --lp-card:#FFFFFF !important;
+  --lp-ink:#211B33 !important;
+  --lp-ink-2:#544C6E !important;
+  --lp-ink-3:#6E6884 !important;
+  --lp-line:rgba(33,27,51,.12) !important;
+  --lp-line-2:rgba(33,27,51,.07) !important;
+  --lp-accent:#6B4BF5 !important;
+  --lp-accent-ink:#5533E0 !important;
+  --lp-accent-soft:#EDE7FF !important;
+  --lp-note:#FEE362 !important;
+  --lp-note-ink:#3E3210 !important;
+  background-color:#fff !important;
+  background-image:
+    radial-gradient(900px 540px at 6% -6%,rgba(174,206,255,.60),transparent 70%),
+    radial-gradient(780px 480px at 94% -4%,rgba(255,235,163,.66),transparent 70%),
+    radial-gradient(1200px 680px at 50% 110%,rgba(255,192,219,.58),transparent 72%) !important;
+  background-repeat:no-repeat !important;
+}
+:root .iq-lp .iq-lp__panel{
+  background:rgba(255,255,255,.58) !important;
+  border:1px solid rgba(255,255,255,.85) !important;
+  box-shadow:0 24px 60px rgba(96,74,150,.10) !important;
+}
+:root .iq-lp .iq-lp__panel::after{background:none !important}
+:root .iq-lp .iq-lp__panel .iq-btn--primary{background:linear-gradient(135deg,#7B5CFF 0%,#5B3BEA 100%) !important;color:#fff !important;box-shadow:0 6px 16px rgba(91,59,234,.26) !important}
+:root .iq-lp .iq-lp__panel .iq-btn--primary:hover{background:linear-gradient(135deg,#6B4BF5 0%,#4B2CD6 100%) !important}
+:root .iq-lp .iq-lp__panel .iq-btn--ghost{color:var(--lp-ink) !important;border-color:rgba(33,27,51,.22) !important}
+:root .iq-lp .iq-btn--ghost{border-color:rgba(33,27,51,.22) !important}
+:root .iq-lp .iq-lp__eyebrow{color:var(--lp-ink-2) !important;background:rgba(255,255,255,.72) !important;border-color:rgba(33,27,51,.10) !important}
+:root .iq-lp .iq-lp__eyebrow::before{background:var(--pink) !important}
+:root .iq-lp .iq-lp__inline .ic{background:#fff !important;color:var(--lp-accent-ink) !important}
+:root .iq-lp .iq-lp__cta-band{background:rgba(255,255,255,.72) !important;color:var(--lp-ink) !important;border:1px solid rgba(255,255,255,.9) !important;box-shadow:0 18px 44px rgba(96,74,150,.10) !important}
+:root .iq-lp .iq-lp__cta-band h2{color:var(--lp-ink) !important}
+:root .iq-lp .iq-lp__cta-band p{color:var(--lp-ink-2) !important}
+:root .iq-lp .iq-lp__stat--tint{background:rgba(124,92,255,.10) !important;border-color:rgba(124,92,255,.24) !important}
+:root .iq-lp label{color:var(--lp-ink-2) !important}
+:root .iq-lp .iq-input,
+:root .iq-lp .iq-select,
+:root .iq-lp .iq-textarea{background:#fff !important;border-color:var(--border-2) !important;color:var(--ink) !important}
+:root .iq-lp .iq-input::placeholder,
+:root .iq-lp .iq-textarea::placeholder{color:var(--ink-3) !important}
+:root .iq-lg{background-color:#fff !important;
+  background-image:
+    radial-gradient(900px 540px at 6% -6%,rgba(174,206,255,.60),transparent 70%),
+    radial-gradient(780px 480px at 94% -4%,rgba(255,235,163,.66),transparent 70%),
+    radial-gradient(1200px 680px at 50% 110%,rgba(255,192,219,.58),transparent 72%) !important;
+  background-repeat:no-repeat !important}
+:root .iq-lg .iq-lg__brand{background:transparent !important}
+:root .iq-lg .iq-lg__panel{background:transparent !important}
+:root .iq-lg .iq-lg__card{background:rgba(255,255,255,.90) !important;border:1px solid rgba(255,255,255,.9) !important}
+
+/* v11c — teks yang masih diwarnai putih oleh blok gelap: ulasan dan tombol
+   ghost. Tanpa ini, isi ulasan jadi putih di atas kartu putih (tak terbaca). */
+:root .iq-lp .iq-tm__body{color:var(--lp-ink-2) !important}
+:root .iq-lp .iq-tm__by{color:var(--lp-ink-3) !important}
+:root .iq-lp .iq-btn--ghost{background:transparent !important;color:var(--lp-ink) !important;border-color:rgba(33,27,51,.22) !important}
+:root .iq-lp .iq-btn--ghost:hover{background:rgba(33,27,51,.05) !important;border-color:rgba(33,27,51,.32) !important}
+:root .iq-lp .iq-tm__gate{background:var(--lp-card) !important;border:1px solid var(--lp-line) !important;color:var(--lp-ink) !important}

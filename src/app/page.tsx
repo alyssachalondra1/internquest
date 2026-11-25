@@ -1,5 +1,7 @@
 import Link from "next/link"
+import { createClient as createAdminClient } from "@supabase/supabase-js"
 import { Mascot } from "@/components/Mascot"
+import { CompanyLogo } from "@/components/CompanyLogo"
 import { Icon } from "@/components/Icons"
 import { TestimonialForm } from "@/components/TestimonialForm"
 import { createClient } from "@/lib/supabase/server"
@@ -39,11 +41,43 @@ const STEPS = [
   { t: "Send the draft", d: "Check the list, then apply." },
 ]
 
-const PREVIEW_ROWS = [
-  { role: "Product designer", company: "Kawan Studio", status: "Interview Fri", pct: 70, initials: "KS", tone: "accent" },
-  { role: "Data analyst", company: "Ruang Data", status: "Draft due", pct: 45, initials: "RD", tone: "warn" },
-  { role: "Frontend engineer", company: "Sagara", status: "Applied", pct: 100, initials: "SG", tone: "quiet" },
-]
+/* Preview content for the three product cards on the landing page.
+   Every company, role, place and date here is invented on purpose: the brief
+   (25 Nov 2026) forbids real postings on the public page. */
+const DUMMY = {
+  job: {
+    when: "Rolling intake",
+    company: "Kiranawala Studio",
+    role: "Social Media Intern",
+    meta: "Bandung · Hybrid · 4 months",
+    done: 1,
+    total: 4,
+    chip: "To Do",
+  },
+  deadlines: [
+    { company: "Kiranawala Studio", until: "Registration until 4 Dec", chip: "5 days", cls: "iq-chip--blue" },
+    { company: "Arunika Labs", until: "Registration until 6 Dec", chip: "7 days", cls: "iq-chip--blue" },
+    { company: "Bayu Ventures", until: "Registration until 9 Dec", chip: "10 days", cls: "iq-chip--yellow" },
+  ],
+  match: {
+    score: 86,
+    note:
+      "The portfolio leans on social content, simple analytics dashboards and scheduling tools, which is what Kiranawala Studio asks for in this internship. Nothing in the listing is missing from the CV, so the score stays high.",
+  },
+}
+
+/* Exact number of people who have an account. Read with the service role
+   because row level security hides other people's profiles from the anon
+   client. When the key is absent the number is simply not shown — never faked. */
+async function readUserCount(): Promise<number | null> {
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!serviceKey || !url) return null
+  const admin = createAdminClient(url, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } })
+  const { count, error } = await admin.from("profiles").select("*", { count: "exact", head: true })
+  if (error) return null
+  return count ?? null
+}
 
 function Stars({ n }: { n: number }) {
   const r = Math.max(0, Math.min(5, Math.round(n)))
@@ -71,6 +105,7 @@ export default async function Landing() {
     .limit(24)
   const list: Testimonial[] = (rows as Testimonial[] | null) ?? []
   const avg = list.length ? list.reduce((s, t) => s + (t.rating || 0), 0) / list.length : 0
+  const userCount = await readUserCount()
 
   let myName = ""
   let myTestimonial: { display_name: string; rating: number; body: string } | null = null
@@ -133,67 +168,98 @@ export default async function Landing() {
                 See what it does
               </a>
             </div>
-            {list.length > 0 && (
-              <div className="iq-lp__proof">
-                <Stars n={avg} />
-                <span className="iq-lp__prooftext">
-                  <b>{avg.toFixed(1)}</b> from {list.length} review{list.length === 1 ? "" : "s"}
-                </span>
-              </div>
+            {userCount !== null && (
+              <p className="iq-lp__usercount">
+                <span className="iq-lp__livedot" aria-hidden="true" />
+                <b>{userCount.toLocaleString("en-US")}</b>
+                <span>people already keep their applications on Sloe</span>
+              </p>
             )}
             <p className="iq-lp__fineprint">Free to start · 10 AI actions a month · No card needed</p>
           </div>
 
           <div className="iq-lp__desk">
             <Mascot src="/mascot-hero.png" fluid priority className="iq-lp__sceneimg" />
-            <div className="iq-lp__mini iq-lp__mini--l">
-              <div className="iq-lp__mini-head">
-                <Icon name="ic-check" className="ic ic-16" />
-                <span>Checklist</span>
+          </div>
+
+          {/* Tiga kartu resmi Sloe. Bentuk, warna dan proporsinya sama dengan
+              yang dipakai di dalam aplikasi; isinya data dummy. */}
+          <div className="iq-lp__cards">
+            <div className="iq-lp__cardslot">
+              <div className="iq-lp__cardlabel">
+                <Icon name="ic-list" className="ic ic-16" /> Application card
               </div>
-              <div className="iq-lp__mini-row">CV tailored</div>
-              <div className="iq-lp__mini-row">Portfolio link</div>
-              <div className="iq-lp__mini-row iq-lp__mini-row--dim">Cover letter</div>
-            </div>
-            <div className="iq-lp__mini iq-lp__mini--r">
-              <div className="iq-lp__mini-head">
-                <Icon name="ic-target" className="ic ic-16" />
-                <span>CV match</span>
-              </div>
-              <div className="iq-lp__mini-num">82%</div>
-              <div className="iq-lp__mini-bar">
-                <i />
-              </div>
-            </div>
-            <div className="iq-lp__previewwrap">
-              <div className="iq-lp__preview">
-                <div className="iq-lp__preview-head">
-                  <span>This week</span>
-                  <span className="iq-lp__mono">3 due</span>
+              <div className="iq-icard iq-icard--pink">
+                <span className="iq-timechip">
+                  <Icon name="ic-clock" className="ic ic-16" /> {DUMMY.job.when}
+                </span>
+                <div className="iq-icard__top">
+                  <CompanyLogo name={DUMMY.job.company} />
+                  <div>
+                    <div className="iq-icard__title">{DUMMY.job.company}</div>
+                    <div className="iq-icard__sub">{DUMMY.job.role}</div>
+                  </div>
                 </div>
-                {PREVIEW_ROWS.map((r) => (
-                  <div key={r.role} className="iq-lp__prow">
-                    <span className="iq-lp__plogo" aria-hidden="true">
-                      {r.initials}
-                    </span>
-                    <div>
-                      <div className="iq-lp__prow-role">{r.role}</div>
-                      <div className="iq-lp__prow-company">{r.company}</div>
-                      <div className="iq-lp__prow-bar">
-                        <i style={{ width: r.pct + "%" }} />
-                      </div>
+                <div className="iq-icard__meta">{DUMMY.job.meta}</div>
+                <div className="iq-progress">
+                  <div
+                    className="iq-progress__fill"
+                    style={csx("width:" + Math.round((DUMMY.job.done / DUMMY.job.total) * 100) + "%")}
+                  />
+                </div>
+                <div className="iq-icard__foot">
+                  <span>
+                    Checklist {DUMMY.job.done}/{DUMMY.job.total}
+                  </span>
+                  <span className="iq-chip iq-chip--yellow">{DUMMY.job.chip}</span>
+                </div>
+                <span className="iq-apply-btn" aria-hidden="true">
+                  <Icon name="ic-link" className="ic ic-16" /> Apply
+                </span>
+              </div>
+            </div>
+
+            <div className="iq-lp__cardslot">
+              <div className="iq-lp__cardlabel">
+                <Icon name="ic-clock" className="ic ic-16" /> Deadlines
+              </div>
+              <div className="iq-card iq-card__pad">
+                <div className="iq-sec-title">
+                  <h3>Upcoming Deadlines</h3>
+                  <Link href="/login">Calendar</Link>
+                </div>
+                {DUMMY.deadlines.map((d) => (
+                  <div key={d.company} className="iq-dl">
+                    <span className="iq-tag-dot" style={csx("background:var(--blue)")} />
+                    <div style={csx("flex:1")}>
+                      <div className="iq-dl__t">{d.company}</div>
+                      <div className="iq-dl__s">{d.until}</div>
                     </div>
-                    <div className={"iq-lp__prow-status iq-lp__prow-status--" + r.tone}>{r.status}</div>
+                    <span className={"iq-chip " + d.cls}>{d.chip}</span>
                   </div>
                 ))}
-                <div className="iq-lp__preview-foot">
-                  <span>3 applied · 1 interview</span>
-                  <span>Updated 2 min ago</span>
-                </div>
               </div>
-              <div className="iq-lp__note">
-                <span className="iq-lp__note-num">2</span>
-                <span className="iq-lp__note-label">interviews booked this week</span>
+            </div>
+
+            <div className="iq-lp__cardslot">
+              <div className="iq-lp__cardlabel">
+                <Icon name="ic-target" className="ic ic-16" /> Match
+              </div>
+              <div className="iq-card iq-card__pad">
+                <div className="row mb-4">
+                  <Icon name="ic-target" className="ic ic-22" style={csx("color:var(--blue-text)")} />
+                  <h3>CV &amp; Company Match</h3>
+                </div>
+                <div className="iq-match__score">{DUMMY.match.score}%</div>
+                <div className="iq-match__bar">
+                  <i style={csx("width:" + DUMMY.match.score + "%")} />
+                </div>
+                <p className="muted iq-justify" style={csx("font-size:13px")}>
+                  {DUMMY.match.note}
+                </p>
+                <button className="iq-btn iq-btn--blue iq-btn--block iq-btn--sm mt-4" disabled>
+                  <Icon name="ic-ai" className="ic ic-16" /> Recalculate
+                </button>
               </div>
             </div>
           </div>
@@ -208,22 +274,21 @@ export default async function Landing() {
             <span className="iq-lp__statlabel">AI actions each month, free</span>
             <span className="iq-lp__statpill">No card needed</span>
           </div>
-          <div className="iq-lp__stat iq-lp__stat--quote">
-            <span className="iq-lp__statkicker">{list.length > 0 ? "In their words" : "What it is"}</span>
-            {list.length > 0 ? (
-              <>
-                <p className="iq-lp__statquote">“{list[0].body}”</p>
-                <div className="iq-lp__statby">
-                  <span className="iq-lp__statavatar">{list[0].display_name.slice(0, 1).toUpperCase()}</span>
-                  <span>{list[0].display_name}</span>
-                </div>
-              </>
-            ) : (
+          {userCount === null ? (
+            <div className="iq-lp__stat iq-lp__stat--quote">
+              <span className="iq-lp__statkicker">What it is</span>
               <p className="iq-lp__statquote">
                 One calm list for the roles, the dates and the drafts that usually live in five different places.
               </p>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="iq-lp__stat iq-lp__stat--live">
+              <span className="iq-lp__statkicker">Live from the database</span>
+              <span className="iq-lp__statnum">{userCount.toLocaleString("en-US")}</span>
+              <span className="iq-lp__statlabel">people with a Sloe account, right now</span>
+              <span className="iq-lp__statpill">Counted, not estimated</span>
+            </div>
+          )}
           <div className="iq-lp__stat iq-lp__stat--tint">
             <span className="iq-lp__statkicker">Three steps</span>
             <span className="iq-lp__statnum">3</span>
