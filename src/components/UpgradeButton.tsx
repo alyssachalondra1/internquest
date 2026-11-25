@@ -33,10 +33,14 @@ export function UpgradeButton({
         window.location.href = "/login?mode=signup"
         return
       }
+      // Show what the server actually said. A generic message hides the reason
+      // (wrong key, sandbox vs live, account not approved) and costs a round trip.
       setMsg(
         res.error === "not_configured"
           ? "Checkout is not switched on yet. Your free plan keeps working."
-          : "Could not start checkout. Please try again in a moment.",
+          : res.message
+            ? `Checkout could not start: ${res.message.slice(0, 160)}`
+            : "Could not start checkout. Please try again in a moment.",
       )
     } catch {
       setMsg("Could not start checkout. Please try again in a moment.")

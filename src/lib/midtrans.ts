@@ -117,6 +117,21 @@ export function signatureKeyCount(): number {
   return SIGN_KEYS.length
 }
 
+/**
+ * Non-secret facts about the configured keys, so an operator can tell which
+ * environment the webhook is listening to without reading the secret.
+ * A Midtrans key announces its environment in its first four characters
+ * ("SB-M..." for sandbox, "Mid-..." for production).
+ */
+export function keyFingerprint(): { count: number; prefixes: string[]; lengths: number[]; production: boolean } {
+  return {
+    count: SIGN_KEYS.length,
+    prefixes: SIGN_KEYS.map((key) => key.slice(0, 4)),
+    lengths: SIGN_KEYS.map((key) => key.length),
+    production: SIGN_KEYS.some((key) => key.startsWith("Mid-")),
+  }
+}
+
 /** Midtrans statuses that mean the money arrived. */
 export function isPaidStatus(status: string): boolean {
   return status === "capture" || status === "settlement"

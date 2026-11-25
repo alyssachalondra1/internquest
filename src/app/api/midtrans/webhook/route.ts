@@ -20,6 +20,11 @@ type Notification = {
 /* Midtrans calls this endpoint. It is the only place a pass becomes paid.
    Order of checks matters: signature first, then the stored amount, then the
    status. A request that fails any step is rejected without touching data. */
+export async function GET() {
+  // Which environment the webhook is listening to, without leaking the secret.
+  return NextResponse.json(keyFingerprint())
+}
+
 export async function POST(request: Request) {
   let body: Notification
   try {
