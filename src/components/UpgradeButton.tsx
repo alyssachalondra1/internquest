@@ -1,21 +1,24 @@
 "use client"
 
 import { useState } from "react"
-import { createCheckout } from "@/app/actions/payments"
+import { createCheckout, createPolarCheckout } from "@/app/actions/payments"
 import type { PlanId } from "@/lib/plans"
 
-/* Starts a paid checkout. The server action returns a Midtrans redirect URL;
-   we never mark anything as paid on the client. */
+/* Starts a paid checkout. The server action returns a redirect URL; we never
+   mark anything as paid on the client. `provider` picks the rail: Midtrans for
+   rupiah, Polar for US dollars. */
 export function UpgradeButton({
   plan,
   label,
   featured,
   className,
+  provider = "midtrans",
 }: {
   plan: PlanId
   label: string
   featured?: boolean
   className?: string
+  provider?: "midtrans" | "polar"
 }) {
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState("")
@@ -24,7 +27,7 @@ export function UpgradeButton({
     setBusy(true)
     setMsg("")
     try {
-      const res = await createCheckout(plan)
+      const res = provider === "polar" ? await createPolarCheckout(plan) : await createCheckout(plan)
       if (res.ok) {
         window.location.href = res.redirectUrl
         return

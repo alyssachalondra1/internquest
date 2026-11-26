@@ -42,12 +42,12 @@ export default function PrivacyPage() {
         <li><b>Google Gemini API</b> - generates AI text from the prompt and CV content you submit.</li>
         <li><b>Vercel</b> - application hosting and delivery.</li>
         <li><b>Resend</b> - sending account-related emails (such as sign-in confirmations).</li>
-        <li><b>Paddle</b> - merchant of record for orders paid in US dollars (cards, Apple Pay, PayPal). Paddle collects and stores the payment details and the billing information needed for tax; those details never reach our servers.</li>
+        <li><b>Polar</b> - merchant of record for orders paid in US dollars (cards, Apple Pay and Google Pay). Polar collects and stores the payment details and the billing information needed for tax; those details never reach our servers.</li>
         <li><b>Payment gateway (Indonesia)</b> - processes orders paid in Indonesian rupiah by QRIS or e-wallet. We only receive the order result, never your payment credentials.</li>
       </ul>
 
       <h2>5. Payments and billing data</h2>
-      <p>When you buy a paid plan or a top-up, the payment provider handles your payment details. For international orders, Paddle acts as merchant of record and is the party you buy from, so it also handles tax and refunds. We store only what we need to give you access: which plan was bought, the order reference, the amount, and the status of the payment.</p>
+      <p>When you buy a paid plan or a top-up, the payment provider handles your payment details. For international orders, Polar acts as merchant of record and is the party you buy from, so it also handles tax and refunds. We store only what we need to give you access: which plan was bought, the order reference, the amount, and the status of the payment.</p>
 
       <h2>6. Data sharing</h2>
       <p>We do not sell your personal information. We share data only with the providers above, when required by law, or to protect the rights and safety of our users and the Service. Content you post into a group is visible to other members of that group.</p>

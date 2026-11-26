@@ -13,7 +13,7 @@ export const PLAN_LABEL: Record<PlanId, string> = {
   topup: "30 AI actions top-up",
 }
 
-/* USD list prices for international buyers. LOCKED 22 Nov 2026: with Paddle's
+/* USD list prices for international buyers. LOCKED 22 Nov 2026: with Polar's
    5% + $0.50 merchant-of-record fee and tax-inclusive VAT they keep a 62-81%
    margin, so they are now the final prices. */
 export const PLAN_PRICE_USD: Record<PlanId, number> = { plus: 499, pro: 999, topup: 299 }

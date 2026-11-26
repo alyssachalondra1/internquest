@@ -8,8 +8,7 @@ import { createClient } from "@/lib/supabase/server"
 import { readQuota, planCredits } from "@/lib/quota"
 import { isConfigured } from "@/lib/midtrans"
 import { PLAN_PRICE_USD_TEXT } from "@/lib/plans"
-import { paddleConfigured } from "@/lib/paddle"
-import { PaddleCheckoutButton } from "@/components/PaddleCheckoutButton"
+import { polarConfigured } from "@/lib/polar"
 
 export const metadata = {
   title: "Plans · Sloe",
@@ -97,7 +96,7 @@ const QUESTIONS = [
   },
   {
     q: "How do I pay",
-    a: "In Indonesia, pay by QRIS or e-wallet (GoPay, ShopeePay). From outside Indonesia, pay in US dollars by card, Apple Pay or PayPal. Your plan starts as soon as the payment clears, and the month runs from that moment. You can also top up 10 extra AI actions without changing your plan.",
+    a: "In Indonesia, pay by QRIS or e-wallet (GoPay, ShopeePay). From outside Indonesia, pay in US dollars by card, Apple Pay or Google Pay. Your plan starts as soon as the payment clears, and the month runs from that moment. You can also top up 10 extra AI actions without changing your plan.",
   },
 ]
 
@@ -109,7 +108,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
   const currency: "IDR" | "USD" =
     sp.currency === "USD" ? "USD" : sp.currency === "IDR" ? "IDR" : country && country !== "ID" ? "USD" : "IDR"
   const usd = currency === "USD"
-  const paddleLive = paddleConfigured()
+  const polarLive = polarConfigured()
 
   const supabase = await createClient()
   const {
@@ -117,12 +116,6 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
   } = await supabase.auth.getUser()
 
   const quota = user ? await readQuota(supabase, user.id) : null
-  // Paddle Retain needs the Paddle customer id. Missing until this user has
-  // bought something, and the column itself appears with 0007.
-  const { data: paddleProfile } = user
-    ? await supabase.from("profiles").select("paddle_customer_id").eq("id", user.id).single()
-    : { data: null }
-  const paddleCustomerId = (paddleProfile?.paddle_customer_id as string | null) ?? null
   const allowance = quota ? planCredits(quota.plan) : 0
   const totalAllowance = allowance + (quota?.topup ?? 0)
   const usedPct =
@@ -230,14 +223,8 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
                   {p.cta}
                 </Link>
               ) : usd ? (
-                p.planId && paddleLive && user ? (
-                  <PaddleCheckoutButton
-                    plan={p.planId}
-                    label={p.cta}
-                    userId={user.id}
-                    paddleCustomerId={paddleCustomerId}
-                    featured={p.featured}
-                  />
+                p.planId && polarLive && user ? (
+                  <UpgradeButton plan={p.planId} label={p.cta} featured={p.featured} provider="polar" />
                 ) : user ? (
                   <span className="iq-btn iq-btn--ghost" aria-disabled="true">
                     Card payment opens soon
@@ -276,8 +263,8 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
               </p>
             </div>
             {usd ? (
-              paddleLive && user ? (
-                <PaddleCheckoutButton plan="topup" label="Top up 10 actions" userId={user.id} paddleCustomerId={paddleCustomerId} />
+              polarLive && user ? (
+                <UpgradeButton plan="topup" label="Top up 10 actions" provider="polar" />
               ) : user ? (
                 <span className="iq-btn iq-btn--ghost" aria-disabled="true">
                   Card payment opens soon
@@ -299,7 +286,7 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
 
         <p className="iq-pr__note">
           {usd
-            ? "Orders in US dollars are processed by Paddle as Merchant of Record, including any applicable tax, receipts and refunds. Cards, Apple Pay and PayPal accepted. Billing questions or refund requests: support@sloe.my.id."
+            ? "Orders in US dollars are processed by Polar as Merchant of Record, including any applicable tax, receipts and refunds. Cards, Apple Pay and Google Pay accepted. Billing questions or refund requests: support@sloe.my.id."
             : checkoutLive
               ? "Pay by QRIS or e-wallet. Your plan starts as soon as the payment clears, and the month runs from that moment. Billing questions or refund requests: support@sloe.my.id."
               : "QRIS checkout opens soon. Start on Free and your account keeps your place when paid plans go live."}

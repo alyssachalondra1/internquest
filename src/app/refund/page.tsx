@@ -48,12 +48,12 @@ export default function RefundPage() {
         method, usually within 5 to 10 business days depending on the payment provider and your bank.
       </p>
 
-      <h2>5. International purchases — Paddle as Merchant of Record</h2>
+      <h2>5. International purchases — Polar as Merchant of Record</h2>
       <p>
-        Orders paid in US dollars are processed by <b>Paddle</b>, who acts as the <b>Merchant of Record</b>. This means
-        Paddle is the seller of record for your order: Paddle calculates and collects any applicable taxes, issues your
-        receipt, and processes refunds and chargebacks. You can request a refund through us, or contact Paddle directly
-        about your order. Refunds are returned to the payment method you used (card, Apple Pay, or PayPal).
+        Orders paid in US dollars are processed by <b>Polar</b>, who acts as the <b>Merchant of Record</b>. This means
+        Polar is the seller of record for your order: Polar calculates and collects any applicable taxes, issues your
+        receipt, and processes refunds and chargebacks. You can request a refund through us, or contact Polar directly
+        about your order. Refunds are returned to the payment method you used (card, Apple Pay, or Google Pay).
       </p>
 
       <h2>6. Purchases in Indonesia</h2>

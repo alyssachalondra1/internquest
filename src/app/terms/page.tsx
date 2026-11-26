@@ -63,8 +63,8 @@ export default function TermsPage() {
       <p>Paid plans (Plus and Pro) are prepaid access passes for one month, and they do not renew automatically. Top-up packs add AI actions to your balance without changing your plan.</p>
       <ul>
         <li>Orders paid in Indonesian rupiah are processed by our payment gateway in Indonesia. We are the seller for those orders.</li>
-        <li>Orders paid in US dollars are processed by <b>Paddle</b>, who acts as the <b>Merchant of Record</b>. For those orders Paddle is the seller of record: Paddle calculates and collects any applicable sales tax or VAT, issues the receipt, and handles refunds and chargebacks. Our agreement for those orders is with Paddle as seller, alongside these Terms.</li>
-        <li>Prices are shown in the currency of the checkout page. International prices may be stated tax-inclusive, and the tax shown on the Paddle receipt depends on your country.</li>
+        <li>Orders paid in US dollars are processed by <b>Polar</b>, who acts as the <b>Merchant of Record</b>. For those orders Polar is the seller of record: Polar calculates and collects any applicable sales tax or VAT, issues the receipt, and handles refunds and chargebacks. Our agreement for those orders is with Polar as seller, alongside these Terms.</li>
+        <li>Prices are shown in the currency of the checkout page. International prices may be stated tax-inclusive, and the tax shown on the Polar receipt depends on your country.</li>
       </ul>
       <p>Refunds and cancellation are described in our <Link href="/refund">Refund &amp; Cancellation Policy</Link>.</p>
 
