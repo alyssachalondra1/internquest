@@ -62,7 +62,7 @@ const DUMMY = {
   match: {
     score: 86,
     note:
-      "The portfolio leans on social content, simple analytics dashboards and scheduling tools, which is what Kiranawala Studio asks for in this internship. Nothing in the listing is missing from the CV, so the score stays high.",
+      "The portfolio leans on social content, simple analytics dashboards and scheduling tools, which is what Kiranawala Studio asks for in this role. Nothing in the listing is missing from the CV, so the score stays high.",
   },
 }
 

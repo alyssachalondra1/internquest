@@ -59,7 +59,7 @@ export default async function AchievementsPage() {
               <div className="muted" style={csx("font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:11px")}>Current level</div>
               <h2 style={csx("font-size:26px")}>Applicant, Level {level}</h2>
             </div>
-            <span className="iq-chip iq-chip--yellow" style={csx("height:34px")}><Icon name="ic-trophy" className="ic ic-16" /> {unlocked}/{badges.length} badges</span>
+            <span className="iq-chip iq-chip--blue" style={csx("height:34px")}><Icon name="ic-trophy" className="ic ic-16" /> {unlocked}/{badges.length} badges</span>
           </div>
           <div className="iq-progress mt-4" style={csx("height:16px")}><div className="iq-progress__fill" style={csx("width:" + levelPct + "%")} /></div>
           <div className="muted mt-2" style={csx("font-size:12px")}>{xp} / {target} XP to Level {level + 1}</div>

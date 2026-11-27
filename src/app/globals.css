@@ -143,7 +143,7 @@ small{font-size:12px}
 /* Badge grid */
 .iq-badge{display:flex;flex-direction:column;align-items:center;gap:8px;padding:var(--sp-6) var(--sp-3);border-radius:var(--r-md);border:2px solid var(--border);text-align:center;background:var(--surface)}
 .iq-badge__ic{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--yellow-15);color:var(--yellow-text)}
-.iq-badge.is-locked{opacity:.45;filter:grayscale(.6)}
+.iq-badge.is-locked{opacity:.78;filter:grayscale(.35)}
 .iq-badge b{font-size:13px} .iq-badge span{font-size:11px;color:var(--ink-3)}
 
 /* Calendar */
@@ -317,7 +317,7 @@ body[data-screen="auth"] .iq-auth{display:grid}
 .iq-prio .iq-progress__fill{background:var(--c,var(--pink))}
 .iq-prio__btn{border:none;background:var(--c,var(--pink));color:#fff;font-weight:800;font-size:13px;padding:9px 20px;border-radius:var(--r-pill);cursor:pointer;transition:filter .12s}
 .iq-prio__btn:hover{filter:brightness(.95)}
-.iq-prio--yellow .iq-prio__btn{color:var(--ink)}
+.iq-prio--yellow .iq-prio__btn{color:#243043}
 .iq-prio__top{display:flex;align-items:center;gap:12px}
 .iq-prio__title{font-size:16px;font-weight:800;line-height:1.15}
 .iq-prio__sub{font-size:12px;color:var(--ink-3);font-weight:600}
@@ -1398,6 +1398,13 @@ html{background:var(--canvas)}
 :root[data-theme="dark"] .iq-skel{background:var(--surface-2)}
 :root[data-theme="dark"] .iq-skel::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
 :root[data-theme="dark"] .iq-btn--ghost{background:var(--surface);border-color:var(--border-2)}
+/* Chips sit on tinted fills; in dark mode the tint darkens the text contrast, so
+   lift the label to the light end of each ramp. */
+:root[data-theme="dark"] .iq-chip--blue{background:rgba(91,140,255,.26);color:#D3E0FF}
+:root[data-theme="dark"] .iq-chip--pink{background:rgba(255,143,184,.22);color:#FFD3E3}
+:root[data-theme="dark"] .iq-chip--yellow{background:rgba(255,209,102,.22);color:#FFE7B0}
+:root[data-theme="dark"] .iq-chip--green{background:rgba(78,216,148,.22);color:#B9F5D6}
+:root[data-theme="dark"] .iq-chip--red{background:rgba(255,128,128,.22);color:#FFC7C7}
 :root[data-theme="dark"] .iq-btn--ghost:hover{background:var(--surface-2)}
 :root[data-theme="dark"] .iq-input,
 :root[data-theme="dark"] .iq-select,
@@ -1732,7 +1739,8 @@ html{background:var(--canvas)}
 .iq-badge__ic{background:var(--blue-15);color:var(--blue-text);border:1px solid rgba(47,107,255,.18)}
 .iq-badge.is-unlocked{border-color:rgba(47,107,255,.24);box-shadow:none}
 .iq-badge.is-locked{border-color:var(--border);background:var(--surface-2)}
-.iq-badge.is-locked .iq-badge__ic{background:var(--surface);color:var(--ink-3);border-color:var(--border)}
+.iq-badge.is-locked .iq-badge__ic{background:var(--surface);color:var(--ink-2);border-color:var(--border)}
+.iq-badge.is-locked span{color:var(--ink-2)}
 .iq-badge b{font-weight:600;letter-spacing:-.01em}
 .iq-badge span{color:var(--ink-3)}
 .iq-badge__spark{display:none}

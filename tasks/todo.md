@@ -155,9 +155,22 @@ Yang dilindungi: tata letak & palet sidebar, isi kartu daftar lowongan (hanya te
 - [x] `docs/payments/midtrans-setup.md`: env var + langkah migrasi.
 - [ ] Belum diuji end-to-end — butuh sandbox key + migrasi dijalankan.
 
-### P6 — QA — belum
-- [ ] Cek dashboard, calendar, groups, settings, profile, achievements (butuh login).
+### P6 — QA — SELESAI (login sebagai akun Pro)
+- [x] Verifikasi produksi: build hijau (19 route), `/` `/login` `/pricing` `/terms` `/privacy` semua 200.
+- [x] Sapuan istilah: ditemukan 1 sisa "internship" di copy `match.note` landing → diganti "role"; render ulang 0 kemunculan.
+- [x] Bubble avatar profil: margin negatif `-62px` sudah di-override jadi 0 (baris 1748) — kartu tidak lagi tergeser.
+- [x] Cek visual 7 halaman app (dashboard, jobs, calendar, groups, settings, achievements, profile) light + dark + mobile 390. Semua 200, 0 overflow, 0 emoji, 0 "Internship" di teks.
+- [x] Bug kontras dark mode: tombol di kartu deadline kuning memakai `var(--ink)` (terang) di atas tombol putih → tak terbaca. Dipaku `#243043`.
+- [x] Chip dark mode: label dinaikkan ke ujung terang tiap ramp (biru/pink/kuning/hijau/merah).
+- [x] Achievements: chip "1/8 badges" kuning → biru aksen; opacity badge terkunci 0.45 → 0.78; "Lv." → "Lv" diseragamkan.
+- [ ] Temuan terbuka: `signature-pose.json` 9 MB (Lottie hero) — lambat di jaringan nyata; logo perusahaan via clearbit gagal resolve di mesin ini (sudah tercatat di T10-C).
 - [ ] `npm run lint` masih merah pra-ada (`any` di `src/lib/ai.ts` & `sound.ts`).
+
+### P7 — Akun uji Pro — SELESAI
+- [x] `alyssachalondra@gmail.com` → plan `pro`, 900 gems, screenshot unlimited. (sudah terdaftar; password di-set ulang)
+- [x] `alyssachalondra@student.uns.ac.id` → plan `pro`, 900 gems, screenshot unlimited. (sudah terdaftar; password di-set ulang)
+- [x] Login terverifikasi lewat `grant_type=password` untuk keduanya.
+- [ ] **Rotasi `SUPABASE_SERVICE_ROLE_KEY`** — key ini sempat dikirim lewat chat dan tertulis di `.env.local`; ganti setelah pengujian selesai.
 
 > Dark mode: **tidak diubah** — tetap ada, bisa switch System/Light/Dark dari topbar & Settings.
 

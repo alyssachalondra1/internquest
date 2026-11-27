@@ -136,7 +136,7 @@ export function AppShell({
           </div>
           <div className="iq-usermini__meta">
             <b>{name}</b>
-            <span>Lv.{profile.level} · Applicant</span>
+            <span>Lv {profile.level} · Applicant</span>
           </div>
         </Link>
         <button className="iq-nav__item iq-signout" onClick={signOut} title="Log out">
